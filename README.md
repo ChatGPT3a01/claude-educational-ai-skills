@@ -384,7 +384,6 @@ copies or substantial portions of the Software.
 
 ## 致謝
 
-- 感謝 [claude-scientific-skills](https://github.com/backtrue/claude-scientific-skills) 提供的專案架構靈感
 - 感謝所有偏鄉教育工作者的辛勤付出
 
 ---
