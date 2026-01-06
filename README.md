@@ -1,5 +1,11 @@
 # Claude Educational AI Skills
 
+<p align="center">
+  <a href="https://chatgpt3a01.github.io/claude-educational-ai-skills/">
+    <img src="https://img.shields.io/badge/📖_線上文件-點擊查看-667eea?style=for-the-badge" alt="線上文件">
+  </a>
+</p>
+
 > 數位學習與教育科技 AI 技能集
 > 專為教育研究者、教師、數位學習平台開發者設計
 
@@ -9,8 +15,6 @@
 ![GPT](https://img.shields.io/badge/GPT-4o%20%7C%204.1-74aa9c)
 ![Gemini](https://img.shields.io/badge/Gemini-2.5%20%7C%203.0-4285F4)
 ![License](https://img.shields.io/badge/License-MIT-green)
-
-**[📖 線上文件](https://chatgpt3a01.github.io/claude-educational-ai-skills/)** | **[💾 GitHub Repo](https://github.com/ChatGPT3a01/claude-educational-ai-skills)**
 
 ---
 
