@@ -19,14 +19,14 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
         }
         .hero {
             background: white;
             border-radius: 20px;
-            padding: 60px 40px;
+            padding: 50px 40px;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             margin-bottom: 30px;
@@ -37,12 +37,12 @@
             margin-bottom: 10px;
         }
         .subtitle {
-            font-size: 1.3em;
+            font-size: 1.2em;
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .badges {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         .badges img {
             margin: 5px;
@@ -52,18 +52,19 @@
             gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 40px;
         }
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 15px 30px;
+            padding: 12px 25px;
             border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1em;
+            font-size: 1em;
             transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
         }
         .btn:hover {
             transform: translateY(-2px);
@@ -77,36 +78,214 @@
             background: #333;
             color: white;
         }
-        .features {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 40px;
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
         }
-        @media (max-width: 768px) {
-            .features {
-                grid-template-columns: repeat(2, 1fr);
-            }
+
+        /* Generator Section */
+        .generator-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
         }
-        .feature {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 15px;
+        .generator-section h2 {
             text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 1.8em;
         }
-        .feature-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+        .generator-steps {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
-        .feature h3 {
-            font-size: 1.1em;
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border-radius: 30px;
+            font-size: 0.95em;
+        }
+        .step.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: white;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .step.active .step-number {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Skill Selector */
+        .skill-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .skill-option {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+        .skill-option:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        .skill-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+        .skill-option-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 8px;
+        }
+        .skill-option-icon {
+            font-size: 1.5em;
+        }
+        .skill-option-title {
+            font-weight: 600;
             color: #333;
         }
-        .feature p {
-            font-size: 0.95em;
+        .skill-option-desc {
+            font-size: 0.9em;
             color: #666;
         }
+
+        /* Form Section */
+        .form-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .form-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .form-hint {
+            font-size: 0.85em;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Output Section */
+        .output-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .output-section.active {
+            display: block;
+        }
+        .output-box {
+            background: #1e1e1e;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+        }
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .output-title {
+            color: #fff;
+            font-weight: 600;
+        }
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: #5a6fd6;
+        }
+        .copy-btn.copied {
+            background: #38ef7d;
+        }
+        .output-content {
+            color: #e0e0e0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.95em;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .output-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Skills Grid */
         .skills-section {
             background: white;
             border-radius: 20px;
@@ -122,18 +301,8 @@
         }
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
-        }
-        @media (max-width: 900px) {
-            .skills-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        @media (max-width: 600px) {
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
         }
         .skill-card {
             background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
@@ -203,14 +372,7 @@
         .skill-card.math { border-top: 4px solid #1abc9c; }
         .skill-card.research { border-top: 4px solid #e67e22; }
 
-        .footer {
-            text-align: center;
-            color: white;
-            padding: 20px;
-        }
-        .footer a {
-            color: white;
-        }
+        /* Author & Footer */
         .author {
             background: white;
             border-radius: 20px;
@@ -240,10 +402,16 @@
         .author-links a:hover {
             transform: translateY(-2px);
         }
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Hero Section -->
         <div class="hero">
             <h1>Claude Educational AI Skills</h1>
             <p class="subtitle">數位學習與教育科技 AI 技能集<br>專為教育研究者、教師、數位學習平台開發者設計</p>
@@ -264,35 +432,308 @@
                 <a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/README.md" class="btn btn-secondary">
                     📖 完整文件
                 </a>
+                <a href="#generator" class="btn btn-success">
+                    ⚡ 提示詞生成器
+                </a>
+            </div>
+        </div>
+
+        <!-- Prompt Generator Section -->
+        <div class="generator-section" id="generator">
+            <h2>⚡ 提示詞生成器</h2>
+
+            <div class="generator-steps">
+                <div class="step active" id="step1-indicator">
+                    <span class="step-number">1</span>
+                    <span>選擇技能</span>
+                </div>
+                <div class="step" id="step2-indicator">
+                    <span class="step-number">2</span>
+                    <span>填入資訊</span>
+                </div>
+                <div class="step" id="step3-indicator">
+                    <span class="step-number">3</span>
+                    <span>生成提示詞</span>
+                </div>
             </div>
 
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">📚</div>
-                    <h3>14 個專業技能</h3>
-                    <p>涵蓋 7 大教育科技領域</p>
+            <!-- Step 1: Select Skill -->
+            <div class="form-section active" id="step1">
+                <div class="skill-selector">
+                    <div class="skill-option" data-skill="differentiated">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">📚</span>
+                            <span class="skill-option-title">差異化教案設計</span>
+                        </div>
+                        <p class="skill-option-desc">設計多層次教學內容與評量，滿足不同程度學生需求</p>
+                    </div>
+                    <div class="skill-option" data-skill="adaptive">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">🎯</span>
+                            <span class="skill-option-title">自適應學習設計</span>
+                        </div>
+                        <p class="skill-option-desc">建構依據學生表現動態調整的學習系統</p>
+                    </div>
+                    <div class="skill-option" data-skill="lesson-plan">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">📝</span>
+                            <span class="skill-option-title">AI 教案產生器</span>
+                        </div>
+                        <p class="skill-option-desc">快速生成完整教案，包含目標、活動、評量</p>
+                    </div>
+                    <div class="skill-option" data-skill="learning-analytics">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">📊</span>
+                            <span class="skill-option-title">學習分析報告</span>
+                        </div>
+                        <p class="skill-option-desc">分析學習歷程數據，產生診斷與建議報告</p>
+                    </div>
+                    <div class="skill-option" data-skill="rural-platform">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">🏔️</span>
+                            <span class="skill-option-title">偏鄉教育方案</span>
+                        </div>
+                        <p class="skill-option-desc">設計適合偏鄉環境的數位學習解決方案</p>
+                    </div>
+                    <div class="skill-option" data-skill="research-design">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">🔬</span>
+                            <span class="skill-option-title">教育研究設計</span>
+                        </div>
+                        <p class="skill-option-desc">規劃教育研究的問題、方法與設計</p>
+                    </div>
+                    <div class="skill-option" data-skill="geogebra">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">📐</span>
+                            <span class="skill-option-title">GeoGebra 教學設計</span>
+                        </div>
+                        <p class="skill-option-desc">設計 GeoGebra 互動式數學探究活動</p>
+                    </div>
+                    <div class="skill-option" data-skill="ict-integration">
+                        <div class="skill-option-header">
+                            <span class="skill-option-icon">💻</span>
+                            <span class="skill-option-title">ICT 融入教學</span>
+                        </div>
+                        <p class="skill-option-desc">運用 SAMR/TPACK 模型設計科技融入課程</p>
+                    </div>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">📝</div>
-                    <h3>完整提示詞範本</h3>
-                    <p>可直接複製使用的模板</p>
+            </div>
+
+            <!-- Step 2: Fill Form (Differentiated) -->
+            <div class="form-section" id="step2-differentiated">
+                <h3 style="margin-bottom: 20px; color: #667eea;">📚 差異化教案設計</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>科目</label>
+                        <input type="text" id="diff-subject" placeholder="例：數學">
+                    </div>
+                    <div class="form-group">
+                        <label>單元名稱</label>
+                        <input type="text" id="diff-unit" placeholder="例：一元一次方程式">
+                    </div>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">🤖</div>
-                    <h3>多 AI 模型支援</h3>
-                    <p>Claude、GPT、Gemini</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>年級</label>
+                        <input type="text" id="diff-grade" placeholder="例：國中七年級">
+                    </div>
+                    <div class="form-group">
+                        <label>班級人數</label>
+                        <input type="text" id="diff-students" placeholder="例：25人">
+                    </div>
+                    <div class="form-group">
+                        <label>節數</label>
+                        <input type="text" id="diff-periods" placeholder="例：2節（每節45分鐘）">
+                    </div>
                 </div>
-                <div class="feature">
-                    <div class="feature-icon">🏔️</div>
-                    <h3>偏鄉友善設計</h3>
-                    <p>考量資源受限環境</p>
+                <div class="form-group">
+                    <label>學生程度分布</label>
+                    <textarea id="diff-levels" placeholder="例：
+- 高程度 (約20%): 運算能力強，可自主延伸學習
+- 中程度 (約50%): 需要引導，可達成基本目標
+- 基礎程度 (約30%): 需要額外支持，從具體操作開始"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>差異化面向（可多選）</label>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+                        <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="diff-content" checked> 內容差異化
+                        </label>
+                        <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="diff-process" checked> 過程差異化
+                        </label>
+                        <label style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="diff-product" checked> 成果差異化
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>其他需求（選填）</label>
+                    <textarea id="diff-other" placeholder="例：需要包含學習單設計、希望加入遊戲化元素..."></textarea>
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← 上一步</button>
+                    <button class="btn btn-success" onclick="generatePrompt('differentiated')">生成提示詞 →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Fill Form (Lesson Plan) -->
+            <div class="form-section" id="step2-lesson-plan">
+                <h3 style="margin-bottom: 20px; color: #667eea;">📝 AI 教案產生器</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>科目</label>
+                        <input type="text" id="lp-subject" placeholder="例：自然科學">
+                    </div>
+                    <div class="form-group">
+                        <label>單元主題</label>
+                        <input type="text" id="lp-topic" placeholder="例：光的折射">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>年級</label>
+                        <input type="text" id="lp-grade" placeholder="例：國中八年級">
+                    </div>
+                    <div class="form-group">
+                        <label>節數</label>
+                        <input type="text" id="lp-periods" placeholder="例：2節">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>學習目標</label>
+                    <textarea id="lp-objectives" placeholder="例：
+1. 能說明光的折射現象
+2. 能運用折射原理解釋生活現象
+3. 能進行簡單的折射實驗"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>教學資源（選填）</label>
+                    <input type="text" id="lp-resources" placeholder="例：實驗器材、投影機、學習單">
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← 上一步</button>
+                    <button class="btn btn-success" onclick="generatePrompt('lesson-plan')">生成提示詞 →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Fill Form (Research Design) -->
+            <div class="form-section" id="step2-research-design">
+                <h3 style="margin-bottom: 20px; color: #667eea;">🔬 教育研究設計</h3>
+                <div class="form-group">
+                    <label>研究主題</label>
+                    <input type="text" id="rd-topic" placeholder="例：AI 輔助偏鄉高中差異化教學成效研究">
+                </div>
+                <div class="form-group">
+                    <label>研究問題</label>
+                    <textarea id="rd-question" placeholder="例：AI 教學輔助系統如何提升偏鄉學生學習成效？"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>研究取向</label>
+                        <select id="rd-approach">
+                            <option value="量化研究">量化研究</option>
+                            <option value="質性研究">質性研究</option>
+                            <option value="混合研究" selected>混合研究</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>研究對象</label>
+                        <input type="text" id="rd-participants" placeholder="例：3所偏鄉高中，約150位學生">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>研究期程</label>
+                    <input type="text" id="rd-duration" placeholder="例：1學年（2學期）">
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← 上一步</button>
+                    <button class="btn btn-success" onclick="generatePrompt('research-design')">生成提示詞 →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Fill Form (GeoGebra) -->
+            <div class="form-section" id="step2-geogebra">
+                <h3 style="margin-bottom: 20px; color: #667eea;">📐 GeoGebra 教學設計</h3>
+                <div class="form-group">
+                    <label>數學概念</label>
+                    <input type="text" id="geo-concept" placeholder="例：二次函數圖形變換 (y = a(x-h)² + k)">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>年級</label>
+                        <input type="text" id="geo-grade" placeholder="例：高中一年級">
+                    </div>
+                    <div class="form-group">
+                        <label>時間</label>
+                        <input type="text" id="geo-time" placeholder="例：1節課（50分鐘）">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>學習目標</label>
+                    <textarea id="geo-objectives" placeholder="例：
+1. 理解參數 a、h、k 對拋物線圖形的影響
+2. 預測參數改變後的圖形變化
+3. 根據圖形特徵寫出二次函數式"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>互動元素需求</label>
+                    <input type="text" id="geo-elements" placeholder="例：滑桿控制參數、動態拋物線、頂點座標顯示">
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← 上一步</button>
+                    <button class="btn btn-success" onclick="generatePrompt('geogebra')">生成提示詞 →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Other Skills (Generic Form) -->
+            <div class="form-section" id="step2-generic">
+                <h3 style="margin-bottom: 20px; color: #667eea;" id="generic-title">📋 填入資訊</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>科目/領域</label>
+                        <input type="text" id="gen-subject" placeholder="請輸入科目或領域">
+                    </div>
+                    <div class="form-group">
+                        <label>年級/對象</label>
+                        <input type="text" id="gen-grade" placeholder="請輸入年級或對象">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>主題/目標</label>
+                    <textarea id="gen-topic" placeholder="請描述您的主題或目標"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>其他需求</label>
+                    <textarea id="gen-other" placeholder="請補充其他需求或條件"></textarea>
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← 上一步</button>
+                    <button class="btn btn-success" onclick="generatePrompt('generic')">生成提示詞 →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Output -->
+            <div class="output-section" id="step3">
+                <div class="output-box">
+                    <div class="output-header">
+                        <span class="output-title">📋 生成的提示詞</span>
+                        <button class="copy-btn" onclick="copyPrompt()">📋 複製</button>
+                    </div>
+                    <div class="output-content" id="output-content"></div>
+                </div>
+                <div class="output-actions">
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← 重新選擇</button>
+                    <a href="https://claude.ai" target="_blank" class="btn btn-primary">🤖 前往 Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="btn btn-success">💬 前往 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="btn" style="background: #4285F4; color: white;">✨ 前往 Gemini</a>
                 </div>
             </div>
         </div>
 
+        <!-- Skills Overview Section -->
         <div class="skills-section">
             <h2>技能分類總覽</h2>
-
             <div class="skills-grid">
                 <div class="skill-card teaching">
                     <div class="skill-card-header">
@@ -305,7 +746,6 @@
                         <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/lesson-plan-generator.md" target="_blank">AI 教案產生器</a></li>
                     </ul>
                 </div>
-
                 <div class="skill-card analytics">
                     <div class="skill-card-header">
                         <span class="skill-card-icon">📊</span>
@@ -316,7 +756,6 @@
                         <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E5%AD%B8%E7%BF%92%E5%88%86%E6%9E%90/student-profiling.md" target="_blank">學生學習輪廓分析</a></li>
                     </ul>
                 </div>
-
                 <div class="skill-card rural">
                     <div class="skill-card-header">
                         <span class="skill-card-icon">🏔️</span>
@@ -327,7 +766,6 @@
                         <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E5%81%8F%E9%84%89%E6%95%99%E8%82%B2/rural-education-platform.md" target="_blank">偏鄉教育平台設計</a></li>
                     </ul>
                 </div>
-
                 <div class="skill-card ai-tools">
                     <div class="skill-card-header">
                         <span class="skill-card-icon">🤖</span>
@@ -338,7 +776,6 @@
                         <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/AI%E5%B7%A5%E5%85%B7%E6%87%89%E7%94%A8/generative-ai-education.md" target="_blank">生成式 AI 教育應用</a></li>
                     </ul>
                 </div>
-
                 <div class="skill-card ict">
                     <div class="skill-card-header">
                         <span class="skill-card-icon">💻</span>
@@ -348,7 +785,6 @@
                         <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/ICT%E7%A7%91%E6%8A%80%E8%9E%8D%E5%85%A5/ict-integration.md" target="_blank">ICT 融入教學</a></li>
                     </ul>
                 </div>
-
                 <div class="skill-card math">
                     <div class="skill-card-header">
                         <span class="skill-card-icon">📐</span>
@@ -358,7 +794,6 @@
                         <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E6%95%B8%E5%AD%B8%E7%A7%91%E6%8A%80%E6%95%99%E8%82%B2/math-technology.md" target="_blank">數學科技教育</a></li>
                     </ul>
                 </div>
-
                 <div class="skill-card research">
                     <div class="skill-card-header">
                         <span class="skill-card-icon">🔬</span>
@@ -372,6 +807,7 @@
             </div>
         </div>
 
+        <!-- Author Section -->
         <div class="author">
             <h2>👤 作者</h2>
             <p><strong>曾慶良 (Ching-Liang Tseng)</strong></p>
@@ -383,9 +819,248 @@
             </div>
         </div>
 
+        <!-- Footer -->
         <div class="footer">
             <p>讓 AI 教育不再只屬於資源豐富的都會學校，而是能在偏鄉生根發芽</p>
         </div>
     </div>
+
+    <script>
+        let currentSkill = '';
+
+        // Skill option click handler
+        document.querySelectorAll('.skill-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.skill-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                currentSkill = this.dataset.skill;
+
+                setTimeout(() => {
+                    goToStep(2);
+                }, 300);
+            });
+        });
+
+        function goToStep(step) {
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((s, i) => {
+                s.classList.toggle('active', i < step);
+            });
+
+            // Hide all form sections
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            document.querySelector('.output-section').classList.remove('active');
+
+            if (step === 1) {
+                document.getElementById('step1').classList.add('active');
+            } else if (step === 2) {
+                // Show appropriate form based on selected skill
+                const formMap = {
+                    'differentiated': 'step2-differentiated',
+                    'lesson-plan': 'step2-lesson-plan',
+                    'research-design': 'step2-research-design',
+                    'geogebra': 'step2-geogebra',
+                    'adaptive': 'step2-generic',
+                    'learning-analytics': 'step2-generic',
+                    'rural-platform': 'step2-generic',
+                    'ict-integration': 'step2-generic'
+                };
+
+                const formId = formMap[currentSkill] || 'step2-generic';
+                document.getElementById(formId).classList.add('active');
+
+                // Update generic form title if needed
+                if (formId === 'step2-generic') {
+                    const titles = {
+                        'adaptive': '🎯 自適應學習設計',
+                        'learning-analytics': '📊 學習分析報告',
+                        'rural-platform': '🏔️ 偏鄉教育方案',
+                        'ict-integration': '💻 ICT 融入教學'
+                    };
+                    document.getElementById('generic-title').textContent = titles[currentSkill] || '📋 填入資訊';
+                }
+            } else if (step === 3) {
+                document.querySelector('.output-section').classList.add('active');
+            }
+        }
+
+        function generatePrompt(type) {
+            let prompt = '';
+
+            if (type === 'differentiated') {
+                const subject = document.getElementById('diff-subject').value || '[科目]';
+                const unit = document.getElementById('diff-unit').value || '[單元]';
+                const grade = document.getElementById('diff-grade').value || '[年級]';
+                const students = document.getElementById('diff-students').value || '[人數]';
+                const periods = document.getElementById('diff-periods').value || '[節數]';
+                const levels = document.getElementById('diff-levels').value || '[請描述學生程度分布]';
+                const contentDiff = document.getElementById('diff-content').checked;
+                const processDiff = document.getElementById('diff-process').checked;
+                const productDiff = document.getElementById('diff-product').checked;
+                const other = document.getElementById('diff-other').value;
+
+                let diffTypes = [];
+                if (contentDiff) diffTypes.push('內容差異化');
+                if (processDiff) diffTypes.push('過程差異化');
+                if (productDiff) diffTypes.push('成果差異化');
+
+                prompt = `請設計一份差異化教案：
+
+【課程基本資訊】
+科目：${subject}
+單元：${unit}
+年級：${grade}
+班級人數：${students}
+節數：${periods}
+
+【學生差異分析】
+能力分布：
+${levels}
+
+【差異化需求】
+希望在以下面向差異化：
+${diffTypes.map(t => '- [x] ' + t).join('\n')}
+
+${other ? '【其他需求】\n' + other + '\n\n' : ''}請設計：
+1. 三個難度層次的學習目標
+2. 差異化的學習活動設計
+3. 分層教材或學習單
+4. 多元評量方式
+5. 教師課堂實施流程建議`;
+
+            } else if (type === 'lesson-plan') {
+                const subject = document.getElementById('lp-subject').value || '[科目]';
+                const topic = document.getElementById('lp-topic').value || '[主題]';
+                const grade = document.getElementById('lp-grade').value || '[年級]';
+                const periods = document.getElementById('lp-periods').value || '[節數]';
+                const objectives = document.getElementById('lp-objectives').value || '[學習目標]';
+                const resources = document.getElementById('lp-resources').value;
+
+                prompt = `請幫我設計一份完整的教案：
+
+【課程資訊】
+科目：${subject}
+單元主題：${topic}
+年級：${grade}
+節數：${periods}
+
+【學習目標】
+${objectives}
+
+${resources ? '【教學資源】\n' + resources + '\n\n' : ''}請設計完整教案，包含：
+1. 教學目標（認知、情意、技能）
+2. 教學流程（引起動機、發展活動、總結評量）
+3. 時間分配
+4. 教學策略與方法
+5. 評量方式
+6. 學習單或補充教材建議`;
+
+            } else if (type === 'research-design') {
+                const topic = document.getElementById('rd-topic').value || '[研究主題]';
+                const question = document.getElementById('rd-question').value || '[研究問題]';
+                const approach = document.getElementById('rd-approach').value;
+                const participants = document.getElementById('rd-participants').value || '[研究對象]';
+                const duration = document.getElementById('rd-duration').value || '[研究期程]';
+
+                prompt = `請協助規劃教育研究設計：
+
+【研究資訊】
+研究主題：${topic}
+核心研究問題：${question}
+
+【研究取向】
+偏好的研究典範：${approach}
+
+【研究條件】
+研究對象：${participants}
+研究期程：${duration}
+
+請設計：
+1. 建議的研究設計類型與理由
+2. 研究對象選取策略
+3. 變項定義與測量（量化）或研究焦點（質性）
+4. 資料收集方法與工具
+5. 資料分析策略
+6. 研究效度/可信賴度確保策略
+7. 預期研究時程表
+8. 研究倫理考量`;
+
+            } else if (type === 'geogebra') {
+                const concept = document.getElementById('geo-concept').value || '[數學概念]';
+                const grade = document.getElementById('geo-grade').value || '[年級]';
+                const time = document.getElementById('geo-time').value || '[時間]';
+                const objectives = document.getElementById('geo-objectives').value || '[學習目標]';
+                const elements = document.getElementById('geo-elements').value || '[互動元素]';
+
+                prompt = `請設計一個 GeoGebra 互動教學活動：
+
+【概念】${concept}
+
+【年級】${grade}
+【時間】${time}
+
+【學習目標】
+學生能夠：
+${objectives}
+
+【設計需求】
+互動元素：${elements}
+
+請提供：
+1. GeoGebra 建構步驟（含指令語法）
+2. 學生探索指引（5個引導問題）
+3. 教師提問建議
+4. 預期學生發現的數學規律
+5. 延伸挑戰題
+6. 常見困難與鷹架提示`;
+
+            } else {
+                // Generic prompt
+                const subject = document.getElementById('gen-subject').value || '[科目/領域]';
+                const grade = document.getElementById('gen-grade').value || '[年級/對象]';
+                const topic = document.getElementById('gen-topic').value || '[主題/目標]';
+                const other = document.getElementById('gen-other').value;
+
+                const skillTitles = {
+                    'adaptive': '自適應學習系統',
+                    'learning-analytics': '學習分析報告',
+                    'rural-platform': '偏鄉數位學習方案',
+                    'ict-integration': 'ICT 融入教學設計'
+                };
+
+                prompt = `請協助設計${skillTitles[currentSkill] || '教育方案'}：
+
+【基本資訊】
+科目/領域：${subject}
+年級/對象：${grade}
+
+【主題/目標】
+${topic}
+
+${other ? '【其他需求】\n' + other + '\n\n' : ''}請提供完整的設計方案，包含：
+1. 設計理念與目標
+2. 具體實施策略
+3. 所需資源與工具
+4. 預期成效
+5. 可能遇到的挑戰與解決方案`;
+            }
+
+            document.getElementById('output-content').textContent = prompt;
+            goToStep(3);
+        }
+
+        function copyPrompt() {
+            const content = document.getElementById('output-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '✓ 已複製';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 複製';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
