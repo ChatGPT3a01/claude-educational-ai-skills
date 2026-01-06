@@ -167,20 +167,33 @@
         }
         .skill-card-items li {
             padding: 8px 0;
-            color: #555;
             font-size: 0.95em;
             border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .skill-card-items li:last-child {
             border-bottom: none;
         }
-        .skill-card-items li::before {
+        .skill-card-items li a {
+            color: #555;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .skill-card-items li a:hover {
+            background: #667eea;
+            color: white;
+        }
+        .skill-card-items li a::before {
             content: "▸";
             color: #667eea;
             font-weight: bold;
+        }
+        .skill-card-items li a:hover::before {
+            color: white;
         }
         .skill-card.teaching { border-top: 4px solid #e74c3c; }
         .skill-card.analytics { border-top: 4px solid #3498db; }
@@ -287,9 +300,9 @@
                         <span class="skill-card-title">教學設計</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>自適應學習設計</li>
-                        <li>差異化教學策略</li>
-                        <li>AI 教案產生器</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/adaptive-learning-design.md" target="_blank">自適應學習設計</a></li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/differentiated-instruction.md" target="_blank">差異化教學策略</a></li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/lesson-plan-generator.md" target="_blank">AI 教案產生器</a></li>
                     </ul>
                 </div>
 
@@ -299,8 +312,8 @@
                         <span class="skill-card-title">學習分析</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>學習分析技術</li>
-                        <li>學生學習輪廓分析</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E5%AD%B8%E7%BF%92%E5%88%86%E6%9E%90/learning-analytics.md" target="_blank">學習分析技術</a></li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E5%AD%B8%E7%BF%92%E5%88%86%E6%9E%90/student-profiling.md" target="_blank">學生學習輪廓分析</a></li>
                     </ul>
                 </div>
 
@@ -310,8 +323,8 @@
                         <span class="skill-card-title">偏鄉教育</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>在地化內容設計</li>
-                        <li>偏鄉教育平台設計</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E5%81%8F%E9%84%89%E6%95%99%E8%82%B2/localized-content-design.md" target="_blank">在地化內容設計</a></li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E5%81%8F%E9%84%89%E6%95%99%E8%82%B2/rural-education-platform.md" target="_blank">偏鄉教育平台設計</a></li>
                     </ul>
                 </div>
 
@@ -321,8 +334,8 @@
                         <span class="skill-card-title">AI 工具應用</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>AI 教學工具全覽</li>
-                        <li>生成式 AI 教育應用</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/AI%E5%B7%A5%E5%85%B7%E6%87%89%E7%94%A8/ai-teaching-tools.md" target="_blank">AI 教學工具全覽</a></li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/AI%E5%B7%A5%E5%85%B7%E6%87%89%E7%94%A8/generative-ai-education.md" target="_blank">生成式 AI 教育應用</a></li>
                     </ul>
                 </div>
 
@@ -332,8 +345,7 @@
                         <span class="skill-card-title">ICT 科技融入</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>ICT 融入教學</li>
-                        <li>SAMR / TPACK 模型</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/ICT%E7%A7%91%E6%8A%80%E8%9E%8D%E5%85%A5/ict-integration.md" target="_blank">ICT 融入教學</a></li>
                     </ul>
                 </div>
 
@@ -343,8 +355,7 @@
                         <span class="skill-card-title">數學科技教育</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>GeoGebra 應用</li>
-                        <li>Desmos 應用</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E6%95%B8%E5%AD%B8%E7%A7%91%E6%8A%80%E6%95%99%E8%82%B2/math-technology.md" target="_blank">數學科技教育</a></li>
                     </ul>
                 </div>
 
@@ -354,8 +365,8 @@
                         <span class="skill-card-title">研究方法</span>
                     </div>
                     <ul class="skill-card-items">
-                        <li>教育研究設計</li>
-                        <li>混合研究方法</li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/education-research-design.md" target="_blank">教育研究設計</a></li>
+                        <li><a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/skills/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/mixed-methods.md" target="_blank">混合研究方法</a></li>
                     </ul>
                 </div>
             </div>
@@ -373,8 +384,7 @@
         </div>
 
         <div class="footer">
-            <p>Built with Claude Code | MIT License</p>
-            <p style="margin-top: 10px; opacity: 0.9;">讓 AI 教育不再只屬於資源豐富的都會學校，而是能在偏鄉生根發芽</p>
+            <p>讓 AI 教育不再只屬於資源豐富的都會學校，而是能在偏鄉生根發芽</p>
         </div>
     </div>
 </body>
