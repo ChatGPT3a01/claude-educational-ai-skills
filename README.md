@@ -4,6 +4,10 @@
   <a href="https://chatgpt3a01.github.io/claude-educational-ai-skills/">
     <img src="https://img.shields.io/badge/📖_線上文件-點擊查看-667eea?style=for-the-badge" alt="線上文件">
   </a>
+  &nbsp;&nbsp;
+  <a href="https://chatgpt3a01.github.io/claude-educational-ai-skills/#generator">
+    <img src="https://img.shields.io/badge/⚡_提示詞生成器-立即使用-ff6b6b?style=for-the-badge" alt="提示詞生成器">
+  </a>
 </p>
 
 > 數位學習與教育科技 AI 技能集
