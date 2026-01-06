@@ -14,9 +14,7 @@
 
 ## 簡介
 
-這是一個專為**數位學習與教育研究**領域打造的 Claude Skills 集合，涵蓋 AI 教育、差異化教學、偏鄉教育、學習分析、ICT 融入教學、數學科技教育等主題。
-
-本專案靈感來自 [claude-scientific-skills](https://github.com/backtrue/claude-scientific-skills)，專注於教育科技領域的研究與實務應用。
+這是一個專為**數位學習與教育研究**領域打造的 Claude Skills 集合，涵蓋 AI 教育、差異化教學、偏鄉教育、學習分析、ICT 融入教學、數學科技教育等主題，專注於教育科技領域的研究與實務應用。
 
 ---
 
