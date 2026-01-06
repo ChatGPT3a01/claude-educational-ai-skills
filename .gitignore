@@ -1,0 +1,63 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Node.js (if using any build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python (if using any scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+
+# Local configuration
+.env
+.env.local
+*.local
+
+# Draft files (not ready for publishing)
+drafts/
+_drafts/
+*.draft.md
+
+# Personal notes
+notes/
+personal/
+私人筆記/
+
+# Build output
+_site/
+public/
+out/
+
+# Cache
+.cache/
+*.cache

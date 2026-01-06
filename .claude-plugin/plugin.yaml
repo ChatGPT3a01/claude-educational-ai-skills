@@ -1,0 +1,50 @@
+name: claude-educational-ai-skills
+version: 1.0.0
+description: |
+  數位學習與教育科技 AI 技能集
+  專為教育研究者、教師、數位學習平台開發者設計
+  涵蓋 AI 教育、差異化教學、偏鄉教育、學習分析等領域
+
+author: 曾慶良 (Ching-Liang Tseng)
+repository: https://github.com/your-username/claude-educational-ai-skills
+license: MIT
+
+categories:
+  - 教學設計
+  - 學習分析
+  - 偏鄉教育
+  - AI工具應用
+  - 研究方法
+  - ICT科技融入
+  - 數學科技教育
+
+keywords:
+  - AI教育
+  - 數位學習
+  - 差異化教學
+  - 自適應學習
+  - 偏鄉教育
+  - 在地化平台
+  - 學習分析
+  - Learning Analytics
+  - Educational Technology
+  - ICT融入教學
+  - 數學教育
+
+supported_models:
+  - claude-3
+  - claude-opus-4
+  - gpt-4o
+  - gpt-4.1
+  - gemini-2.5-flash
+  - gemini-2.5-pro
+  - gemini-3.0-flash
+  - gemini-3.0-pro
+
+target_audience:
+  - 教育研究者
+  - 中小學教師
+  - 大學教授
+  - 數位學習平台開發者
+  - 教育政策制定者
+  - 偏鄉教育工作者
