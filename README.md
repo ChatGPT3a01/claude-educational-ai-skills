@@ -10,6 +10,8 @@
 ![Gemini](https://img.shields.io/badge/Gemini-2.5%20%7C%203.0-4285F4)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+**[📖 線上文件](https://chatgpt3a01.github.io/claude-educational-ai-skills/)** | **[💾 GitHub Repo](https://github.com/ChatGPT3a01/claude-educational-ai-skills)**
+
 ---
 
 ## 簡介
