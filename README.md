@@ -12,7 +12,7 @@
 ![Skills](https://img.shields.io/badge/Skills-14-blue)
 ![Categories](https://img.shields.io/badge/Categories-7-green)
 ![Claude](https://img.shields.io/badge/Claude-Opus%204.5%20%7C%20Sonnet%204-blueviolet)
-![GPT](https://img.shields.io/badge/GPT-4o%20%7C%204.1-74aa9c)
+![GPT](https://img.shields.io/badge/GPT-5.1%20%7C%205.2-74aa9c)
 ![Gemini](https://img.shields.io/badge/Gemini-2.5%20%7C%203.0-4285F4)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
