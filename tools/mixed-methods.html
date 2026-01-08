@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>混合研究方法 - 提示詞生成器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .tool-header { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #667eea; text-decoration: none; font-weight: 600; margin-bottom: 20px; padding: 8px 16px; background: #f0f0ff; border-radius: 8px; }
+        .tool-title-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tool-icon { font-size: 2.5em; }
+        .tool-title { font-size: 1.8em; color: #333; }
+        .tool-category { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; }
+        .tool-desc { color: #666; margin-top: 10px; }
+        .tool-content { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .section-title { font-size: 1.3em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .template-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .template-card { padding: 20px; border: 2px solid #e0e0e0; border-radius: 15px; cursor: pointer; transition: all 0.3s; background: #fafafa; }
+        .template-card:hover { border-color: #667eea; background: #f0f0ff; }
+        .template-card.active { border-color: #667eea; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); }
+        .template-card-title { font-weight: 600; margin-bottom: 8px; }
+        .template-card-desc { font-size: 0.85em; color: #666; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .form-grid { display: grid; gap: 18px; }
+        .form-field label { display: block; margin-bottom: 6px; font-weight: 600; }
+        .form-field input, .form-field textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.95em; font-family: inherit; }
+        .form-field input:focus, .form-field textarea:focus { outline: none; border-color: #667eea; }
+        .form-field textarea { min-height: 80px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+        .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .btn { padding: 14px 28px; border-radius: 12px; font-weight: 600; border: none; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .output-section { display: none; margin-top: 30px; }
+        .output-section.active { display: block; }
+        .output-box { background: #1e1e1e; border-radius: 15px; padding: 25px; }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .output-title { color: #fff; font-weight: 600; }
+        .copy-btn { background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .copy-btn.copied { background: #38ef7d; }
+        .output-content { color: #e0e0e0; font-family: monospace; font-size: 0.9em; white-space: pre-wrap; line-height: 1.7; max-height: 500px; overflow-y: auto; }
+        .ai-links { display: flex; gap: 12px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        .ai-link { padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; }
+        .ai-link.claude { background: #7c3aed; color: white; }
+        .ai-link.gpt { background: #10a37f; color: white; }
+        .ai-link.gemini { background: #4285f4; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tool-header">
+            <a href="../index.html" class="back-link">← 返回工具箱</a>
+            <div class="tool-title-row">
+                <span class="tool-icon">🔄</span>
+                <h1 class="tool-title">混合研究方法</h1>
+                <span class="tool-category">研究方法</span>
+            </div>
+            <p class="tool-desc">整合量化與質性研究方法</p>
+        </div>
+
+        <div class="tool-content">
+            <h2 class="section-title">選擇提示詞範本</h2>
+            <div class="template-cards">
+                <div class="template-card active" onclick="selectTemplate(0)">
+                    <div class="template-card-title">📐 混合研究設計規劃</div>
+                    <p class="template-card-desc">規劃量化與質性整合的研究設計</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate(1)">
+                    <div class="template-card-title">🔗 整合分析策略</div>
+                    <p class="template-card-desc">設計量化與質性結果的整合分析</p>
+                </div>
+            </div>
+
+            <div class="form-section active" id="form-0">
+                <div class="form-grid">
+                    <div class="form-field"><label>研究主題</label><input type="text" id="f0-topic" placeholder="例：AI輔助偏鄉高中差異化教學成效研究"></div>
+                    <div class="form-field"><label>核心研究問題</label><textarea id="f0-question" placeholder="例：AI教學輔助系統如何提升偏鄉學生學習成效？"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>研究目的1</label><input type="text" id="f0-purpose1" placeholder="例：檢驗AI輔助對學習成效的影響"></div>
+                        <div class="form-field"><label>研究目的2</label><input type="text" id="f0-purpose2" placeholder="例：深入了解學生使用AI的學習經驗"></div>
+                    </div>
+                    <div class="form-field"><label>選擇混合研究的理由</label><textarea id="f0-reason" placeholder="例：用質性解釋量化結果、全面理解複雜現象"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>研究對象</label><input type="text" id="f0-participant" placeholder="例：3所偏鄉高中，約150位學生"></div>
+                        <div class="form-field"><label>可用時間</label><input type="text" id="f0-time" placeholder="例：1學年（2學期）"></div>
+                    </div>
+                    <div class="form-field"><label>研究資源</label><input type="text" id="f0-resource" placeholder="例：研究助理、AI系統授權、交通費"></div>
+                </div>
+            </div>
+
+            <div class="form-section" id="form-1">
+                <div class="form-grid">
+                    <div class="form-field"><label>研究設計類型</label><input type="text" id="f1-design" placeholder="例：解釋性序列設計"></div>
+                    <div class="form-field"><label>量化結果摘要</label><textarea id="f1-quant" placeholder="例：實驗組成績顯著高於控制組(p<.05)，效果量d=0.65"></textarea></div>
+                    <div class="form-field"><label>質性結果摘要</label><textarea id="f1-qual" placeholder="例：訪談發現三個主題：1.AI即時回饋提升動機..."></textarea></div>
+                    <div class="form-field"><label>整合目的</label><textarea id="f1-purpose" placeholder="例：驗證發現的一致性、解釋量化結果的意義"></textarea></div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="generatePrompt()">⚡ 生成提示詞</button>
+                <button class="btn btn-secondary" onclick="resetForm()">🔄 重置</button>
+            </div>
+
+            <div class="output-section" id="output-section">
+                <div class="output-box">
+                    <div class="output-header">
+                        <span class="output-title">生成的提示詞</span>
+                        <button class="copy-btn" onclick="copyPrompt()">複製</button>
+                    </div>
+                    <div class="output-content" id="output-content"></div>
+                </div>
+                <div class="ai-links">
+                    <a href="https://claude.ai" target="_blank" class="ai-link claude">前往 Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="ai-link gpt">前往 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">前往 Gemini</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            { generate: () => `請協助規劃混合研究設計：
+
+【研究資訊】
+研究主題：${document.getElementById('f0-topic').value || '[主題]'}
+核心研究問題：${document.getElementById('f0-question').value || '[問題]'}
+研究目的：
+1. ${document.getElementById('f0-purpose1').value || '[目的1]'}
+2. ${document.getElementById('f0-purpose2').value || '[目的2]'}
+
+【選擇混合研究的理由】
+我希望透過混合研究來：${document.getElementById('f0-reason').value || '[理由]'}
+
+【研究條件】
+研究對象：${document.getElementById('f0-participant').value || '[描述]'}
+可用時間：${document.getElementById('f0-time').value || '[期程]'}
+研究資源：${document.getElementById('f0-resource').value || '[列舉]'}
+
+請設計：
+1. 建議的混合設計類型與理由
+2. 各階段研究問題/目的對應
+3. 量化與質性各階段的設計
+4. 整合策略（何時、如何整合）
+5. 資料收集時程表
+6. 品質確保策略
+7. 潛在挑戰與因應` },
+            { generate: () => `請設計混合研究的整合分析策略：
+
+【研究設計類型】
+${document.getElementById('f1-design').value || '[並行/解釋性序列/探索性序列]'}
+
+【已有結果】
+量化結果摘要：${document.getElementById('f1-quant').value || '[量化摘要]'}
+質性結果摘要：${document.getElementById('f1-qual').value || '[質性摘要]'}
+
+【整合目的】
+希望透過整合：${document.getElementById('f1-purpose').value || '[整合目的]'}
+
+請提供：
+1. 整合方法建議（joint display, transformation等）
+2. 結果呈現格式建議
+3. 處理歧異結果的策略
+4. 整合品質確保策略
+5. 撰寫整合結果的建議` }
+        ];
+        let currentTemplate = 0;
+        function selectTemplate(i) { currentTemplate = i; document.querySelectorAll('.template-card').forEach((c,idx) => c.classList.toggle('active', idx===i)); document.querySelectorAll('.form-section').forEach((f,idx) => f.classList.toggle('active', idx===i)); document.getElementById('output-section').classList.remove('active'); }
+        function generatePrompt() { document.getElementById('output-content').textContent = templates[currentTemplate].generate(); document.getElementById('output-section').classList.add('active'); document.getElementById('output-section').scrollIntoView({behavior:'smooth'}); }
+        function copyPrompt() { navigator.clipboard.writeText(document.getElementById('output-content').textContent).then(() => { const b = document.querySelector('.copy-btn'); b.textContent = '已複製!'; b.classList.add('copied'); setTimeout(() => { b.textContent = '複製'; b.classList.remove('copied'); }, 2000); }); }
+        function resetForm() { document.querySelectorAll('input,textarea').forEach(e => e.value = ''); document.getElementById('output-section').classList.remove('active'); }
+    </script>
+</body>
+</html>

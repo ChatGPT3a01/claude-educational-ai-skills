@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>差異化教學策略 - 提示詞生成器</title>
+    <meta name="description" content="設計多層次教學內容與評量，滿足不同程度學生需求">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        /* Header */
+        .tool-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background: #f0f0ff;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .back-link:hover { background: #e0e0ff; }
+        .tool-title-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        .tool-icon { font-size: 2.5em; }
+        .tool-title { font-size: 1.8em; color: #333; }
+        .tool-category {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+        }
+        .tool-desc { color: #666; font-size: 1em; margin-top: 10px; }
+
+        /* Main Content */
+        .tool-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        /* Template Cards */
+        .template-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .template-card {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fafafa;
+        }
+        .template-card:hover {
+            border-color: #667eea;
+            background: #f0f0ff;
+        }
+        .template-card.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        .template-card-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .template-card-desc { font-size: 0.85em; color: #666; }
+
+        /* Form */
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .form-grid {
+            display: grid;
+            gap: 18px;
+        }
+        .form-field label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+        .form-field input,
+        .form-field textarea,
+        .form-field select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-field input:focus,
+        .form-field textarea:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .form-field textarea { min-height: 100px; resize: vertical; }
+        .form-field .hint { font-size: 0.8em; color: #888; margin-top: 4px; }
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        /* Buttons */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-success { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+
+        /* Output */
+        .output-section { display: none; margin-top: 30px; }
+        .output-section.active { display: block; }
+        .output-box {
+            background: #1e1e1e;
+            border-radius: 15px;
+            padding: 25px;
+        }
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .output-title { color: #fff; font-weight: 600; }
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: #5a6fd6; }
+        .copy-btn.copied { background: #38ef7d; }
+        .output-content {
+            color: #e0e0e0;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .ai-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .ai-link {
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ai-link.claude { background: #7c3aed; color: white; }
+        .ai-link.gpt { background: #10a37f; color: white; }
+        .ai-link.gemini { background: #4285f4; color: white; }
+        .ai-link:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            .tool-header, .tool-content { padding: 25px 20px; }
+            .tool-title { font-size: 1.5em; }
+            .template-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="tool-header">
+            <a href="../index.html" class="back-link">← 返回工具箱</a>
+            <div class="tool-title-row">
+                <span class="tool-icon">📚</span>
+                <h1 class="tool-title">差異化教學策略</h1>
+                <span class="tool-category">教學設計</span>
+            </div>
+            <p class="tool-desc">設計多層次教學內容與評量，滿足不同程度學生需求</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="tool-content">
+            <h2 class="section-title">選擇提示詞範本</h2>
+
+            <!-- Template Cards -->
+            <div class="template-cards">
+                <div class="template-card active" data-template="0" onclick="selectTemplate(0)">
+                    <div class="template-card-title">📝 設計差異化教案</div>
+                    <p class="template-card-desc">生成包含三個難度層次的完整差異化教案</p>
+                </div>
+                <div class="template-card" data-template="1" onclick="selectTemplate(1)">
+                    <div class="template-card-title">📄 生成分層學習單</div>
+                    <p class="template-card-desc">為同一主題生成基礎/進階/挑戰三種難度學習單</p>
+                </div>
+            </div>
+
+            <!-- Form Section 0: 設計差異化教案 -->
+            <div class="form-section active" id="form-0">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>科目</label>
+                            <input type="text" id="f0-subject" placeholder="例：數學">
+                        </div>
+                        <div class="form-field">
+                            <label>單元</label>
+                            <input type="text" id="f0-unit" placeholder="例：一元一次方程式">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>年級</label>
+                            <input type="text" id="f0-grade" placeholder="例：國中七年級">
+                        </div>
+                        <div class="form-field">
+                            <label>班級人數</label>
+                            <input type="text" id="f0-students" placeholder="例：25人">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>高程度學生比例</label>
+                            <input type="text" id="f0-high" placeholder="例：20%">
+                        </div>
+                        <div class="form-field">
+                            <label>中程度學生比例</label>
+                            <input type="text" id="f0-mid" placeholder="例：50%">
+                        </div>
+                        <div class="form-field">
+                            <label>基礎程度學生比例</label>
+                            <input type="text" id="f0-low" placeholder="例：30%">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>特殊考量</label>
+                        <textarea id="f0-special" placeholder="例：班上有原住民學生、新住民子女、需要額外支持的學生等"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Section 1: 生成分層學習單 -->
+            <div class="form-section" id="form-1">
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label>主題</label>
+                        <input type="text" id="f1-topic" placeholder="例：分數的加減">
+                    </div>
+                    <div class="form-field">
+                        <label>學習目標</label>
+                        <textarea id="f1-objective" placeholder="例：能正確計算同分母分數的加減"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="generatePrompt()">⚡ 生成提示詞</button>
+                <button class="btn btn-secondary" onclick="resetForm()">🔄 重置</button>
+            </div>
+
+            <!-- Output Section -->
+            <div class="output-section" id="output-section">
+                <div class="output-box">
+                    <div class="output-header">
+                        <span class="output-title">生成的提示詞</span>
+                        <button class="copy-btn" onclick="copyPrompt()">複製</button>
+                    </div>
+                    <div class="output-content" id="output-content"></div>
+                </div>
+                <div class="ai-links">
+                    <a href="https://claude.ai" target="_blank" class="ai-link claude">前往 Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="ai-link gpt">前往 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">前往 Gemini</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Template Data
+        const templates = [
+            {
+                name: '設計差異化教案',
+                generate: function() {
+                    const subject = document.getElementById('f0-subject').value || '[科目]';
+                    const unit = document.getElementById('f0-unit').value || '[單元]';
+                    const grade = document.getElementById('f0-grade').value || '[年級]';
+                    const students = document.getElementById('f0-students').value || '[人數]';
+                    const high = document.getElementById('f0-high').value || '[高程度%]';
+                    const mid = document.getElementById('f0-mid').value || '[中程度%]';
+                    const low = document.getElementById('f0-low').value || '[基礎程度%]';
+                    const special = document.getElementById('f0-special').value || '[特殊考量]';
+
+                    return `請幫我設計一份差異化教案：
+
+科目：${subject}
+單元：${unit}
+年級：${grade}
+班級人數：${students}
+學生程度分布：
+- 高程度：約 ${high} 學生
+- 中程度：約 ${mid} 學生
+- 基礎程度：約 ${low} 學生
+
+請設計：
+1. 三個難度層次的學習目標
+2. 差異化的學習活動設計
+3. 分層教材或學習單
+4. 多元評量方式
+5. 教師課堂實施流程建議
+
+特殊考量：${special}`;
+                }
+            },
+            {
+                name: '生成分層學習單',
+                generate: function() {
+                    const topic = document.getElementById('f1-topic').value || '[主題]';
+                    const objective = document.getElementById('f1-objective').value || '[學習目標]';
+
+                    return `請為以下主題生成三個難度的學習單：
+
+主題：${topic}
+學習目標：${objective}
+
+基礎版需求：
+- 以填空、選擇題為主
+- 提供較多提示與鷹架
+- 題目數量適中
+
+進階版需求：
+- 包含應用與分析題
+- 減少提示
+- 增加思考性問題
+
+挑戰版需求：
+- 開放式問題
+- 跨領域連結
+- 創意發揮空間`;
+                }
+            }
+        ];
+
+        let currentTemplate = 0;
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+
+            // Update card styles
+            document.querySelectorAll('.template-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            // Show corresponding form
+            document.querySelectorAll('.form-section').forEach((form, i) => {
+                form.classList.toggle('active', i === index);
+            });
+
+            // Hide output
+            document.getElementById('output-section').classList.remove('active');
+        }
+
+        function generatePrompt() {
+            const prompt = templates[currentTemplate].generate();
+            document.getElementById('output-content').textContent = prompt;
+            document.getElementById('output-section').classList.add('active');
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyPrompt() {
+            const content = document.getElementById('output-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '已複製!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '複製';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        function resetForm() {
+            document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            document.getElementById('output-section').classList.remove('active');
+        }
+    </script>
+</body>
+</html>

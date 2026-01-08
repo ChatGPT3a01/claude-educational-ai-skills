@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Claude Educational AI Skills - 數位學習與教育科技 AI 技能集</title>
+    <title>Claude Educational AI Skills - 教育 AI 技能工具箱</title>
     <meta name="description" content="專為教育研究者、教師、數位學習平台開發者設計的 AI 技能集">
     <style>
         * {
@@ -23,26 +23,33 @@
             margin: 0 auto;
             padding: 40px 20px;
         }
+
+        /* Hero Section */
         .hero {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 50px 40px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
             margin-bottom: 30px;
         }
         h1 {
-            font-size: 2.2em;
+            font-size: 2.4em;
             color: #333;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .subtitle {
-            font-size: 1.1em;
+            font-size: 1.15em;
             color: #666;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .badges {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
         .badges img {
             margin: 3px;
@@ -57,18 +64,18 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 12px 24px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
             font-size: 0.95em;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
             border: none;
             cursor: pointer;
         }
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
         }
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -82,25 +89,72 @@
             background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
         }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #667eea;
+            color: #667eea;
+        }
+        .btn-outline:hover {
+            background: #667eea;
+            color: white;
+        }
 
-        /* Generator Section */
-        .generator-section {
-            background: white;
-            border-radius: 20px;
+        /* Toolbox Section */
+        .toolbox-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
             margin-bottom: 30px;
         }
-        .generator-section h2 {
+        .toolbox-header {
             text-align: center;
-            margin-bottom: 10px;
-            color: #333;
-            font-size: 1.8em;
+            margin-bottom: 30px;
         }
-        .generator-intro {
-            text-align: center;
+        .toolbox-header h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .toolbox-intro {
             color: #666;
+            font-size: 0.95em;
+        }
+
+        /* Audience Selector */
+        .audience-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
             margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .audience-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            border-radius: 50px;
+            background: #f5f5f5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .audience-card:hover {
+            background: #e8e8ff;
+            border-color: #667eea;
+        }
+        .audience-card.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        .audience-icon {
+            font-size: 1.3em;
+        }
+        .audience-label {
+            font-weight: 600;
             font-size: 0.95em;
         }
 
@@ -110,16 +164,17 @@
             flex-wrap: wrap;
             gap: 8px;
             justify-content: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
             border-bottom: 2px solid #eee;
         }
         .category-tab {
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: #f5f5f5;
+            padding: 10px 18px;
+            border-radius: 25px;
+            background: #f0f0f0;
             cursor: pointer;
             font-size: 0.9em;
+            font-weight: 500;
             transition: all 0.2s;
             border: 2px solid transparent;
         }
@@ -131,243 +186,177 @@
             color: white;
         }
 
-        /* Skill List */
-        .skill-list {
+        /* Tool Cards Grid */
+        .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        .skill-item {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: #fafafa;
-        }
-        .skill-item:hover {
-            border-color: #667eea;
-            background: #f0f0ff;
-        }
-        .skill-item.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
-        }
-        .skill-item.hidden {
-            display: none;
-        }
-        .skill-item-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
-        }
-        .skill-item-icon {
-            font-size: 1.3em;
-        }
-        .skill-item-title {
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95em;
-        }
-        .skill-item-desc {
-            font-size: 0.85em;
-            color: #666;
-        }
-        .skill-item-category {
-            font-size: 0.75em;
-            color: #999;
-            margin-top: 5px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
         }
 
-        /* Template Selection */
-        .template-section {
+        /* Tool Card */
+        .tool-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e8e8ff;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.2);
+        }
+        .tool-card.hidden {
             display: none;
-            animation: fadeIn 0.3s ease;
         }
-        .template-section.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .template-header {
+        .tool-card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #eee;
         }
-        .template-header h3 {
-            color: #667eea;
+        .tool-number {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+        .tool-icon {
+            font-size: 1.8em;
+        }
+        .tool-title {
+            color: white;
+            font-size: 1.15em;
+            font-weight: 600;
             flex: 1;
         }
-        .back-btn {
-            background: #f0f0f0;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-        .back-btn:hover {
-            background: #e0e0e0;
-        }
-
-        /* Template Selector */
-        .template-selector {
-            margin-bottom: 20px;
-        }
-        .template-selector label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        .template-selector select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 1em;
-            background: white;
-        }
-        .template-selector select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        /* Form Fields */
-        .form-fields {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .form-field {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-field label {
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.9em;
-        }
-        .form-field input,
-        .form-field textarea,
-        .form-field select {
-            padding: 10px 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.95em;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-        .form-field input:focus,
-        .form-field textarea:focus,
-        .form-field select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        .form-field textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-        .form-field .hint {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 3px;
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        /* Output Section */
-        .output-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .output-section.active {
-            display: block;
-        }
-        .output-box {
-            background: #1e1e1e;
-            border-radius: 15px;
-            padding: 25px;
-            position: relative;
-        }
-        .output-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        .output-title {
-            color: #fff;
-            font-weight: 600;
-        }
-        .copy-btn {
-            background: #667eea;
+        .tool-category-badge {
+            background: rgba(255,255,255,0.2);
             color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+        }
+
+        /* Audience Descriptions */
+        .tool-audiences {
+            padding: 20px;
+            min-height: 120px;
+        }
+        .audience-desc {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
             font-size: 0.9em;
-            transition: background 0.2s;
+            line-height: 1.5;
         }
-        .copy-btn:hover {
-            background: #5a6fd6;
+        .audience-desc.show {
+            display: block;
         }
-        .copy-btn.copied {
-            background: #38ef7d;
+        .audience-desc.teacher-desc {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-left: 4px solid #4caf50;
         }
-        .output-content {
-            color: #e0e0e0;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.9em;
-            white-space: pre-wrap;
-            line-height: 1.7;
-            max-height: 500px;
-            overflow-y: auto;
+        .audience-desc.researcher-desc {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
         }
-        .output-actions {
+        .audience-desc.developer-desc {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 4px solid #ff9800;
+        }
+        .audience-desc-label {
+            font-weight: 600;
+            font-size: 0.8em;
+            margin-bottom: 4px;
+            opacity: 0.8;
+        }
+
+        /* Tool Buttons */
+        .tool-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 20px;
+            gap: 10px;
+            padding: 0 20px 20px;
+        }
+        .tool-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
             justify-content: center;
+            gap: 6px;
+        }
+        .tool-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .tool-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .tool-btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+        .tool-btn-secondary:hover {
+            background: #e8e8ff;
+            border-color: #667eea;
+        }
+
+        /* Stats */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
             flex-wrap: wrap;
         }
-
-        /* Source Info */
-        .source-info {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-label {
             font-size: 0.85em;
             color: #666;
         }
-        .source-info a {
-            color: #667eea;
-        }
 
-        /* Author & Footer */
+        /* Author Section */
         .author {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 35px 40px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.3);
             margin-bottom: 30px;
             text-align: center;
         }
         .author h2 {
             margin-bottom: 15px;
+            color: #333;
         }
         .author-links {
             display: flex;
@@ -380,18 +369,22 @@
             color: white;
             text-decoration: none;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 10px 20px;
+            border-radius: 10px;
             font-size: 0.9em;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
         }
         .author-links a:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
+
+        /* Footer */
         .footer {
             text-align: center;
-            color: white;
-            padding: 20px;
+            color: rgba(255,255,255,0.9);
+            padding: 25px;
+            font-size: 0.95em;
         }
 
         /* Responsive */
@@ -399,18 +392,23 @@
             .container {
                 padding: 20px 15px;
             }
-            .hero, .generator-section, .author {
-                padding: 25px 20px;
+            .hero, .toolbox-section, .author {
+                padding: 30px 20px;
             }
             h1 {
                 font-size: 1.8em;
             }
-            .category-tabs {
-                gap: 5px;
+            .tool-grid {
+                grid-template-columns: 1fr;
             }
-            .category-tab {
-                padding: 6px 12px;
-                font-size: 0.85em;
+            .audience-selector {
+                gap: 8px;
+            }
+            .audience-card {
+                padding: 10px 16px;
+            }
+            .stats-bar {
+                gap: 25px;
             }
         }
     </style>
@@ -420,10 +418,10 @@
         <!-- Hero Section -->
         <div class="hero">
             <h1>Claude Educational AI Skills</h1>
-            <p class="subtitle">數位學習與教育科技 AI 技能集<br>專為教育研究者、教師、數位學習平台開發者設計</p>
+            <p class="subtitle">教育 AI 技能工具箱<br>專為教師、研究者、開發者打造的提示詞生成器</p>
 
             <div class="badges">
-                <img src="https://img.shields.io/badge/Skills-13-blue" alt="Skills">
+                <img src="https://img.shields.io/badge/Skills-14-blue" alt="Skills">
                 <img src="https://img.shields.io/badge/Categories-7-green" alt="Categories">
                 <img src="https://img.shields.io/badge/Claude-Opus%204.5%20%7C%20Sonnet%204-blueviolet" alt="Claude">
                 <img src="https://img.shields.io/badge/GPT-5.1%20%7C%205.2-74aa9c" alt="GPT">
@@ -431,87 +429,72 @@
             </div>
 
             <div class="btn-group">
-                <a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills" class="btn btn-primary">
+                <a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills" class="btn btn-primary" target="_blank">
                     GitHub Repo
                 </a>
-                <a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/README.md" class="btn btn-secondary">
+                <a href="https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/README.md" class="btn btn-secondary" target="_blank">
                     完整文件
                 </a>
             </div>
         </div>
 
-        <!-- Prompt Generator Section -->
-        <div class="generator-section" id="generator">
-            <h2>提示詞生成器</h2>
-            <p class="generator-intro">
-                選擇技能 → 選擇範本 → 填入資訊 → 生成專業提示詞<br>
-                <strong>所有範本皆來自技能文件，可點擊查看完整說明</strong>
-            </p>
+        <!-- Toolbox Section -->
+        <div class="toolbox-section" id="toolbox">
+            <div class="toolbox-header">
+                <h2>選擇你的身份，開始使用工具</h2>
+                <p class="toolbox-intro">每個工具都提供「提示詞生成器」與「技能文件」雙入口</p>
+            </div>
 
-            <!-- Step 1: Skill Selection -->
-            <div id="step-skill" class="template-section active">
-                <div class="category-tabs">
-                    <div class="category-tab active" data-category="all">全部</div>
-                    <div class="category-tab" data-category="teaching">教學設計</div>
-                    <div class="category-tab" data-category="analytics">學習分析</div>
-                    <div class="category-tab" data-category="rural">偏鄉教育</div>
-                    <div class="category-tab" data-category="ai-tools">AI工具應用</div>
-                    <div class="category-tab" data-category="ict">ICT融入</div>
-                    <div class="category-tab" data-category="math">數學科技</div>
-                    <div class="category-tab" data-category="research">研究方法</div>
+            <!-- Audience Selector -->
+            <div class="audience-selector">
+                <div class="audience-card active" data-audience="all" onclick="selectAudience('all')">
+                    <span class="audience-icon">👥</span>
+                    <span class="audience-label">全部</span>
                 </div>
-
-                <div class="skill-list" id="skill-list">
-                    <!-- Skills will be populated by JavaScript -->
+                <div class="audience-card" data-audience="teacher" onclick="selectAudience('teacher')">
+                    <span class="audience-icon">👨‍🏫</span>
+                    <span class="audience-label">教師</span>
+                </div>
+                <div class="audience-card" data-audience="researcher" onclick="selectAudience('researcher')">
+                    <span class="audience-icon">🔬</span>
+                    <span class="audience-label">研究者</span>
+                </div>
+                <div class="audience-card" data-audience="developer" onclick="selectAudience('developer')">
+                    <span class="audience-icon">💻</span>
+                    <span class="audience-label">開發者</span>
                 </div>
             </div>
 
-            <!-- Step 2: Template & Form -->
-            <div id="step-form" class="template-section">
-                <div class="template-header">
-                    <button class="back-btn" onclick="showSkillSelection()">← 返回選擇技能</button>
-                    <h3 id="selected-skill-title"></h3>
-                </div>
-
-                <div class="template-selector">
-                    <label>選擇提示詞範本</label>
-                    <select id="template-select" onchange="loadTemplate()">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                </div>
-
-                <div class="form-fields" id="form-fields">
-                    <!-- Form fields will be populated by JavaScript -->
-                </div>
-
-                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
-                    <button class="btn btn-success" onclick="generatePrompt()">生成提示詞</button>
-                </div>
-
-                <div class="source-info" id="source-info">
-                    <!-- Source link will be populated by JavaScript -->
-                </div>
+            <!-- Category Tabs -->
+            <div class="category-tabs">
+                <div class="category-tab active" data-category="all" onclick="filterCategory('all')">全部技能</div>
+                <div class="category-tab" data-category="teaching" onclick="filterCategory('teaching')">教學設計</div>
+                <div class="category-tab" data-category="analytics" onclick="filterCategory('analytics')">學習分析</div>
+                <div class="category-tab" data-category="rural" onclick="filterCategory('rural')">偏鄉教育</div>
+                <div class="category-tab" data-category="ai-tools" onclick="filterCategory('ai-tools')">AI工具</div>
+                <div class="category-tab" data-category="ict" onclick="filterCategory('ict')">ICT融入</div>
+                <div class="category-tab" data-category="math" onclick="filterCategory('math')">數學科技</div>
+                <div class="category-tab" data-category="research" onclick="filterCategory('research')">研究方法</div>
             </div>
 
-            <!-- Step 3: Output -->
-            <div id="step-output" class="output-section">
-                <div class="template-header">
-                    <button class="back-btn" onclick="showForm()">← 返回修改</button>
-                    <h3>生成結果</h3>
-                </div>
+            <!-- Tool Cards Grid -->
+            <div class="tool-grid" id="tool-grid">
+                <!-- Cards will be generated by JavaScript -->
+            </div>
 
-                <div class="output-box">
-                    <div class="output-header">
-                        <span class="output-title">生成的提示詞</span>
-                        <button class="copy-btn" onclick="copyPrompt()">複製</button>
-                    </div>
-                    <div class="output-content" id="output-content"></div>
+            <!-- Stats -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number">14</div>
+                    <div class="stat-label">專業技能</div>
                 </div>
-                <div class="output-actions">
-                    <button class="btn btn-secondary" onclick="showSkillSelection()">重新選擇技能</button>
-                    <a href="https://claude.ai" target="_blank" class="btn btn-primary">前往 Claude</a>
-                    <a href="https://chat.openai.com" target="_blank" class="btn btn-success">前往 ChatGPT</a>
-                    <a href="https://gemini.google.com" target="_blank" class="btn" style="background: #4285F4; color: white;">前往 Gemini</a>
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">領域分類</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">提示詞範本</div>
                 </div>
             </div>
         </div>
@@ -522,9 +505,9 @@
             <p><strong>曾慶良 (Ching-Liang Tseng)</strong></p>
             <p style="color: #666; margin-top: 10px;">研究領域：AI 教育、數位學習、偏鄉教育、差異化教學</p>
             <div class="author-links">
-                <a href="https://www.facebook.com/?locale=zh_TW">Facebook</a>
-                <a href="https://www.youtube.com/@Liang-yt02">YouTube</a>
-                <a href="https://www.facebook.com/groups/2754139931432955">3A科技研究社</a>
+                <a href="https://www.facebook.com/?locale=zh_TW" target="_blank">Facebook</a>
+                <a href="https://www.youtube.com/@Liang-yt02" target="_blank">YouTube</a>
+                <a href="https://www.facebook.com/groups/2754139931432955" target="_blank">3A科技研究社</a>
             </div>
         </div>
 
@@ -536,1256 +519,303 @@
 
     <script>
         // ============================================
-        // 技能與範本資料（來自各技能文件）
+        // 技能資料
         // ============================================
-        const skillsData = {
-            // 教學設計
-            'differentiated-instruction': {
+        const toolsData = [
+            {
                 id: 'differentiated-instruction',
                 title: '差異化教學策略',
                 icon: '📚',
                 category: 'teaching',
                 categoryName: '教學設計',
-                description: '設計多層次教學內容與評量，滿足不同程度學生需求',
                 file: 'skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/differentiated-instruction.md',
-                templates: [
-                    {
-                        name: '設計差異化教案',
-                        template: `請幫我設計一份差異化教案：
-
-科目：[科目名稱]
-單元：[單元名稱]
-年級：[年級]
-班級人數：[人數]
-學生程度分布：
-- 高程度：約 [高程度%] 學生
-- 中程度：約 [中程度%] 學生
-- 基礎程度：約 [基礎程度%] 學生
-
-請設計：
-1. 三個難度層次的學習目標
-2. 差異化的學習活動設計
-3. 分層教材或學習單
-4. 多元評量方式
-5. 教師課堂實施流程建議
-
-特殊考量：[特殊考量]`,
-                        fields: [
-                            { key: '科目名稱', label: '科目', type: 'text', placeholder: '例：數學' },
-                            { key: '單元名稱', label: '單元', type: 'text', placeholder: '例：一元一次方程式' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國中七年級' },
-                            { key: '人數', label: '班級人數', type: 'text', placeholder: '例：25人' },
-                            { key: '高程度%', label: '高程度學生比例', type: 'text', placeholder: '例：20%' },
-                            { key: '中程度%', label: '中程度學生比例', type: 'text', placeholder: '例：50%' },
-                            { key: '基礎程度%', label: '基礎程度學生比例', type: 'text', placeholder: '例：30%' },
-                            { key: '特殊考量', label: '特殊考量', type: 'textarea', placeholder: '例：班上有原住民學生、新住民子女' }
-                        ]
-                    },
-                    {
-                        name: '生成分層學習單',
-                        template: `請為以下主題生成三個難度的學習單：
-
-主題：[主題名稱]
-學習目標：[具體目標]
-
-基礎版需求：
-- 以填空、選擇題為主
-- 提供較多提示與鷹架
-- 題目數量適中
-
-進階版需求：
-- 包含應用與分析題
-- 減少提示
-- 增加思考性問題
-
-挑戰版需求：
-- 開放式問題
-- 跨領域連結
-- 創意發揮空間`,
-                        fields: [
-                            { key: '主題名稱', label: '主題', type: 'text', placeholder: '例：分數的加減' },
-                            { key: '具體目標', label: '學習目標', type: 'textarea', placeholder: '例：能正確計算同分母分數的加減' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '設計分層教案、多層次學習單，滿足不同程度學生需求',
+                    researcher: '研究差異化教學成效、分析教學策略對學習成果的影響',
+                    developer: '開發自適應學習平台的差異化內容推送系統'
+                }
             },
-            'adaptive-learning-design': {
+            {
                 id: 'adaptive-learning-design',
                 title: '自適應學習設計',
                 icon: '🎯',
                 category: 'teaching',
                 categoryName: '教學設計',
-                description: '建構依據學生表現動態調整的學習系統',
                 file: 'skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/adaptive-learning-design.md',
-                templates: [
-                    {
-                        name: '設計自適應學習單元',
-                        template: `請幫我設計一個自適應學習單元：
-
-主題：[學習主題]
-學科：[科目名稱]
-目標對象：[年級/程度]
-預計學習時間：[時間]
-
-需求：
-1. 設計 3 個難度等級的學習內容
-2. 定義各等級的進入條件與晉升標準
-3. 設計形成性評量問題（每等級 3-5 題）
-4. 規劃學習路徑的分支邏輯
-5. 設計即時回饋機制
-
-特殊需求：[特殊需求]`,
-                        fields: [
-                            { key: '學習主題', label: '學習主題', type: 'text', placeholder: '例：二次函數' },
-                            { key: '科目名稱', label: '科目', type: 'text', placeholder: '例：數學' },
-                            { key: '年級/程度', label: '目標對象', type: 'text', placeholder: '例：高中一年級' },
-                            { key: '時間', label: '預計學習時間', type: 'text', placeholder: '例：2小時' },
-                            { key: '特殊需求', label: '特殊需求', type: 'textarea', placeholder: '例：適合偏鄉低頻寬環境' }
-                        ]
-                    },
-                    {
-                        name: '分析學生學習數據',
-                        template: `請分析以下學生學習數據，並提供自適應建議：
-
-學生資料：
-- 前測成績：[分數]
-- 學習時間：[時長]
-- 答題正確率：[百分比]
-- 錯誤題型分布：[類型列表]
-
-請提供：
-1. 學生目前能力診斷
-2. 建議的學習路徑
-3. 需要補強的概念
-4. 推薦的學習資源類型`,
-                        fields: [
-                            { key: '分數', label: '前測成績', type: 'text', placeholder: '例：65分' },
-                            { key: '時長', label: '學習時間', type: 'text', placeholder: '例：45分鐘' },
-                            { key: '百分比', label: '答題正確率', type: 'text', placeholder: '例：70%' },
-                            { key: '類型列表', label: '錯誤題型分布', type: 'textarea', placeholder: '例：計算題錯3題、應用題錯2題' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '設計依學生表現動態調整的學習單元與路徑',
+                    researcher: '分析學習路徑數據、研究自適應學習機制的效果',
+                    developer: '建構自適應學習引擎、設計學習路徑演算法'
+                }
             },
-            'lesson-plan-generator': {
+            {
                 id: 'lesson-plan-generator',
                 title: 'AI 教案產生器',
                 icon: '📝',
                 category: 'teaching',
                 categoryName: '教學設計',
-                description: '運用 AI 快速生成符合教學目標的完整教案',
                 file: 'skills/%E6%95%99%E5%AD%B8%E8%A8%AD%E8%A8%88/lesson-plan-generator.md',
-                templates: [
-                    {
-                        name: '完整教案生成',
-                        template: `請生成一份完整的教案：
-
-【基本資訊】
-科目：[科目名稱]
-單元名稱：[單元名稱]
-適用年級：[年級]
-教學節數：[節數]
-學生人數：[人數]
-
-【課綱對應】
-學習領域：[領域]
-核心素養：[素養代碼與內容]
-學習表現：[表現代碼與內容]
-學習內容：[內容代碼與內容]
-
-【特殊需求】
-- 學生程度：[程度描述]
-- 可用設備：[設備清單]
-- 特殊考量：[特殊考量]
-
-請包含：
-1. 具體可評量的學習目標
-2. 詳細的教學流程（含時間分配）
-3. 師生互動設計
-4. 差異化教學策略
-5. 多元評量方式
-6. 學習單/講義設計
-7. 板書/簡報重點規劃`,
-                        fields: [
-                            { key: '科目名稱', label: '科目', type: 'text', placeholder: '例：自然科學' },
-                            { key: '單元名稱', label: '單元名稱', type: 'text', placeholder: '例：光的折射' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國中八年級' },
-                            { key: '節數', label: '教學節數', type: 'text', placeholder: '例：2節' },
-                            { key: '人數', label: '學生人數', type: 'text', placeholder: '例：28人' },
-                            { key: '領域', label: '學習領域', type: 'text', placeholder: '例：自然科學' },
-                            { key: '素養代碼與內容', label: '核心素養', type: 'textarea', placeholder: '例：自-J-A2 能將所習得的科學知識...' },
-                            { key: '表現代碼與內容', label: '學習表現', type: 'textarea', placeholder: '例：tr-IV-1 能將所習得的知識...' },
-                            { key: '內容代碼與內容', label: '學習內容', type: 'textarea', placeholder: '例：Ka-IV-1 光的折射現象' },
-                            { key: '程度描述', label: '學生程度', type: 'text', placeholder: '例：中等偏上' },
-                            { key: '設備清單', label: '可用設備', type: 'text', placeholder: '例：實驗器材、投影機' },
-                            { key: '特殊考量', label: '特殊考量', type: 'textarea', placeholder: '例：偏鄉、原住民文化融入' }
-                        ]
-                    },
-                    {
-                        name: '快速備課版',
-                        template: `我需要快速備課，請幫我：
-
-科目：[科目]
-主題：[主題]
-時間：[分鐘]
-重點：[核心概念]
-
-請給我：
-1. 簡潔的教學流程
-2. 3個引起動機的開場方式
-3. 5個檢核學生理解的提問
-4. 1個簡單的課堂活動`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：國語' },
-                            { key: '主題', label: '主題', type: 'text', placeholder: '例：記敘文寫作' },
-                            { key: '分鐘', label: '時間（分鐘）', type: 'text', placeholder: '例：45分鐘' },
-                            { key: '核心概念', label: '核心概念', type: 'textarea', placeholder: '例：開頭、發展、結尾的結構' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '快速生成符合課綱的完整教案，節省備課時間',
+                    researcher: '研究 AI 輔助教學設計的品質與效率',
+                    developer: '整合教案生成 API、建立自動化備課系統'
+                }
             },
-            // 學習分析
-            'learning-analytics': {
+            {
                 id: 'learning-analytics',
                 title: '學習分析技術',
                 icon: '📊',
                 category: 'analytics',
                 categoryName: '學習分析',
-                description: '收集、分析學習歷程數據，優化教學決策',
                 file: 'skills/%E5%AD%B8%E7%BF%92%E5%88%86%E6%9E%90/learning-analytics.md',
-                templates: [
-                    {
-                        name: '學習數據分析報告',
-                        template: `請分析以下班級學習數據，生成分析報告：
-
-【班級資訊】
-班級：[班級名稱]
-人數：[人數]
-課程：[課程名稱]
-分析期間：[起訖日期]
-
-【數據摘要】
-- 平均登入次數：[次數]
-- 平均學習時長：[時數]
-- 平均測驗成績：[分數]
-- 作業繳交率：[百分比]
-- 成績分布：[各分數段人數]
-
-【問題描述】
-[教師觀察到的現象或疑問]
-
-請提供：
-1. 數據趨勢分析
-2. 學習困難學生辨識
-3. 可能的原因診斷
-4. 具體的教學調整建議
-5. 下一步數據收集建議`,
-                        fields: [
-                            { key: '班級名稱', label: '班級', type: 'text', placeholder: '例：八年三班' },
-                            { key: '人數', label: '人數', type: 'text', placeholder: '例：30人' },
-                            { key: '課程名稱', label: '課程', type: 'text', placeholder: '例：數學' },
-                            { key: '起訖日期', label: '分析期間', type: 'text', placeholder: '例：2024/09/01-2024/10/31' },
-                            { key: '次數', label: '平均登入次數', type: 'text', placeholder: '例：每週4次' },
-                            { key: '時數', label: '平均學習時長', type: 'text', placeholder: '例：每週2.5小時' },
-                            { key: '分數', label: '平均測驗成績', type: 'text', placeholder: '例：72分' },
-                            { key: '百分比', label: '作業繳交率', type: 'text', placeholder: '例：85%' },
-                            { key: '各分數段人數', label: '成績分布', type: 'textarea', placeholder: '例：90以上5人、80-89有8人、70-79有10人...' },
-                            { key: '教師觀察到的現象或疑問', label: '問題描述', type: 'textarea', placeholder: '例：發現最近幾週成績有下滑趨勢' }
-                        ]
-                    },
-                    {
-                        name: '學習預警模型設計',
-                        template: `請協助設計一個學習預警系統：
-
-【場域描述】
-學校類型：[學校類型]
-學生規模：[人數]
-課程類型：[課程類型]
-
-【可用數據】
-1. 學習平台數據：[列出可用欄位]
-2. 成績系統數據：[列出可用欄位]
-3. 其他數據：[如出缺席、輔導紀錄]
-
-【預警目標】
-希望預測：[預測目標]
-預警提前時間：[提前時間]
-
-請設計：
-1. 預警指標選擇與權重
-2. 風險等級定義
-3. 預警觸發條件
-4. 介入策略建議
-5. 效果追蹤機制`,
-                        fields: [
-                            { key: '學校類型', label: '學校類型', type: 'text', placeholder: '例：國中' },
-                            { key: '人數', label: '學生規模', type: 'text', placeholder: '例：500人' },
-                            { key: '課程類型', label: '課程類型', type: 'text', placeholder: '例：必修課程' },
-                            { key: '列出可用欄位', label: '學習平台數據', type: 'textarea', placeholder: '例：登入時間、觀看時長、測驗成績' },
-                            { key: '列出可用欄位', label: '成績系統數據', type: 'textarea', placeholder: '例：段考成績、平時成績' },
-                            { key: '如出缺席、輔導紀錄', label: '其他數據', type: 'textarea', placeholder: '例：出缺席紀錄、輔導紀錄' },
-                            { key: '預測目標', label: '預警目標', type: 'text', placeholder: '例：期末成績不及格' },
-                            { key: '提前時間', label: '預警提前時間', type: 'text', placeholder: '例：期中考前2週' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '分析班級學習數據、識別學習困難學生',
+                    researcher: '設計學習分析研究、建立學習預警模型',
+                    developer: '開發學習儀表板、建構數據視覺化系統'
+                }
             },
-            'student-profiling': {
+            {
                 id: 'student-profiling',
                 title: '學生學習輪廓分析',
                 icon: '👤',
                 category: 'analytics',
                 categoryName: '學習分析',
-                description: '建立全面的學生學習畫像，支援個人化教學',
                 file: 'skills/%E5%AD%B8%E7%BF%92%E5%88%86%E6%9E%90/student-profiling.md',
-                templates: [
-                    {
-                        name: '建立學生學習輪廓',
-                        template: `請協助我建立這位學生的學習輪廓：
-
-【基本資料】
-年級：[年級]
-性別：[性別]
-就讀學校類型：[都會/偏鄉/原鄉]
-
-【認知資料】
-- 前測成績：[各科成績]
-- 學習風格測驗結果：[視覺/聽覺/讀寫/動覺]
-- 教師觀察的學習特徵：[描述]
-
-【情意資料】
-- 學習動機量表分數：[分數/等級]
-- 上課參與情況：[描述]
-- 對各科目的態度：[描述]
-
-【社會脈絡】
-- 家庭狀況：[簡述]
-- 課後學習環境：[描述]
-- 特殊背景：[如新住民子女、原住民、身心障礙等]
-
-請分析並產出：
-1. 學生的優勢能力
-2. 需要支援的領域
-3. 適合的學習方式
-4. 教學策略建議
-5. 需要注意的敏感議題`,
-                        fields: [
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國中七年級' },
-                            { key: '性別', label: '性別', type: 'text', placeholder: '例：男' },
-                            { key: '都會/偏鄉/原鄉', label: '學校類型', type: 'text', placeholder: '例：偏鄉' },
-                            { key: '各科成績', label: '前測成績', type: 'textarea', placeholder: '例：國文70、數學55、英文65' },
-                            { key: '視覺/聽覺/讀寫/動覺', label: '學習風格', type: 'text', placeholder: '例：視覺型為主' },
-                            { key: '描述', label: '學習特徵觀察', type: 'textarea', placeholder: '例：專注力較短、喜歡動手操作' },
-                            { key: '分數/等級', label: '學習動機', type: 'text', placeholder: '例：中等' },
-                            { key: '描述', label: '上課參與', type: 'text', placeholder: '例：偶爾舉手發言' },
-                            { key: '描述', label: '科目態度', type: 'textarea', placeholder: '例：喜歡自然、對數學有排斥感' },
-                            { key: '簡述', label: '家庭狀況', type: 'text', placeholder: '例：單親、與祖父母同住' },
-                            { key: '描述', label: '課後學習環境', type: 'textarea', placeholder: '例：家中無網路、課後需照顧弟妹' },
-                            { key: '如新住民子女、原住民、身心障礙等', label: '特殊背景', type: 'text', placeholder: '例：原住民（泰雅族）' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '建立學生學習畫像、規劃個人化教學策略',
+                    researcher: '研究學習者特徵與學習成效的關聯',
+                    developer: '設計學習者模型系統、建構個人化推薦引擎'
+                }
             },
-            // 偏鄉教育
-            'localized-content-design': {
+            {
                 id: 'localized-content-design',
                 title: '在地化內容設計',
                 icon: '🏔️',
                 category: 'rural',
                 categoryName: '偏鄉教育',
-                description: '設計符合在地文化的學習內容',
                 file: 'skills/%E5%81%8F%E9%84%89%E6%95%99%E8%82%B2/localized-content-design.md',
-                templates: [
-                    {
-                        name: '在地化教材設計',
-                        template: `請幫我將以下教學內容在地化：
-
-【原始內容】
-科目：[科目]
-單元：[單元名稱]
-學習目標：[原本的學習目標]
-原始教材內容摘要：[摘要]
-
-【在地脈絡】
-學校所在地：[縣市/鄉鎮/部落]
-主要族群：[漢族/原住民族別/客家/新住民等]
-在地特色：
-- 主要產業：[如農業、漁業、觀光]
-- 自然環境：[如山區、海邊、溫泉]
-- 文化資產：[如祭典、傳統建築、傳統技藝]
-
-【學生背景】
-- 語言使用：[中文流利度、母語使用狀況]
-- 生活經驗：[常見的日常活動]
-- 文化認同：[對傳統文化的態度]
-
-請設計：
-1. 在地化的學習情境
-2. 連結學生生活經驗的例子
-3. 融入在地知識的教學活動
-4. 運用在地資源的實作任務
-5. 社區參與的可能性`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：數學' },
-                            { key: '單元名稱', label: '單元', type: 'text', placeholder: '例：面積計算' },
-                            { key: '原本的學習目標', label: '學習目標', type: 'textarea', placeholder: '例：能計算不規則圖形的面積' },
-                            { key: '摘要', label: '原始教材摘要', type: 'textarea', placeholder: '例：教導學生將不規則圖形分割成基本圖形...' },
-                            { key: '縣市/鄉鎮/部落', label: '學校所在地', type: 'text', placeholder: '例：台東縣延平鄉桃源部落' },
-                            { key: '漢族/原住民族別/客家/新住民等', label: '主要族群', type: 'text', placeholder: '例：布農族' },
-                            { key: '如農業、漁業、觀光', label: '主要產業', type: 'text', placeholder: '例：小米種植、觀光' },
-                            { key: '如山區、海邊、溫泉', label: '自然環境', type: 'text', placeholder: '例：山區、森林' },
-                            { key: '如祭典、傳統建築、傳統技藝', label: '文化資產', type: 'text', placeholder: '例：打耳祭、傳統家屋' },
-                            { key: '中文流利度、母語使用狀況', label: '語言使用', type: 'text', placeholder: '例：中文尚可、日常使用布農語' },
-                            { key: '常見的日常活動', label: '生活經驗', type: 'textarea', placeholder: '例：幫忙農務、上山採集' },
-                            { key: '對傳統文化的態度', label: '文化認同', type: 'text', placeholder: '例：認同度高、積極參與祭典' }
-                        ]
-                    },
-                    {
-                        name: '原住民族教育內容設計',
-                        template: `請設計一份融入原住民族文化的教學內容：
-
-【基本資訊】
-科目：[科目]
-單元：[單元]
-年級：[年級]
-族群：[族別，如泰雅族、阿美族]
-
-【課綱要求】
-學習表現：[表現內容]
-學習內容：[內容要點]
-
-【文化融入方向】
-希望融入的文化元素：[文化元素]
-
-【資源盤點】
-- 可邀請的耆老/文化講師：[有/無]
-- 可運用的部落場域：[列舉]
-- 既有的族語教材：[列舉]
-
-請設計：
-1. 文化融入的教學流程
-2. 族語詞彙學習單
-3. 耆老訪談/文化體驗活動
-4. 跨領域連結可能性
-5. 文化敏感度注意事項`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：自然' },
-                            { key: '單元', label: '單元', type: 'text', placeholder: '例：植物的構造' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國小五年級' },
-                            { key: '族別，如泰雅族、阿美族', label: '族群', type: 'text', placeholder: '例：泰雅族' },
-                            { key: '表現內容', label: '學習表現', type: 'textarea', placeholder: '例：能認識植物的基本構造' },
-                            { key: '內容要點', label: '學習內容', type: 'textarea', placeholder: '例：植物的根、莖、葉、花、果實、種子' },
-                            { key: '文化元素', label: '希望融入的文化元素', type: 'textarea', placeholder: '例：族語詞彙、傳統植物知識、生態智慧' },
-                            { key: '有/無', label: '耆老/文化講師', type: 'text', placeholder: '例：有，部落有2位耆老可邀請' },
-                            { key: '列舉', label: '可運用的部落場域', type: 'text', placeholder: '例：部落傳統領域、小米田' },
-                            { key: '列舉', label: '既有族語教材', type: 'text', placeholder: '例：族語E樂園教材' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '設計融入在地文化與原住民族元素的教材',
+                    researcher: '研究在地化教材對學習動機與成效的影響',
+                    developer: '開發支援多元文化的教材編輯與呈現系統'
+                }
             },
-            'rural-education-platform': {
+            {
                 id: 'rural-education-platform',
                 title: '偏鄉教育平台設計',
                 icon: '💻',
                 category: 'rural',
                 categoryName: '偏鄉教育',
-                description: '針對偏鄉限制設計數位學習平台',
                 file: 'skills/%E5%81%8F%E9%84%89%E6%95%99%E8%82%B2/rural-education-platform.md',
-                templates: [
-                    {
-                        name: '偏鄉平台需求分析',
-                        template: `請協助分析偏鄉學校的數位學習平台需求：
-
-【學校基本資料】
-學校名稱類型：[國小/國中，校名可匿名]
-所在地區：[縣市鄉鎮]
-學生人數：[人數]
-教師人數：[教師人數]
-班級數：[班數]
-
-【基礎設施現況】
-網路類型：[光纖/ADSL/4G/衛星]
-平均頻寬：[Mbps]
-網路穩定性：[穩定/偶爾斷線/經常斷線]
-現有設備：
-- 電腦教室：[台數/年份]
-- 平板：[台數/型號]
-- 其他設備：[列舉]
-
-【師資現況】
-- 專任教師：[專任人數]
-- 代理代課：[代理人數]
-- 教師數位能力：[自評或描述]
-
-【學生背景】
-- 族群組成：[比例]
-- 家庭數位資源：[有電腦/手機/網路的比例]
-- 課後學習支援：[描述]
-
-請分析並提供：
-1. 關鍵需求優先順序
-2. 建議的平台功能規格
-3. 技術規格建議（低標/建議/理想）
-4. 預期挑戰與因應策略
-5. 分階段導入建議`,
-                        fields: [
-                            { key: '國小/國中，校名可匿名', label: '學校類型', type: 'text', placeholder: '例：偏遠國小' },
-                            { key: '縣市鄉鎮', label: '所在地區', type: 'text', placeholder: '例：花蓮縣瑞穗鄉' },
-                            { key: '人數', label: '學生人數', type: 'text', placeholder: '例：45人' },
-                            { key: '教師人數', label: '教師人數', type: 'text', placeholder: '例：8人' },
-                            { key: '班數', label: '班級數', type: 'text', placeholder: '例：6班' },
-                            { key: '光纖/ADSL/4G/衛星', label: '網路類型', type: 'text', placeholder: '例：4G' },
-                            { key: 'Mbps', label: '平均頻寬', type: 'text', placeholder: '例：10Mbps' },
-                            { key: '穩定/偶爾斷線/經常斷線', label: '網路穩定性', type: 'text', placeholder: '例：偶爾斷線' },
-                            { key: '台數/年份', label: '電腦教室', type: 'text', placeholder: '例：15台/2018年' },
-                            { key: '台數/型號', label: '平板', type: 'text', placeholder: '例：20台 iPad' },
-                            { key: '列舉', label: '其他設備', type: 'text', placeholder: '例：投影機3台' },
-                            { key: '專任人數', label: '專任教師', type: 'text', placeholder: '例：5人' },
-                            { key: '代理人數', label: '代理代課', type: 'text', placeholder: '例：3人' },
-                            { key: '自評或描述', label: '教師數位能力', type: 'text', placeholder: '例：中等，需要培訓' },
-                            { key: '比例', label: '族群組成', type: 'text', placeholder: '例：原住民60%、漢族40%' },
-                            { key: '有電腦/手機/網路的比例', label: '家庭數位資源', type: 'text', placeholder: '例：有手機80%、有網路50%' },
-                            { key: '描述', label: '課後學習支援', type: 'textarea', placeholder: '例：約30%學生參加課後照顧班' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '了解偏鄉數位學習平台的功能與應用方式',
+                    researcher: '研究偏鄉數位學習的挑戰與解決方案',
+                    developer: '設計低頻寬、離線優先的教育平台架構'
+                }
             },
-            // AI工具應用
-            'ai-teaching-tools': {
+            {
                 id: 'ai-teaching-tools',
                 title: 'AI 教學工具全覽',
                 icon: '🤖',
                 category: 'ai-tools',
                 categoryName: 'AI工具應用',
-                description: '各類 AI 工具分類與選用指南',
                 file: 'skills/AI%E5%B7%A5%E5%85%B7%E6%87%89%E7%94%A8/ai-teaching-tools.md',
-                templates: [
-                    {
-                        name: 'AI 工具選擇諮詢',
-                        template: `請幫我選擇適合的 AI 工具：
-
-【教學需求】
-任務類型：[備課/教學/評量/行政]
-具體需求：[詳細描述要完成的任務]
-
-【條件限制】
-預算：[免費/有預算，金額]
-技術能力：[新手/中等/進階]
-設備環境：[電腦/手機/平板，作業系統]
-資安要求：[學校是否有特殊要求]
-語言需求：[需要支援的語言]
-
-【偏好】
-介面語言：[中文/英文皆可/必須中文]
-使用頻率：[偶爾/經常/每天]
-
-請推薦：
-1. 最適合的工具（含理由）
-2. 替代方案
-3. 工具比較表
-4. 快速上手建議`,
-                        fields: [
-                            { key: '備課/教學/評量/行政', label: '任務類型', type: 'text', placeholder: '例：備課' },
-                            { key: '詳細描述要完成的任務', label: '具體需求', type: 'textarea', placeholder: '例：快速生成不同難度的數學練習題' },
-                            { key: '免費/有預算，金額', label: '預算', type: 'text', placeholder: '例：免費優先' },
-                            { key: '新手/中等/進階', label: '技術能力', type: 'text', placeholder: '例：新手' },
-                            { key: '電腦/手機/平板，作業系統', label: '設備環境', type: 'text', placeholder: '例：Windows 電腦' },
-                            { key: '學校是否有特殊要求', label: '資安要求', type: 'text', placeholder: '例：無特殊要求' },
-                            { key: '需要支援的語言', label: '語言需求', type: 'text', placeholder: '例：繁體中文' },
-                            { key: '中文/英文皆可/必須中文', label: '介面語言', type: 'text', placeholder: '例：必須中文' },
-                            { key: '偶爾/經常/每天', label: '使用頻率', type: 'text', placeholder: '例：經常' }
-                        ]
-                    },
-                    {
-                        name: '多 AI 協作工作流',
-                        template: `請設計一個運用多種 AI 工具的教學準備流程：
-
-【任務】
-準備一堂課的完整教材，包含：
-- 教案
-- 簡報
-- 學習單
-- 評量題目
-- 教學影片腳本
-
-【課程資訊】
-科目：[科目]
-主題：[主題]
-年級：[年級]
-
-【可用工具】
-- 文本 AI：[可用的文本AI]
-- 簡報 AI：[可用的簡報AI]
-- 圖像 AI：[可用的圖像AI]
-- 其他：[其他工具]
-
-請設計：
-1. 最佳工具分配
-2. 工作流程順序
-3. 各工具的提示詞建議
-4. 輸出格式整合方式
-5. 品質檢核點`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：社會' },
-                            { key: '主題', label: '主題', type: 'text', placeholder: '例：台灣的地理環境' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國小五年級' },
-                            { key: '可用的文本AI', label: '文本 AI', type: 'text', placeholder: '例：Claude、GPT' },
-                            { key: '可用的簡報AI', label: '簡報 AI', type: 'text', placeholder: '例：Gamma、Canva' },
-                            { key: '可用的圖像AI', label: '圖像 AI', type: 'text', placeholder: '例：DALL-E、Canva AI' },
-                            { key: '其他工具', label: '其他工具', type: 'text', placeholder: '例：Google Slides' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '選擇適合教學需求的 AI 工具、快速上手應用',
+                    researcher: '比較各類 AI 工具的教育應用效果',
+                    developer: '整合多種 AI 工具 API、建立教學工具生態系'
+                }
             },
-            'generative-ai-education': {
+            {
                 id: 'generative-ai-education',
                 title: '生成式 AI 教育應用',
                 icon: '✨',
                 category: 'ai-tools',
                 categoryName: 'AI工具應用',
-                description: 'Claude/GPT/Gemini 在教育中的應用',
                 file: 'skills/AI%E5%B7%A5%E5%85%B7%E6%87%89%E7%94%A8/generative-ai-education.md',
-                templates: [
-                    {
-                        name: '課程大綱生成',
-                        template: `請擔任資深[科目]教師，幫我設計一學期的課程大綱：
-
-【課程資訊】
-科目：[科目名稱]
-年級：[年級]
-每週節數：[節數]
-學期週數：[週數]
-
-【課綱依據】
-核心素養：[素養代碼]
-學習表現：[表現代碼]
-學習內容：[內容代碼]
-
-【學生背景】
-程度描述：[描述]
-先備知識：[列舉]
-
-請設計包含：
-1. 各週教學主題與目標
-2. 重要概念的邏輯順序
-3. 評量時間點安排
-4. 跨領域連結機會
-5. 差異化教學切入點`,
-                        fields: [
-                            { key: '科目', label: '科目（角色設定）', type: 'text', placeholder: '例：數學' },
-                            { key: '科目名稱', label: '科目名稱', type: 'text', placeholder: '例：數學' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國中八年級' },
-                            { key: '節數', label: '每週節數', type: 'text', placeholder: '例：4節' },
-                            { key: '週數', label: '學期週數', type: 'text', placeholder: '例：18週' },
-                            { key: '素養代碼', label: '核心素養', type: 'textarea', placeholder: '例：數-J-A2 具備有理數...' },
-                            { key: '表現代碼', label: '學習表現', type: 'textarea', placeholder: '例：n-IV-1 理解因數...' },
-                            { key: '內容代碼', label: '學習內容', type: 'textarea', placeholder: '例：N-8-1 因數與倍數' },
-                            { key: '描述', label: '學生程度', type: 'text', placeholder: '例：中等' },
-                            { key: '列舉', label: '先備知識', type: 'textarea', placeholder: '例：整數四則運算、分數基本概念' }
-                        ]
-                    },
-                    {
-                        name: '多元題型生成',
-                        template: `請為以下主題設計多元評量題目：
-
-【主題資訊】
-科目：[科目]
-主題：[主題名稱]
-認知層次分布：
-- 記憶理解：[記憶%]
-- 應用分析：[應用%]
-- 評鑑創造：[評鑑%]
-
-【題型需求】
-1. 選擇題：[選擇題數]
-2. 是非題：[是非題數]
-3. 配合題：[配合題數]
-4. 填空題：[填空題數]
-5. 簡答題：[簡答題數]
-6. 申論題：[申論題數]
-
-【難度分布】
-- 基礎：[基礎%]
-- 中等：[中等%]
-- 挑戰：[挑戰%]
-
-請提供：
-- 完整題目
-- 正確答案
-- 評分標準（申論題）
-- 試題分析（雙向細目表）`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：自然' },
-                            { key: '主題名稱', label: '主題', type: 'text', placeholder: '例：光的反射與折射' },
-                            { key: '記憶%', label: '記憶理解比例', type: 'text', placeholder: '例：30%' },
-                            { key: '應用%', label: '應用分析比例', type: 'text', placeholder: '例：50%' },
-                            { key: '評鑑%', label: '評鑑創造比例', type: 'text', placeholder: '例：20%' },
-                            { key: '選擇題數', label: '選擇題數量', type: 'text', placeholder: '例：10題' },
-                            { key: '是非題數', label: '是非題數量', type: 'text', placeholder: '例：5題' },
-                            { key: '配合題數', label: '配合題數量', type: 'text', placeholder: '例：1組' },
-                            { key: '填空題數', label: '填空題數量', type: 'text', placeholder: '例：5題' },
-                            { key: '簡答題數', label: '簡答題數量', type: 'text', placeholder: '例：3題' },
-                            { key: '申論題數', label: '申論題數量', type: 'text', placeholder: '例：1題' },
-                            { key: '基礎%', label: '基礎難度比例', type: 'text', placeholder: '例：40%' },
-                            { key: '中等%', label: '中等難度比例', type: 'text', placeholder: '例：40%' },
-                            { key: '挑戰%', label: '挑戰難度比例', type: 'text', placeholder: '例：20%' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '運用 Claude/GPT/Gemini 生成教學內容與評量',
+                    researcher: '研究生成式 AI 對教育的影響與倫理議題',
+                    developer: '開發基於 LLM 的教育應用、設計提示詞工程'
+                }
             },
-            // ICT 科技融入
-            'ict-integration': {
+            {
                 id: 'ict-integration',
                 title: 'ICT 融入教學',
                 icon: '🖥️',
                 category: 'ict',
                 categoryName: 'ICT科技融入',
-                description: '運用 SAMR/TPACK 模型設計科技融入課程',
                 file: 'skills/ICT%E7%A7%91%E6%8A%80%E8%9E%8D%E5%85%A5/ict-integration.md',
-                templates: [
-                    {
-                        name: 'ICT 融入教學設計',
-                        template: `請幫我設計一堂融入 ICT 的課程：
-
-【課程資訊】
-科目：[科目]
-單元：[單元名稱]
-年級：[年級]
-節數：[節數]
-學習目標：[列出]
-
-【現有設備】
-- 教師端：[教師設備]
-- 學生端：[學生設備]
-- 網路環境：[網路描述]
-
-【SAMR 目標層次】
-希望達到：[替代/增益/修正/重新定義]
-
-【特殊需求】
-[特殊需求說明]
-
-請設計：
-1. 推薦的 ICT 工具組合
-2. 詳細的教學流程（含科技使用時機）
-3. 學生操作指引
-4. 備案（科技故障時）
-5. TPACK 分析說明`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：數學' },
-                            { key: '單元名稱', label: '單元', type: 'text', placeholder: '例：二次函數圖形' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：高中一年級' },
-                            { key: '節數', label: '節數', type: 'text', placeholder: '例：2節' },
-                            { key: '列出', label: '學習目標', type: 'textarea', placeholder: '例：能理解二次函數圖形的特性' },
-                            { key: '教師設備', label: '教師端設備', type: 'text', placeholder: '例：電腦、投影機、電子白板' },
-                            { key: '學生設備', label: '學生端設備', type: 'text', placeholder: '例：每人一台平板' },
-                            { key: '網路描述', label: '網路環境', type: 'text', placeholder: '例：WiFi穩定' },
-                            { key: '替代/增益/修正/重新定義', label: 'SAMR 目標', type: 'text', placeholder: '例：修正' },
-                            { key: '特殊需求說明', label: '特殊需求', type: 'textarea', placeholder: '例：需要離線可用、免費工具優先' }
-                        ]
-                    },
-                    {
-                        name: '混成教學設計',
-                        template: `請設計一堂混成教學課程：
-
-【課程資訊】
-科目：[科目]
-主題：[主題]
-總學習時間：[時數]
-
-【混成模式】
-- 線上非同步：[非同步%]
-- 線上同步：[同步%]
-- 實體課堂：[實體%]
-
-【學生條件】
-- 設備擁有率：[設備%]
-- 網路條件：[網路描述]
-- 自學能力：[高/中/低]
-
-請設計：
-1. 各模式的學習內容分配
-2. 線上非同步學習任務
-3. 同步課堂活動設計
-4. 實體課堂活動設計
-5. 學習進度追蹤機制
-6. 師生互動設計
-7. 成效評量方式`,
-                        fields: [
-                            { key: '科目', label: '科目', type: 'text', placeholder: '例：英文' },
-                            { key: '主題', label: '主題', type: 'text', placeholder: '例：過去式句型' },
-                            { key: '時數', label: '總學習時間', type: 'text', placeholder: '例：4小時' },
-                            { key: '非同步%', label: '線上非同步比例', type: 'text', placeholder: '例：40%' },
-                            { key: '同步%', label: '線上同步比例', type: 'text', placeholder: '例：20%' },
-                            { key: '實體%', label: '實體課堂比例', type: 'text', placeholder: '例：40%' },
-                            { key: '設備%', label: '設備擁有率', type: 'text', placeholder: '例：90%' },
-                            { key: '網路描述', label: '網路條件', type: 'text', placeholder: '例：大部分學生家中有WiFi' },
-                            { key: '高/中/低', label: '自學能力', type: 'text', placeholder: '例：中' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '運用 SAMR/TPACK 模型設計科技融入課程',
+                    researcher: '研究 ICT 融入教學的成效與最佳實踐',
+                    developer: '開發支援混成教學的平台與工具'
+                }
             },
-            // 數學科技教育
-            'math-technology': {
+            {
                 id: 'math-technology',
                 title: '數學科技教育',
                 icon: '📐',
                 category: 'math',
                 categoryName: '數學科技教育',
-                description: 'GeoGebra、Desmos 等工具的教學應用',
                 file: 'skills/%E6%95%B8%E5%AD%B8%E7%A7%91%E6%8A%80%E6%95%99%E8%82%B2/math-technology.md',
-                templates: [
-                    {
-                        name: 'GeoGebra 教學設計',
-                        template: `請設計一個 GeoGebra 互動教學活動：
-
-【概念】[數學概念]
-
-【學習目標】
-學生能夠：
-[學習目標]
-
-【設計需求】
-- 年級：[年級]
-- 時間：[時間]
-- 互動元素：[互動元素需求]
-- 視覺呈現：[視覺需求]
-
-請提供：
-1. GeoGebra 建構步驟
-2. 關鍵指令/語法
-3. 學生探索指引（5個引導問題）
-4. 教師提問建議
-5. 預期學生發現的數學規律
-6. 延伸挑戰題
-7. 常見困難與鷹架提示`,
-                        fields: [
-                            { key: '數學概念', label: '數學概念', type: 'text', placeholder: '例：二次函數圖形變換 y=a(x-h)²+k' },
-                            { key: '學習目標', label: '學習目標', type: 'textarea', placeholder: '例：1. 理解參數 a、h、k 對拋物線的影響\n2. 預測參數改變後的圖形變化' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：高中一年級' },
-                            { key: '時間', label: '時間', type: 'text', placeholder: '例：1節課（50分鐘）' },
-                            { key: '互動元素需求', label: '互動元素', type: 'text', placeholder: '例：滑桿控制參數、動態拋物線' },
-                            { key: '視覺需求', label: '視覺呈現', type: 'text', placeholder: '例：頂點座標顯示、對稱軸' }
-                        ]
-                    },
-                    {
-                        name: 'Desmos 活動設計',
-                        template: `請幫我設計一個 Desmos Activity Builder 活動：
-
-【主題】[數學主題]
-【年級】[年級]
-【時間】[分鐘]
-
-【活動流程需求】
-頁面數：[頁面數]
-包含元素：[包含元素]
-
-【設計重點】
-1. 由具體到抽象的脈絡
-2. 即時回饋設計
-3. 差異化挑戰
-
-請提供：
-1. 各頁面內容與設計
-2. CL (Computation Layer) 程式碼（如需要）
-3. 教師儀表板使用建議
-4. 課堂實施流程`,
-                        fields: [
-                            { key: '數學主題', label: '主題', type: 'text', placeholder: '例：線性函數' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國中八年級' },
-                            { key: '分鐘', label: '時間（分鐘）', type: 'text', placeholder: '例：45分鐘' },
-                            { key: '頁面數', label: '頁面數', type: 'text', placeholder: '例：6-8頁' },
-                            { key: '包含元素', label: '包含元素', type: 'textarea', placeholder: '例：圖形探索、配對拖曳、選擇題、開放式回答' }
-                        ]
-                    },
-                    {
-                        name: '數學探究活動設計',
-                        template: `請設計一個運用科技工具的數學探究活動：
-
-【活動資訊】
-數學主題：[主題]
-年級：[年級]
-時間：[節數]
-使用工具：[如：GeoGebra]
-
-【探究目標】
-希望學生探究的核心問題：[問題]
-預期發現：[描述]
-
-【學生先備】
-- 數學先備：[數學先備]
-- 科技先備：[工具操作能力]
-
-請設計：
-1. 探究任務單（學生版）
-2. 引導問題序列
-3. 工具操作步驟指引
-4. 預期學生發現的數學規律
-5. 延伸挑戰題
-6. 常見困難與鷹架提示
-7. 評量規準`,
-                        fields: [
-                            { key: '主題', label: '數學主題', type: 'text', placeholder: '例：畢氏定理' },
-                            { key: '年級', label: '年級', type: 'text', placeholder: '例：國中八年級' },
-                            { key: '節數', label: '時間', type: 'text', placeholder: '例：2節' },
-                            { key: '如：GeoGebra', label: '使用工具', type: 'text', placeholder: '例：GeoGebra' },
-                            { key: '問題', label: '探究核心問題', type: 'textarea', placeholder: '例：直角三角形三邊長之間有什麼關係？' },
-                            { key: '描述', label: '預期發現', type: 'textarea', placeholder: '例：發現 a² + b² = c²' },
-                            { key: '數學先備', label: '數學先備知識', type: 'textarea', placeholder: '例：正方形面積計算、基本幾何概念' },
-                            { key: '工具操作能力', label: '科技先備', type: 'text', placeholder: '例：會使用 GeoGebra 畫圖' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '設計 GeoGebra、Desmos 互動教學活動',
+                    researcher: '研究數學視覺化工具對概念理解的影響',
+                    developer: '開發數學互動教材、整合數學運算引擎'
+                }
             },
-            // 研究方法
-            'education-research-design': {
+            {
                 id: 'education-research-design',
                 title: '教育研究設計',
                 icon: '🔬',
                 category: 'research',
                 categoryName: '研究方法',
-                description: '研究問題、方法、設計規劃',
                 file: 'skills/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/education-research-design.md',
-                templates: [
-                    {
-                        name: '研究問題發展',
-                        template: `請協助我發展教育研究問題：
-
-【研究領域】
-大領域：[如：AI教育、數位學習、偏鄉教育]
-具體主題：[更具體的面向]
-
-【問題意識來源】
-- 實務觀察：[教學現場發現的問題]
-- 文獻缺口：[現有研究的不足]
-- 政策需求：[政策面的議題]
-
-【初步想法】
-我想探究的是：[初步描述]
-
-【研究條件】
-- 可接觸的研究對象：[描述]
-- 可用資源：[時間、經費、設備]
-- 研究者背景：[專長、經驗]
-
-請協助：
-1. 將想法聚焦為明確的研究問題
-2. 建議 2-3 個可行的研究問題方向
-3. 分析各方向的研究價值與可行性
-4. 建議合適的研究方法取向
-5. 提醒潛在的研究倫理議題`,
-                        fields: [
-                            { key: '如：AI教育、數位學習、偏鄉教育', label: '大領域', type: 'text', placeholder: '例：AI教育' },
-                            { key: '更具體的面向', label: '具體主題', type: 'text', placeholder: '例：生成式AI在寫作教學中的應用' },
-                            { key: '教學現場發現的問題', label: '實務觀察', type: 'textarea', placeholder: '例：學生寫作能力普遍下降，使用AI後反而更不會寫' },
-                            { key: '現有研究的不足', label: '文獻缺口', type: 'textarea', placeholder: '例：目前研究多聚焦於AI輔助批改，較少探討...' },
-                            { key: '政策面的議題', label: '政策需求', type: 'textarea', placeholder: '例：教育部推動AI教育，需要實證研究' },
-                            { key: '初步描述', label: '初步想法', type: 'textarea', placeholder: '例：我想知道如何正確使用AI來提升寫作能力而非取代' },
-                            { key: '描述', label: '可接觸的研究對象', type: 'text', placeholder: '例：任教學校2個班級約60人' },
-                            { key: '時間、經費、設備', label: '可用資源', type: 'text', placeholder: '例：1學期、無額外經費、學校有平板' },
-                            { key: '專長、經驗', label: '研究者背景', type: 'text', placeholder: '例：國文教師10年經驗、碩士生' }
-                        ]
-                    },
-                    {
-                        name: '研究設計規劃',
-                        template: `請協助規劃以下研究的設計：
-
-【研究資訊】
-研究問題：[明確陳述]
-研究目的：[列出]
-
-【研究取向】
-偏好的研究典範：[量化/質性/混合/不確定]
-研究類型：[實驗/調查/個案/行動研究/其他]
-
-【研究條件】
-- 可接觸對象：[描述]
-- 研究期程：[時間]
-- 研究資源：[列舉]
-
-【期望產出】
-[學位論文/期刊發表/政策建議/實務改進]
-
-請設計：
-1. 建議的研究設計類型與理由
-2. 研究對象選取策略
-3. 變項定義與測量（量化）或研究焦點（質性）
-4. 資料收集方法與工具
-5. 資料分析策略
-6. 研究效度/可信賴度確保策略
-7. 預期研究時程表
-8. 研究倫理考量`,
-                        fields: [
-                            { key: '明確陳述', label: '研究問題', type: 'textarea', placeholder: '例：AI輔助寫作教學對國中生寫作能力與態度的影響為何？' },
-                            { key: '列出', label: '研究目的', type: 'textarea', placeholder: '例：1.探討AI輔助對寫作能力的影響\n2.了解學生對AI寫作工具的態度' },
-                            { key: '量化/質性/混合/不確定', label: '研究取向', type: 'text', placeholder: '例：混合研究' },
-                            { key: '實驗/調查/個案/行動研究/其他', label: '研究類型', type: 'text', placeholder: '例：準實驗研究' },
-                            { key: '描述', label: '可接觸對象', type: 'text', placeholder: '例：2個班級共60人' },
-                            { key: '時間', label: '研究期程', type: 'text', placeholder: '例：1學期' },
-                            { key: '列舉', label: '研究資源', type: 'text', placeholder: '例：學校平板、AI訂閱帳號' },
-                            { key: '學位論文/期刊發表/政策建議/實務改進', label: '期望產出', type: 'text', placeholder: '例：碩士論文' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '規劃行動研究、設計教學改進實驗',
+                    researcher: '發展研究問題、設計嚴謹的研究方案',
+                    developer: '了解教育研究需求、設計研究支援工具'
+                }
             },
-            'mixed-methods': {
+            {
                 id: 'mixed-methods',
                 title: '混合研究方法',
                 icon: '🔄',
                 category: 'research',
                 categoryName: '研究方法',
-                description: '整合量化與質性研究方法',
                 file: 'skills/%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/mixed-methods.md',
-                templates: [
-                    {
-                        name: '混合研究設計規劃',
-                        template: `請協助規劃混合研究設計：
-
-【研究資訊】
-研究主題：[主題]
-核心研究問題：[問題]
-研究目的：
-1. [目的1]
-2. [目的2]
-
-【選擇混合研究的理由】
-我希望透過混合研究來：[理由]
-
-【研究條件】
-研究對象：[描述]
-可用時間：[期程]
-研究資源：[列舉]
-
-請設計：
-1. 建議的混合設計類型與理由
-2. 各階段研究問題/目的對應
-3. 量化與質性各階段的設計
-4. 整合策略（何時、如何整合）
-5. 資料收集時程表
-6. 品質確保策略
-7. 潛在挑戰與因應`,
-                        fields: [
-                            { key: '主題', label: '研究主題', type: 'text', placeholder: '例：AI輔助偏鄉高中差異化教學成效研究' },
-                            { key: '問題', label: '核心研究問題', type: 'textarea', placeholder: '例：AI教學輔助系統如何提升偏鄉學生學習成效？' },
-                            { key: '目的1', label: '研究目的1', type: 'text', placeholder: '例：檢驗AI輔助對學習成效的影響' },
-                            { key: '目的2', label: '研究目的2', type: 'text', placeholder: '例：深入了解學生使用AI的學習經驗' },
-                            { key: '理由', label: '選擇混合研究的理由', type: 'textarea', placeholder: '例：用質性解釋量化結果、全面理解複雜現象' },
-                            { key: '描述', label: '研究對象', type: 'text', placeholder: '例：3所偏鄉高中，約150位學生' },
-                            { key: '期程', label: '可用時間', type: 'text', placeholder: '例：1學年（2學期）' },
-                            { key: '列舉', label: '研究資源', type: 'text', placeholder: '例：研究助理、AI系統授權、交通費' }
-                        ]
-                    },
-                    {
-                        name: '整合分析策略',
-                        template: `請設計混合研究的整合分析策略：
-
-【研究設計類型】
-[並行/解釋性序列/探索性序列]
-
-【已有結果】
-量化結果摘要：[量化摘要]
-質性結果摘要：[質性摘要]
-
-【整合目的】
-希望透過整合：[整合目的]
-
-請提供：
-1. 整合方法建議（joint display, transformation等）
-2. 結果呈現格式建議
-3. 處理歧異結果的策略
-4. 整合品質確保策略
-5. 撰寫整合結果的建議`,
-                        fields: [
-                            { key: '並行/解釋性序列/探索性序列', label: '研究設計類型', type: 'text', placeholder: '例：解釋性序列設計' },
-                            { key: '量化摘要', label: '量化結果摘要', type: 'textarea', placeholder: '例：實驗組成績顯著高於控制組(p<.05)，效果量d=0.65' },
-                            { key: '質性摘要', label: '質性結果摘要', type: 'textarea', placeholder: '例：訪談發現三個主題：1.AI即時回饋提升動機...' },
-                            { key: '整合目的', label: '整合目的', type: 'textarea', placeholder: '例：驗證發現的一致性、解釋量化結果的意義' }
-                        ]
-                    }
-                ]
+                audiences: {
+                    teacher: '整合量化與質性資料分析教學成效',
+                    researcher: '設計混合研究、規劃資料整合策略',
+                    developer: '開發支援混合研究的資料收集與分析工具'
+                }
             }
-        };
+        ];
 
         // ============================================
         // 全域變數
         // ============================================
-        let currentSkill = null;
-        let currentTemplate = null;
+        let currentAudience = 'all';
+        let currentCategory = 'all';
 
         // ============================================
         // 初始化
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
-            renderSkillList();
-            setupCategoryTabs();
+            renderToolCards();
         });
 
         // ============================================
-        // 技能列表渲染
+        // 渲染工具卡片
         // ============================================
-        function renderSkillList() {
-            const skillList = document.getElementById('skill-list');
-            skillList.innerHTML = '';
+        function renderToolCards() {
+            const grid = document.getElementById('tool-grid');
+            grid.innerHTML = '';
 
-            Object.values(skillsData).forEach(skill => {
-                const div = document.createElement('div');
-                div.className = 'skill-item';
-                div.dataset.category = skill.category;
-                div.dataset.skillId = skill.id;
-                div.innerHTML = `
-                    <div class="skill-item-header">
-                        <span class="skill-item-icon">${skill.icon}</span>
-                        <span class="skill-item-title">${skill.title}</span>
+            toolsData.forEach((tool, index) => {
+                const card = document.createElement('div');
+                card.className = 'tool-card';
+                card.dataset.category = tool.category;
+                card.dataset.toolId = tool.id;
+
+                const num = String(index + 1).padStart(2, '0');
+                const fileUrl = `https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/${tool.file}`;
+
+                card.innerHTML = `
+                    <div class="tool-card-header">
+                        <div class="tool-number">${num}</div>
+                        <span class="tool-icon">${tool.icon}</span>
+                        <span class="tool-title">${tool.title}</span>
+                        <span class="tool-category-badge">${tool.categoryName}</span>
                     </div>
-                    <p class="skill-item-desc">${skill.description}</p>
-                    <p class="skill-item-category">${skill.categoryName}</p>
+                    <div class="tool-audiences">
+                        <div class="audience-desc teacher-desc ${currentAudience === 'all' || currentAudience === 'teacher' ? 'show' : ''}">
+                            <div class="audience-desc-label">👨‍🏫 教師應用</div>
+                            ${tool.audiences.teacher}
+                        </div>
+                        <div class="audience-desc researcher-desc ${currentAudience === 'all' || currentAudience === 'researcher' ? 'show' : ''}">
+                            <div class="audience-desc-label">🔬 研究應用</div>
+                            ${tool.audiences.researcher}
+                        </div>
+                        <div class="audience-desc developer-desc ${currentAudience === 'all' || currentAudience === 'developer' ? 'show' : ''}">
+                            <div class="audience-desc-label">💻 開發應用</div>
+                            ${tool.audiences.developer}
+                        </div>
+                    </div>
+                    <div class="tool-buttons">
+                        <a href="tools/${tool.id}.html" class="tool-btn tool-btn-primary">
+                            ⚡ 開啟生成器
+                        </a>
+                        <a href="${fileUrl}" target="_blank" class="tool-btn tool-btn-secondary">
+                            📖 技能文件
+                        </a>
+                    </div>
                 `;
-                div.onclick = () => selectSkill(skill.id);
-                skillList.appendChild(div);
+
+                grid.appendChild(card);
+            });
+
+            applyFilters();
+        }
+
+        // ============================================
+        // 身份切換
+        // ============================================
+        function selectAudience(audience) {
+            currentAudience = audience;
+
+            // 更新按鈕狀態
+            document.querySelectorAll('.audience-card').forEach(card => {
+                card.classList.remove('active');
+                if (card.dataset.audience === audience) {
+                    card.classList.add('active');
+                }
+            });
+
+            // 更新卡片內的說明顯示
+            document.querySelectorAll('.tool-card').forEach(card => {
+                const teacherDesc = card.querySelector('.teacher-desc');
+                const researcherDesc = card.querySelector('.researcher-desc');
+                const developerDesc = card.querySelector('.developer-desc');
+
+                if (audience === 'all') {
+                    teacherDesc.classList.add('show');
+                    researcherDesc.classList.add('show');
+                    developerDesc.classList.add('show');
+                } else {
+                    teacherDesc.classList.toggle('show', audience === 'teacher');
+                    researcherDesc.classList.toggle('show', audience === 'researcher');
+                    developerDesc.classList.toggle('show', audience === 'developer');
+                }
             });
         }
 
         // ============================================
-        // 分類標籤
+        // 分類篩選
         // ============================================
-        function setupCategoryTabs() {
+        function filterCategory(category) {
+            currentCategory = category;
+
+            // 更新標籤狀態
             document.querySelectorAll('.category-tab').forEach(tab => {
-                tab.onclick = function() {
-                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    filterSkills(this.dataset.category);
-                };
-            });
-        }
-
-        function filterSkills(category) {
-            document.querySelectorAll('.skill-item').forEach(item => {
-                if (category === 'all' || item.dataset.category === category) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
+                tab.classList.remove('active');
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
                 }
             });
+
+            applyFilters();
         }
 
         // ============================================
-        // 技能選擇
+        // 套用篩選
         // ============================================
-        function selectSkill(skillId) {
-            currentSkill = skillsData[skillId];
-
-            // 更新標題
-            document.getElementById('selected-skill-title').textContent =
-                `${currentSkill.icon} ${currentSkill.title}`;
-
-            // 填充範本選擇器
-            const select = document.getElementById('template-select');
-            select.innerHTML = currentSkill.templates.map((t, i) =>
-                `<option value="${i}">${t.name}</option>`
-            ).join('');
-
-            // 更新來源資訊
-            const sourceUrl = `https://github.com/ChatGPT3a01/claude-educational-ai-skills/blob/master/${currentSkill.file}`;
-            document.getElementById('source-info').innerHTML =
-                `範本來源：<a href="${sourceUrl}" target="_blank">${currentSkill.title}</a> 技能文件`;
-
-            // 載入第一個範本
-            loadTemplate();
-
-            // 顯示表單
-            showForm();
-        }
-
-        // ============================================
-        // 範本載入
-        // ============================================
-        function loadTemplate() {
-            const templateIndex = document.getElementById('template-select').value;
-            currentTemplate = currentSkill.templates[templateIndex];
-
-            const formFields = document.getElementById('form-fields');
-            formFields.innerHTML = '';
-
-            currentTemplate.fields.forEach(field => {
-                const div = document.createElement('div');
-                div.className = 'form-field';
-
-                let inputHtml = '';
-                if (field.type === 'textarea') {
-                    inputHtml = `<textarea id="field-${field.key}" placeholder="${field.placeholder || ''}"></textarea>`;
-                } else if (field.type === 'select' && field.options) {
-                    inputHtml = `<select id="field-${field.key}">
-                        ${field.options.map(o => `<option value="${o}">${o}</option>`).join('')}
-                    </select>`;
-                } else {
-                    inputHtml = `<input type="text" id="field-${field.key}" placeholder="${field.placeholder || ''}">`;
-                }
-
-                div.innerHTML = `
-                    <label>${field.label}</label>
-                    ${inputHtml}
-                `;
-                formFields.appendChild(div);
+        function applyFilters() {
+            document.querySelectorAll('.tool-card').forEach(card => {
+                const matchCategory = currentCategory === 'all' || card.dataset.category === currentCategory;
+                card.classList.toggle('hidden', !matchCategory);
             });
-        }
-
-        // ============================================
-        // 生成提示詞
-        // ============================================
-        function generatePrompt() {
-            let prompt = currentTemplate.template;
-
-            currentTemplate.fields.forEach(field => {
-                const input = document.getElementById(`field-${field.key}`);
-                const value = input.value || `[${field.label}]`;
-                // 使用全局替換
-                const regex = new RegExp(`\\[${escapeRegExp(field.key)}\\]`, 'g');
-                prompt = prompt.replace(regex, value);
-            });
-
-            document.getElementById('output-content').textContent = prompt;
-            showOutput();
-        }
-
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-
-        // ============================================
-        // 複製功能
-        // ============================================
-        function copyPrompt() {
-            const content = document.getElementById('output-content').textContent;
-            navigator.clipboard.writeText(content).then(() => {
-                const btn = document.querySelector('.copy-btn');
-                btn.textContent = '已複製!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = '複製';
-                    btn.classList.remove('copied');
-                }, 2000);
-            });
-        }
-
-        // ============================================
-        // 頁面切換
-        // ============================================
-        function showSkillSelection() {
-            document.getElementById('step-skill').classList.add('active');
-            document.getElementById('step-form').classList.remove('active');
-            document.getElementById('step-output').classList.remove('active');
-        }
-
-        function showForm() {
-            document.getElementById('step-skill').classList.remove('active');
-            document.getElementById('step-form').classList.add('active');
-            document.getElementById('step-output').classList.remove('active');
-        }
-
-        function showOutput() {
-            document.getElementById('step-skill').classList.remove('active');
-            document.getElementById('step-form').classList.remove('active');
-            document.getElementById('step-output').classList.add('active');
         }
     </script>
 </body>

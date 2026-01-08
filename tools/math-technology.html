@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數學科技教育 - 提示詞生成器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .tool-header { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #667eea; text-decoration: none; font-weight: 600; margin-bottom: 20px; padding: 8px 16px; background: #f0f0ff; border-radius: 8px; }
+        .tool-title-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tool-icon { font-size: 2.5em; }
+        .tool-title { font-size: 1.8em; color: #333; }
+        .tool-category { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; }
+        .tool-desc { color: #666; margin-top: 10px; }
+        .tool-content { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .section-title { font-size: 1.3em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .template-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .template-card { padding: 20px; border: 2px solid #e0e0e0; border-radius: 15px; cursor: pointer; transition: all 0.3s; background: #fafafa; }
+        .template-card:hover { border-color: #667eea; background: #f0f0ff; }
+        .template-card.active { border-color: #667eea; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); }
+        .template-card-title { font-weight: 600; margin-bottom: 8px; }
+        .template-card-desc { font-size: 0.85em; color: #666; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .form-grid { display: grid; gap: 18px; }
+        .form-field label { display: block; margin-bottom: 6px; font-weight: 600; }
+        .form-field input, .form-field textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.95em; font-family: inherit; }
+        .form-field input:focus, .form-field textarea:focus { outline: none; border-color: #667eea; }
+        .form-field textarea { min-height: 80px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+        .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .btn { padding: 14px 28px; border-radius: 12px; font-weight: 600; border: none; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .output-section { display: none; margin-top: 30px; }
+        .output-section.active { display: block; }
+        .output-box { background: #1e1e1e; border-radius: 15px; padding: 25px; }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .output-title { color: #fff; font-weight: 600; }
+        .copy-btn { background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .copy-btn.copied { background: #38ef7d; }
+        .output-content { color: #e0e0e0; font-family: monospace; font-size: 0.9em; white-space: pre-wrap; line-height: 1.7; max-height: 500px; overflow-y: auto; }
+        .ai-links { display: flex; gap: 12px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        .ai-link { padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; }
+        .ai-link.claude { background: #7c3aed; color: white; }
+        .ai-link.gpt { background: #10a37f; color: white; }
+        .ai-link.gemini { background: #4285f4; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tool-header">
+            <a href="../index.html" class="back-link">← 返回工具箱</a>
+            <div class="tool-title-row">
+                <span class="tool-icon">📐</span>
+                <h1 class="tool-title">數學科技教育</h1>
+                <span class="tool-category">數學科技教育</span>
+            </div>
+            <p class="tool-desc">GeoGebra、Desmos 等工具的教學應用</p>
+        </div>
+
+        <div class="tool-content">
+            <h2 class="section-title">選擇提示詞範本</h2>
+            <div class="template-cards">
+                <div class="template-card active" onclick="selectTemplate(0)">
+                    <div class="template-card-title">📊 GeoGebra 教學設計</div>
+                    <p class="template-card-desc">設計 GeoGebra 互動教學活動</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate(1)">
+                    <div class="template-card-title">📈 Desmos 活動設計</div>
+                    <p class="template-card-desc">設計 Desmos Activity Builder 活動</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate(2)">
+                    <div class="template-card-title">🔍 數學探究活動</div>
+                    <p class="template-card-desc">運用科技工具的數學探究活動</p>
+                </div>
+            </div>
+
+            <div class="form-section active" id="form-0">
+                <div class="form-grid">
+                    <div class="form-field"><label>數學概念</label><input type="text" id="f0-concept" placeholder="例：二次函數圖形變換 y=a(x-h)²+k"></div>
+                    <div class="form-field"><label>學習目標</label><textarea id="f0-objective" placeholder="例：1. 理解參數 a、h、k 對拋物線的影響\n2. 預測參數改變後的圖形變化"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>年級</label><input type="text" id="f0-grade" placeholder="例：高中一年級"></div>
+                        <div class="form-field"><label>時間</label><input type="text" id="f0-time" placeholder="例：1節課（50分鐘）"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field"><label>互動元素</label><input type="text" id="f0-interactive" placeholder="例：滑桿控制參數、動態拋物線"></div>
+                        <div class="form-field"><label>視覺呈現</label><input type="text" id="f0-visual" placeholder="例：頂點座標顯示、對稱軸"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" id="form-1">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field"><label>主題</label><input type="text" id="f1-topic" placeholder="例：線性函數"></div>
+                        <div class="form-field"><label>年級</label><input type="text" id="f1-grade" placeholder="例：國中八年級"></div>
+                        <div class="form-field"><label>時間（分鐘）</label><input type="text" id="f1-time" placeholder="例：45分鐘"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field"><label>頁面數</label><input type="text" id="f1-pages" placeholder="例：6-8頁"></div>
+                    </div>
+                    <div class="form-field"><label>包含元素</label><textarea id="f1-elements" placeholder="例：圖形探索、配對拖曳、選擇題、開放式回答"></textarea></div>
+                </div>
+            </div>
+
+            <div class="form-section" id="form-2">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field"><label>數學主題</label><input type="text" id="f2-topic" placeholder="例：畢氏定理"></div>
+                        <div class="form-field"><label>年級</label><input type="text" id="f2-grade" placeholder="例：國中八年級"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field"><label>時間</label><input type="text" id="f2-time" placeholder="例：2節"></div>
+                        <div class="form-field"><label>使用工具</label><input type="text" id="f2-tool" placeholder="例：GeoGebra"></div>
+                    </div>
+                    <div class="form-field"><label>探究核心問題</label><textarea id="f2-question" placeholder="例：直角三角形三邊長之間有什麼關係？"></textarea></div>
+                    <div class="form-field"><label>預期發現</label><textarea id="f2-discovery" placeholder="例：發現 a² + b² = c²"></textarea></div>
+                    <div class="form-field"><label>數學先備知識</label><textarea id="f2-prerequisite" placeholder="例：正方形面積計算、基本幾何概念"></textarea></div>
+                    <div class="form-field"><label>科技先備</label><input type="text" id="f2-tech" placeholder="例：會使用 GeoGebra 畫圖"></div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="generatePrompt()">⚡ 生成提示詞</button>
+                <button class="btn btn-secondary" onclick="resetForm()">🔄 重置</button>
+            </div>
+
+            <div class="output-section" id="output-section">
+                <div class="output-box">
+                    <div class="output-header">
+                        <span class="output-title">生成的提示詞</span>
+                        <button class="copy-btn" onclick="copyPrompt()">複製</button>
+                    </div>
+                    <div class="output-content" id="output-content"></div>
+                </div>
+                <div class="ai-links">
+                    <a href="https://claude.ai" target="_blank" class="ai-link claude">前往 Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="ai-link gpt">前往 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">前往 Gemini</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            { generate: () => `請設計一個 GeoGebra 互動教學活動：
+
+【概念】${document.getElementById('f0-concept').value || '[數學概念]'}
+
+【學習目標】
+學生能夠：
+${document.getElementById('f0-objective').value || '[學習目標]'}
+
+【設計需求】
+- 年級：${document.getElementById('f0-grade').value || '[年級]'}
+- 時間：${document.getElementById('f0-time').value || '[時間]'}
+- 互動元素：${document.getElementById('f0-interactive').value || '[互動元素需求]'}
+- 視覺呈現：${document.getElementById('f0-visual').value || '[視覺需求]'}
+
+請提供：
+1. GeoGebra 建構步驟
+2. 關鍵指令/語法
+3. 學生探索指引（5個引導問題）
+4. 教師提問建議
+5. 預期學生發現的數學規律
+6. 延伸挑戰題
+7. 常見困難與鷹架提示` },
+            { generate: () => `請幫我設計一個 Desmos Activity Builder 活動：
+
+【主題】${document.getElementById('f1-topic').value || '[數學主題]'}
+【年級】${document.getElementById('f1-grade').value || '[年級]'}
+【時間】${document.getElementById('f1-time').value || '[分鐘]'}
+
+【活動流程需求】
+頁面數：${document.getElementById('f1-pages').value || '[頁面數]'}
+包含元素：${document.getElementById('f1-elements').value || '[包含元素]'}
+
+【設計重點】
+1. 由具體到抽象的脈絡
+2. 即時回饋設計
+3. 差異化挑戰
+
+請提供：
+1. 各頁面內容與設計
+2. CL (Computation Layer) 程式碼（如需要）
+3. 教師儀表板使用建議
+4. 課堂實施流程` },
+            { generate: () => `請設計一個運用科技工具的數學探究活動：
+
+【活動資訊】
+數學主題：${document.getElementById('f2-topic').value || '[主題]'}
+年級：${document.getElementById('f2-grade').value || '[年級]'}
+時間：${document.getElementById('f2-time').value || '[節數]'}
+使用工具：${document.getElementById('f2-tool').value || '[如：GeoGebra]'}
+
+【探究目標】
+希望學生探究的核心問題：${document.getElementById('f2-question').value || '[問題]'}
+預期發現：${document.getElementById('f2-discovery').value || '[描述]'}
+
+【學生先備】
+- 數學先備：${document.getElementById('f2-prerequisite').value || '[數學先備]'}
+- 科技先備：${document.getElementById('f2-tech').value || '[工具操作能力]'}
+
+請設計：
+1. 探究任務單（學生版）
+2. 引導問題序列
+3. 工具操作步驟指引
+4. 預期學生發現的數學規律
+5. 延伸挑戰題
+6. 常見困難與鷹架提示
+7. 評量規準` }
+        ];
+        let currentTemplate = 0;
+        function selectTemplate(i) { currentTemplate = i; document.querySelectorAll('.template-card').forEach((c,idx) => c.classList.toggle('active', idx===i)); document.querySelectorAll('.form-section').forEach((f,idx) => f.classList.toggle('active', idx===i)); document.getElementById('output-section').classList.remove('active'); }
+        function generatePrompt() { document.getElementById('output-content').textContent = templates[currentTemplate].generate(); document.getElementById('output-section').classList.add('active'); document.getElementById('output-section').scrollIntoView({behavior:'smooth'}); }
+        function copyPrompt() { navigator.clipboard.writeText(document.getElementById('output-content').textContent).then(() => { const b = document.querySelector('.copy-btn'); b.textContent = '已複製!'; b.classList.add('copied'); setTimeout(() => { b.textContent = '複製'; b.classList.remove('copied'); }, 2000); }); }
+        function resetForm() { document.querySelectorAll('input,textarea').forEach(e => e.value = ''); document.getElementById('output-section').classList.remove('active'); }
+    </script>
+</body>
+</html>

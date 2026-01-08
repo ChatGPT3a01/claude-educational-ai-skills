@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自適應學習設計 - 提示詞生成器</title>
+    <meta name="description" content="建構依據學生表現動態調整的學習系統">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6; color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .tool-header {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 30px; margin-bottom: 25px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px; color: #667eea;
+            text-decoration: none; font-weight: 600; margin-bottom: 20px;
+            padding: 8px 16px; background: #f0f0ff; border-radius: 8px; transition: all 0.2s;
+        }
+        .back-link:hover { background: #e0e0ff; }
+        .tool-title-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .tool-icon { font-size: 2.5em; }
+        .tool-title { font-size: 1.8em; color: #333; }
+        .tool-category {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85em;
+        }
+        .tool-desc { color: #666; font-size: 1em; margin-top: 10px; }
+        .tool-content {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            border-radius: 20px; padding: 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); margin-bottom: 25px;
+        }
+        .section-title { font-size: 1.3em; color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .template-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .template-card {
+            padding: 20px; border: 2px solid #e0e0e0; border-radius: 15px;
+            cursor: pointer; transition: all 0.3s; background: #fafafa;
+        }
+        .template-card:hover { border-color: #667eea; background: #f0f0ff; }
+        .template-card.active {
+            border-color: #667eea; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        .template-card-title { font-weight: 600; color: #333; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .template-card-desc { font-size: 0.85em; color: #666; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .form-grid { display: grid; gap: 18px; }
+        .form-field label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 0.95em; }
+        .form-field input, .form-field textarea, .form-field select {
+            width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 0.95em; font-family: inherit; transition: border-color 0.2s;
+        }
+        .form-field input:focus, .form-field textarea:focus, .form-field select:focus { outline: none; border-color: #667eea; }
+        .form-field textarea { min-height: 100px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+        .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px;
+            border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 1em;
+            transition: all 0.3s; border: none; cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .output-section { display: none; margin-top: 30px; }
+        .output-section.active { display: block; }
+        .output-box { background: #1e1e1e; border-radius: 15px; padding: 25px; }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .output-title { color: #fff; font-weight: 600; }
+        .copy-btn {
+            background: #667eea; color: white; border: none; padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+        }
+        .copy-btn:hover { background: #5a6fd6; }
+        .copy-btn.copied { background: #38ef7d; }
+        .output-content {
+            color: #e0e0e0; font-family: 'Monaco', 'Menlo', monospace; font-size: 0.9em;
+            white-space: pre-wrap; line-height: 1.7; max-height: 500px; overflow-y: auto;
+        }
+        .ai-links { display: flex; gap: 12px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        .ai-link {
+            padding: 12px 20px; border-radius: 10px; text-decoration: none;
+            font-weight: 600; font-size: 0.9em; transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+        }
+        .ai-link.claude { background: #7c3aed; color: white; }
+        .ai-link.gpt { background: #10a37f; color: white; }
+        .ai-link.gemini { background: #4285f4; color: white; }
+        .ai-link:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        @media (max-width: 768px) {
+            .container { padding: 20px 15px; }
+            .tool-header, .tool-content { padding: 25px 20px; }
+            .tool-title { font-size: 1.5em; }
+            .template-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tool-header">
+            <a href="../index.html" class="back-link">← 返回工具箱</a>
+            <div class="tool-title-row">
+                <span class="tool-icon">🎯</span>
+                <h1 class="tool-title">自適應學習設計</h1>
+                <span class="tool-category">教學設計</span>
+            </div>
+            <p class="tool-desc">建構依據學生表現動態調整的學習系統</p>
+        </div>
+
+        <div class="tool-content">
+            <h2 class="section-title">選擇提示詞範本</h2>
+            <div class="template-cards">
+                <div class="template-card active" data-template="0" onclick="selectTemplate(0)">
+                    <div class="template-card-title">🎯 設計自適應學習單元</div>
+                    <p class="template-card-desc">設計具有多難度等級與動態路徑的學習單元</p>
+                </div>
+                <div class="template-card" data-template="1" onclick="selectTemplate(1)">
+                    <div class="template-card-title">📊 分析學生學習數據</div>
+                    <p class="template-card-desc">根據學習數據提供自適應建議</p>
+                </div>
+            </div>
+
+            <div class="form-section active" id="form-0">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>學習主題</label>
+                            <input type="text" id="f0-topic" placeholder="例：二次函數">
+                        </div>
+                        <div class="form-field">
+                            <label>科目</label>
+                            <input type="text" id="f0-subject" placeholder="例：數學">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>目標對象</label>
+                            <input type="text" id="f0-target" placeholder="例：高中一年級">
+                        </div>
+                        <div class="form-field">
+                            <label>預計學習時間</label>
+                            <input type="text" id="f0-time" placeholder="例：2小時">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>特殊需求</label>
+                        <textarea id="f0-special" placeholder="例：適合偏鄉低頻寬環境、需要離線功能"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" id="form-1">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>前測成績</label>
+                            <input type="text" id="f1-pretest" placeholder="例：65分">
+                        </div>
+                        <div class="form-field">
+                            <label>學習時間</label>
+                            <input type="text" id="f1-time" placeholder="例：45分鐘">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>答題正確率</label>
+                            <input type="text" id="f1-accuracy" placeholder="例：70%">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label>錯誤題型分布</label>
+                        <textarea id="f1-errors" placeholder="例：計算題錯3題、應用題錯2題"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="generatePrompt()">⚡ 生成提示詞</button>
+                <button class="btn btn-secondary" onclick="resetForm()">🔄 重置</button>
+            </div>
+
+            <div class="output-section" id="output-section">
+                <div class="output-box">
+                    <div class="output-header">
+                        <span class="output-title">生成的提示詞</span>
+                        <button class="copy-btn" onclick="copyPrompt()">複製</button>
+                    </div>
+                    <div class="output-content" id="output-content"></div>
+                </div>
+                <div class="ai-links">
+                    <a href="https://claude.ai" target="_blank" class="ai-link claude">前往 Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="ai-link gpt">前往 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">前往 Gemini</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            {
+                name: '設計自適應學習單元',
+                generate: function() {
+                    return `請幫我設計一個自適應學習單元：
+
+主題：${document.getElementById('f0-topic').value || '[學習主題]'}
+學科：${document.getElementById('f0-subject').value || '[科目名稱]'}
+目標對象：${document.getElementById('f0-target').value || '[年級/程度]'}
+預計學習時間：${document.getElementById('f0-time').value || '[時間]'}
+
+需求：
+1. 設計 3 個難度等級的學習內容
+2. 定義各等級的進入條件與晉升標準
+3. 設計形成性評量問題（每等級 3-5 題）
+4. 規劃學習路徑的分支邏輯
+5. 設計即時回饋機制
+
+特殊需求：${document.getElementById('f0-special').value || '[特殊需求]'}`;
+                }
+            },
+            {
+                name: '分析學生學習數據',
+                generate: function() {
+                    return `請分析以下學生學習數據，並提供自適應建議：
+
+學生資料：
+- 前測成績：${document.getElementById('f1-pretest').value || '[分數]'}
+- 學習時間：${document.getElementById('f1-time').value || '[時長]'}
+- 答題正確率：${document.getElementById('f1-accuracy').value || '[百分比]'}
+- 錯誤題型分布：${document.getElementById('f1-errors').value || '[類型列表]'}
+
+請提供：
+1. 學生目前能力診斷
+2. 建議的學習路徑
+3. 需要補強的概念
+4. 推薦的學習資源類型`;
+                }
+            }
+        ];
+
+        let currentTemplate = 0;
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+            document.querySelectorAll('.template-card').forEach((card, i) => card.classList.toggle('active', i === index));
+            document.querySelectorAll('.form-section').forEach((form, i) => form.classList.toggle('active', i === index));
+            document.getElementById('output-section').classList.remove('active');
+        }
+
+        function generatePrompt() {
+            document.getElementById('output-content').textContent = templates[currentTemplate].generate();
+            document.getElementById('output-section').classList.add('active');
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyPrompt() {
+            navigator.clipboard.writeText(document.getElementById('output-content').textContent).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = '已複製!'; btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = '複製'; btn.classList.remove('copied'); }, 2000);
+            });
+        }
+
+        function resetForm() {
+            document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            document.getElementById('output-section').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
