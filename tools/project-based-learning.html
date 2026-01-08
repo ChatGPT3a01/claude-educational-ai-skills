@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專題導向學習 (PBL) - 提示詞生成器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .tool-header { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .back-link { display: inline-flex; align-items: center; gap: 8px; color: #667eea; text-decoration: none; font-weight: 600; margin-bottom: 20px; padding: 8px 16px; background: #f0f0ff; border-radius: 8px; }
+        .tool-title-row { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tool-icon { font-size: 2.5em; }
+        .tool-title { font-size: 1.8em; color: #333; }
+        .tool-category { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; }
+        .tool-desc { color: #666; margin-top: 10px; }
+        .tool-content { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .section-title { font-size: 1.3em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .template-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .template-card { padding: 20px; border: 2px solid #e0e0e0; border-radius: 15px; cursor: pointer; transition: all 0.3s; background: #fafafa; }
+        .template-card:hover { border-color: #667eea; background: #f0f0ff; }
+        .template-card.active { border-color: #667eea; background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); }
+        .template-card-title { font-weight: 600; margin-bottom: 8px; }
+        .template-card-desc { font-size: 0.85em; color: #666; }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+        .form-grid { display: grid; gap: 18px; }
+        .form-field label { display: block; margin-bottom: 6px; font-weight: 600; }
+        .form-field input, .form-field textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.95em; font-family: inherit; }
+        .form-field input:focus, .form-field textarea:focus { outline: none; border-color: #667eea; }
+        .form-field textarea { min-height: 80px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+        .btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
+        .btn { padding: 14px 28px; border-radius: 12px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .output-section { display: none; margin-top: 30px; }
+        .output-section.active { display: block; }
+        .output-box { background: #1e1e1e; border-radius: 15px; padding: 25px; }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .output-title { color: #fff; font-weight: 600; }
+        .copy-btn { background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        .copy-btn.copied { background: #38ef7d; }
+        .output-content { color: #e0e0e0; font-family: monospace; font-size: 0.9em; white-space: pre-wrap; line-height: 1.7; max-height: 500px; overflow-y: auto; }
+        .ai-links { display: flex; gap: 12px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
+        .ai-link { padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; }
+        .ai-link.claude { background: #7c3aed; color: white; }
+        .ai-link.gpt { background: #10a37f; color: white; }
+        .ai-link.gemini { background: #4285f4; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="tool-header">
+            <a href="../index.html" class="back-link">← 返回工具箱</a>
+            <div class="tool-title-row">
+                <span class="tool-icon">🎯</span>
+                <h1 class="tool-title">專題導向學習 (PBL)</h1>
+                <span class="tool-category">教學設計</span>
+            </div>
+            <p class="tool-desc">設計以真實問題為核心的專題式學習活動</p>
+        </div>
+
+        <div class="tool-content">
+            <h2 class="section-title">選擇提示詞範本</h2>
+            <div class="template-cards">
+                <div class="template-card active" onclick="selectTemplate(0)">
+                    <div class="template-card-title">📋 PBL 專題設計</div>
+                    <p class="template-card-desc">設計完整的專題導向學習活動</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate(1)">
+                    <div class="template-card-title">❓ 驅動問題設計</div>
+                    <p class="template-card-desc">設計激發探究的驅動問題</p>
+                </div>
+                <div class="template-card" onclick="selectTemplate(2)">
+                    <div class="template-card-title">📊 專題歷程評量</div>
+                    <p class="template-card-desc">設計專題的歷程評量機制</p>
+                </div>
+            </div>
+
+            <div class="form-section active" id="form-0">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field"><label>年級</label><input type="text" id="f0-grade" placeholder="例：國中八年級"></div>
+                        <div class="form-field"><label>專題時長</label><input type="text" id="f0-duration" placeholder="例：6週"></div>
+                        <div class="form-field"><label>學生人數</label><input type="text" id="f0-students" placeholder="例：30人"></div>
+                    </div>
+                    <div class="form-field"><label>涵蓋領域</label><textarea id="f0-domains" placeholder="例：自然（生物）、社會（地理）、科技"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>分組方式</label><input type="text" id="f0-grouping" placeholder="例：小組，每組5人"></div>
+                    </div>
+                    <div class="form-field"><label>驅動問題/議題</label><textarea id="f0-question" placeholder="例：如何解決學校周邊的塑膠垃圾問題？（或請 AI 幫忙設計）"></textarea></div>
+                    <div class="form-field"><label>真實情境連結</label><textarea id="f0-context" placeholder="例：社區環境問題、在地產業、社會議題"></textarea></div>
+                    <div class="form-field"><label>學習目標</label><textarea id="f0-objectives" placeholder="例：\n學科知識：生態系、永續發展概念\n核心能力：問題解決、團隊合作、批判思考"></textarea></div>
+                    <div class="form-field"><label>可用資源</label><textarea id="f0-resources" placeholder="例：電腦教室、實驗器材、社區合作夥伴"></textarea></div>
+                </div>
+            </div>
+
+            <div class="form-section" id="form-1">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field"><label>相關學科</label><input type="text" id="f1-subject" placeholder="例：自然科學"></div>
+                        <div class="form-field"><label>核心概念</label><input type="text" id="f1-concept" placeholder="例：能量轉換"></div>
+                    </div>
+                    <div class="form-field"><label>希望探討的議題</label><textarea id="f1-topic" placeholder="例：再生能源、節能減碳"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>年級</label><input type="text" id="f1-grade" placeholder="例：高中一年級"></div>
+                        <div class="form-field"><label>先備知識</label><input type="text" id="f1-prior" placeholder="例：基本電學概念"></div>
+                    </div>
+                    <div class="form-field"><label>學生興趣</label><textarea id="f1-interest" placeholder="例：對科技產品有興趣、關心環境議題"></textarea></div>
+                    <div class="form-field"><label>學校/社區特色</label><textarea id="f1-local" placeholder="例：位於工業區、鄰近農村、海邊社區"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>開放程度</label><input type="text" id="f1-openness" placeholder="例：適度引導"></div>
+                        <div class="form-field"><label>難度層次</label><input type="text" id="f1-difficulty" placeholder="例：標準型"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" id="form-2">
+                <div class="form-grid">
+                    <div class="form-row">
+                        <div class="form-field"><label>專題名稱</label><input type="text" id="f2-name" placeholder="例：校園永續行動"></div>
+                        <div class="form-field"><label>專題時長</label><input type="text" id="f2-duration" placeholder="例：8週"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field"><label>分組方式</label><input type="text" id="f2-grouping" placeholder="例：小組，4人一組"></div>
+                    </div>
+                    <div class="form-field"><label>希望評估的學科學習</label><textarea id="f2-content" placeholder="例：生態系概念、數據分析能力"></textarea></div>
+                    <div class="form-field"><label>希望評估的過程技能</label><textarea id="f2-skills" placeholder="例：資料蒐集、團隊合作、簡報製作"></textarea></div>
+                    <div class="form-field"><label>希望評估的態度情意</label><textarea id="f2-attitude" placeholder="例：積極度、反思能力、環境關懷"></textarea></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>教師評量比重</label><input type="text" id="f2-teacher" placeholder="例：50%"></div>
+                        <div class="form-field"><label>同儕互評比重</label><input type="text" id="f2-peer" placeholder="例：30%"></div>
+                        <div class="form-field"><label>自我評量比重</label><input type="text" id="f2-self" placeholder="例：20%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="generatePrompt()">⚡ 生成提示詞</button>
+                <button class="btn btn-secondary" onclick="resetForm()">🔄 重置</button>
+            </div>
+
+            <div class="output-section" id="output-section">
+                <div class="output-box">
+                    <div class="output-header">
+                        <span class="output-title">生成的提示詞</span>
+                        <button class="copy-btn" onclick="copyPrompt()">複製</button>
+                    </div>
+                    <div class="output-content" id="output-content"></div>
+                </div>
+                <div class="ai-links">
+                    <a href="https://claude.ai" target="_blank" class="ai-link claude">前往 Claude</a>
+                    <a href="https://chat.openai.com" target="_blank" class="ai-link gpt">前往 ChatGPT</a>
+                    <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">前往 Gemini</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const templates = [
+            { generate: () => `請設計一個專題導向學習(PBL)專題：
+
+【基本資訊】
+年級：${document.getElementById('f0-grade').value || '[年級]'}
+涵蓋領域：${document.getElementById('f0-domains').value || '[領域列表]'}
+專題時長：${document.getElementById('f0-duration').value || '[週數]'}
+學生人數：${document.getElementById('f0-students').value || '[人數]'}
+分組方式：${document.getElementById('f0-grouping').value || '[分組說明]'}
+
+【驅動問題】
+${document.getElementById('f0-question').value || '請幫我設計適合的驅動問題'}
+
+【真實情境】
+希望連結的真實世界脈絡：${document.getElementById('f0-context').value || '[情境描述]'}
+
+【學習目標】
+${document.getElementById('f0-objectives').value || '[學習目標]'}
+
+【資源條件】
+${document.getElementById('f0-resources').value || '[可用資源]'}
+
+請設計：
+1. 精煉的驅動問題（如需要）
+2. 專題階段規劃（含各階段目標與活動）
+3. 各階段教師鷹架設計
+4. 形成性評量檢核點
+5. 最終成果形式建議
+6. 評分規準（Rubric）
+7. 專題發表形式建議` },
+            { generate: () => `請幫我設計 PBL 驅動問題：
+
+【主題領域】
+相關學科：${document.getElementById('f1-subject').value || '[科目]'}
+核心概念：${document.getElementById('f1-concept').value || '[概念]'}
+希望探討的議題：${document.getElementById('f1-topic').value || '[議題方向]'}
+
+【學生背景】
+年級：${document.getElementById('f1-grade').value || '[年級]'}
+先備知識：${document.getElementById('f1-prior').value || '[描述]'}
+學生興趣：${document.getElementById('f1-interest').value || '[描述]'}
+
+【在地連結】
+學校/社區特色：${document.getElementById('f1-local').value || '[描述]'}
+
+【設計原則偏好】
+- 開放程度：${document.getElementById('f1-openness').value || '[高度開放/適度引導/結構化]'}
+- 難度層次：${document.getElementById('f1-difficulty').value || '[挑戰型/標準型/入門型]'}
+
+請提供：
+1. 3-5 個驅動問題選項
+2. 各問題的探究方向分析
+3. 可發展的子問題
+4. 適合的成果形式
+5. 建議的專題時長` },
+            { generate: () => `請設計 PBL 專題的歷程評量機制：
+
+【專題資訊】
+專題名稱：${document.getElementById('f2-name').value || '[名稱]'}
+專題時長：${document.getElementById('f2-duration').value || '[週數]'}
+分組方式：${document.getElementById('f2-grouping').value || '[分組說明]'}
+
+【評量目的】
+希望評估：
+- 學科學習：${document.getElementById('f2-content').value || '[列舉重點]'}
+- 過程技能：${document.getElementById('f2-skills').value || '[技能列舉]'}
+- 態度情意：${document.getElementById('f2-attitude').value || '[態度列舉]'}
+
+【評量者】
+- 教師評量：${document.getElementById('f2-teacher').value || '[比重%]'}
+- 同儕互評：${document.getElementById('f2-peer').value || '[比重%]'}
+- 自我評量：${document.getElementById('f2-self').value || '[比重%]'}
+
+請設計：
+1. 各階段檢核點與評量工具
+2. 小組合作評量表
+3. 個人貢獻評估機制
+4. 學習歷程檔案架構
+5. 最終成果評分規準
+6. 反思引導問題` }
+        ];
+        let currentTemplate = 0;
+        function selectTemplate(i) { currentTemplate = i; document.querySelectorAll('.template-card').forEach((c,idx) => c.classList.toggle('active', idx===i)); document.querySelectorAll('.form-section').forEach((f,idx) => f.classList.toggle('active', idx===i)); document.getElementById('output-section').classList.remove('active'); }
+        function generatePrompt() { document.getElementById('output-content').textContent = templates[currentTemplate].generate(); document.getElementById('output-section').classList.add('active'); document.getElementById('output-section').scrollIntoView({behavior:'smooth'}); }
+        function copyPrompt() { navigator.clipboard.writeText(document.getElementById('output-content').textContent).then(() => { const b = document.querySelector('.copy-btn'); b.textContent = '已複製!'; b.classList.add('copied'); setTimeout(() => { b.textContent = '複製'; b.classList.remove('copied'); }, 2000); }); }
+        function resetForm() { document.querySelectorAll('input,textarea').forEach(e => e.value = ''); document.getElementById('output-section').classList.remove('active'); }
+    </script>
+</body>
+</html>
