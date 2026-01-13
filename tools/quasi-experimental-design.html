@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>準實驗研究設計助手 - Claude Educational AI Skills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .tool-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tool-desc {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .template-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .template-card.active {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .template-card h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .template-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .output-section.visible {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        .output-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .ai-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-links a {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .ai-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8em;
+            }
+
+            .template-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回工具箱</a>
+
+        <div class="tool-header">
+            <span class="tool-icon">🔬</span>
+            <h1>準實驗研究設計助手</h1>
+            <p class="tool-desc">協助設計嚴謹的準實驗研究，從研究架構規劃到統計分析與倫理審查</p>
+        </div>
+
+        <div class="template-cards">
+            <div class="template-card active" onclick="selectTemplate(0)">
+                <h3>🔬 研究設計規劃</h3>
+                <p>規劃準實驗研究架構、測量時間點與內在效度分析</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(1)">
+                <h3>📋 測量工具設計</h3>
+                <p>選擇或設計依變項測量工具，確保信效度</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(2)">
+                <h3>📊 統計方法選擇</h3>
+                <p>決定適當的統計分析方法與效果量計算</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(3)">
+                <h3>📄 IRB 倫理審查</h3>
+                <p>準備人體研究倫理委員會申請文件</p>
+            </div>
+        </div>
+
+        <!-- 模板 0: 研究設計規劃 -->
+        <div id="form-0" class="form-section active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔬 研究設計架構規劃</h2>
+
+            <div class="form-group">
+                <label for="research-topic">研究主題 *</label>
+                <input type="text" id="research-topic" placeholder="例如：探討遊戲化圖形組織教學對國小學生科學學習成效與學習動機的影響">
+            </div>
+
+            <div class="form-group">
+                <label for="research-questions">研究問題</label>
+                <textarea id="research-questions" rows="4" placeholder="1. 遊戲化圖形組織教學是否能提升學生的科學學習成就？&#10;2. 遊戲化圖形組織教學是否能提升學生的學習動機？&#10;3. 可選：是否有交互作用或調節效果？"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="intervention-exp">實驗組介入</label>
+                <input type="text" id="intervention-exp" placeholder="例如：遊戲化圖形組織教學（含積分系統、同儕互評）">
+            </div>
+
+            <div class="form-group">
+                <label for="intervention-ctrl">控制組介入</label>
+                <input type="text" id="intervention-ctrl" placeholder="例如：傳統講述式教學">
+            </div>
+
+            <div class="form-group">
+                <label for="intervention-duration">介入時程</label>
+                <input type="text" id="intervention-duration" placeholder="例如：每週 2 節課，持續 8 週，共 16 節課">
+            </div>
+
+            <div class="form-group">
+                <label for="target-population">目標母群</label>
+                <input type="text" id="target-population" placeholder="例如：國小五年級學生">
+            </div>
+
+            <div class="form-group">
+                <label for="sample-source">預估樣本來源</label>
+                <input type="text" id="sample-source" placeholder="例如：某國小 4 個班級，約 120 人">
+            </div>
+
+            <div class="form-group">
+                <label for="grouping-method">分組方式</label>
+                <input type="text" id="grouping-method" placeholder="例如：以既有班級為單位，無法隨機分派個人">
+            </div>
+        </div>
+
+        <!-- 模板 1: 測量工具設計 -->
+        <div id="form-1" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📋 測量工具選擇與設計</h2>
+
+            <div class="form-group">
+                <label for="dependent-vars">研究依變項 *</label>
+                <textarea id="dependent-vars" rows="4" placeholder="例如：&#10;1. 科學學習成就&#10;2. 學習動機（自主動機、控制動機）&#10;3. 批判思考傾向"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="participants">研究對象</label>
+                <input type="text" id="participants" placeholder="例如：國小五年級學生，平均年齡 11 歲">
+            </div>
+
+            <div class="form-group">
+                <label for="test-environment">施測環境</label>
+                <input type="text" id="test-environment" placeholder="例如：教室團體施測">
+            </div>
+
+            <div class="form-group">
+                <label for="time-limit">時間限制</label>
+                <input type="text" id="time-limit" placeholder="例如：單次施測不超過 40 分鐘">
+            </div>
+
+            <div class="form-group">
+                <label for="research-design-type">研究設計</label>
+                <input type="text" id="research-design-type" placeholder="例如：前測-介入-後測設計">
+            </div>
+        </div>
+
+        <!-- 模板 2: 統計方法選擇 -->
+        <div id="form-2" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📊 統計分析方法選擇</h2>
+
+            <div class="form-group">
+                <label for="stat-design">研究設計 *</label>
+                <input type="text" id="stat-design" placeholder="例如：非等組前後測設計（實驗組 vs 控制組，各測前測與後測）">
+            </div>
+
+            <div class="form-group">
+                <label for="stat-iv">自變項</label>
+                <input type="text" id="stat-iv" placeholder="例如：教學方法（實驗組=遊戲化，控制組=傳統），類別變項">
+            </div>
+
+            <div class="form-group">
+                <label for="stat-dv">依變項</label>
+                <input type="text" id="stat-dv" placeholder="例如：學習成就後測分數，連續變項，範圍 0-100 分">
+            </div>
+
+            <div class="form-group">
+                <label for="stat-covariate">共變項</label>
+                <input type="text" id="stat-covariate" placeholder="例如：學習成就前測分數、性別">
+            </div>
+
+            <div class="form-group">
+                <label for="stat-exp-n">實驗組樣本數</label>
+                <input type="text" id="stat-exp-n" placeholder="例如：30 人">
+            </div>
+
+            <div class="form-group">
+                <label for="stat-ctrl-n">控制組樣本數</label>
+                <input type="text" id="stat-ctrl-n" placeholder="例如：28 人">
+            </div>
+
+            <div class="form-group">
+                <label for="stat-distribution">資料分布</label>
+                <input type="text" id="stat-distribution" placeholder="例如：預期常態分布（需檢驗）">
+            </div>
+        </div>
+
+        <!-- 模板 3: IRB 倫理審查 -->
+        <div id="form-3" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📄 IRB 倫理審查文件準備</h2>
+
+            <div class="form-group">
+                <label for="irb-title">研究題目 *</label>
+                <input type="text" id="irb-title" placeholder="完整的研究題目">
+            </div>
+
+            <div class="form-group">
+                <label for="irb-pi">主持人資訊</label>
+                <input type="text" id="irb-pi" placeholder="姓名、職稱、單位">
+            </div>
+
+            <div class="form-group">
+                <label for="irb-participants">研究對象</label>
+                <input type="text" id="irb-participants" placeholder="例如：國小五年級學生，預計 120 人">
+            </div>
+
+            <div class="form-group">
+                <label for="irb-site">研究場域</label>
+                <input type="text" id="irb-site" placeholder="例如：XX 國小">
+            </div>
+
+            <div class="form-group">
+                <label for="irb-duration">研究期程</label>
+                <input type="text" id="irb-duration" placeholder="例如：2025 年 3 月至 6 月，共 3 個月">
+            </div>
+
+            <div class="form-group">
+                <label for="irb-procedure">研究程序摘要</label>
+                <textarea id="irb-procedure" rows="4" placeholder="簡述研究設計、介入內容、測量工具與施測程序，約 200 字"></textarea>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">⚡ 生成提示詞</button>
+
+        <div id="output" class="output-section">
+            <div class="output-content" id="promptOutput"></div>
+            <button class="copy-btn" onclick="copyPrompt()">📋 複製到剪貼板</button>
+            <div class="ai-links">
+                <a href="https://claude.ai" target="_blank">🤖 使用 Claude</a>
+                <a href="https://chat.openai.com" target="_blank">💬 使用 ChatGPT</a>
+                <a href="https://gemini.google.com" target="_blank">✨ 使用 Gemini</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 0;
+
+        const templates = [
+            {
+                name: '研究設計架構規劃',
+                generate: () => {
+                    const topic = document.getElementById('research-topic').value;
+                    const questions = document.getElementById('research-questions').value;
+                    const interventionExp = document.getElementById('intervention-exp').value;
+                    const interventionCtrl = document.getElementById('intervention-ctrl').value;
+                    const duration = document.getElementById('intervention-duration').value;
+                    const population = document.getElementById('target-population').value;
+                    const sample = document.getElementById('sample-source').value;
+                    const grouping = document.getElementById('grouping-method').value;
+
+                    if (!topic) {
+                        alert('請填寫研究主題');
+                        return '';
+                    }
+
+                    return `請協助規劃以下研究的準實驗設計架構：
+
+【研究主題】
+${topic}
+
+【研究問題】
+${questions || '[請填寫研究問題]'}
+
+【介入內容】
+- 實驗組介入：${interventionExp || '[請填寫實驗組介入]'}
+- 控制組介入：${interventionCtrl || '[請填寫控制組介入]'}
+- 介入時程：${duration || '[請填寫介入時程]'}
+
+【研究對象】
+- 目標母群：${population || '[請填寫目標母群]'}
+- 預估樣本來源：${sample || '[請填寫樣本來源]'}
+- 分組方式：${grouping || '[請填寫分組方式]'}
+
+請協助完成以下設計任務：
+
+1. **建議適當的準實驗設計類型**
+   - 說明選擇理由
+   - 繪製研究設計圖（使用符號：O=觀察/測量，X=介入）
+
+2. **規劃測量時間點**
+   - 前測（何時、測什麼）
+   - 後測（立即後測、延宕後測）
+   - 過程測量（若需要）
+
+3. **樣本數估算**
+   - 使用 G*Power 邏輯進行統計檢定力分析
+   - 假設：效果量 medium (d=0.5)，α=0.05，power=0.80
+   - 計算每組所需樣本數
+
+4. **內在效度威脅分析**
+   識別以下威脅並提出控制策略：
+   - 歷史效應（History）
+   - 成熟效應（Maturation）
+   - 測驗效應（Testing）
+   - 選擇偏誤（Selection Bias）
+   - 流失偏誤（Attrition）
+   - 實驗者效應（Experimenter Effect）
+
+請提供：
+1. 完整的研究設計架構說明
+2. 研究設計圖（文字符號表示）
+3. 內在效度威脅分析表（威脅、可能性、控制策略）
+4. 樣本數估算結果與說明`;
+                }
+            },
+            {
+                name: '測量工具選擇與設計',
+                generate: () => {
+                    const dependentVars = document.getElementById('dependent-vars').value;
+                    const participants = document.getElementById('participants').value;
+                    const environment = document.getElementById('test-environment').value;
+                    const timeLimit = document.getElementById('time-limit').value;
+                    const designType = document.getElementById('research-design-type').value;
+
+                    if (!dependentVars) {
+                        alert('請填寫研究依變項');
+                        return '';
+                    }
+
+                    return `請協助選擇或設計以下研究的測量工具：
+
+【研究依變項】
+${dependentVars}
+
+【測量需求】
+- 研究對象：${participants || '[請填寫研究對象]'}
+- 施測環境：${environment || '[請填寫施測環境]'}
+- 時間限制：${timeLimit || '[請填寫時間限制]'}
+- 研究設計：${designType || '[請填寫研究設計]'}
+
+針對每個依變項，請提供以下資訊：
+
+**依變項 1：[例如：科學學習成就]**
+
+1. **操作型定義**
+   [例如：學生在「能源議題」單元的知識理解與應用能力]
+
+2. **測量工具建議**
+   - 現有量表推薦（含信效度資訊、文獻來源）
+   - 或：自編工具設計建議（題型、題數、內容向度）
+
+3. **計分方式**
+   [例如：選擇題 20 題（每題 2 分）+ 應用題 5 題（每題 4 分），總分 100 分]
+
+4. **預期信效度**
+   - 內部一致性信度（Cronbach's α）預期值
+   - 效度類型（內容效度、建構效度、效標關聯效度）
+   - 效度建立方式
+
+5. **施測注意事項**
+   [例如：前後測使用相同題目，間隔 8 週以降低記憶效應]
+
+（依此格式為每個依變項提供完整資訊）
+
+**整體測量規劃**
+
+請提供：
+1. 測量工具總覽表（依變項、工具、題數、施測時間）
+2. 施測順序建議（避免疲勞效應）
+3. 測量工具取得方式（購買、借用、自編）
+4. 預試計畫（若為自編工具）`;
+                }
+            },
+            {
+                name: '統計分析方法選擇',
+                generate: () => {
+                    const design = document.getElementById('stat-design').value;
+                    const iv = document.getElementById('stat-iv').value;
+                    const dv = document.getElementById('stat-dv').value;
+                    const covariate = document.getElementById('stat-covariate').value;
+                    const expN = document.getElementById('stat-exp-n').value;
+                    const ctrlN = document.getElementById('stat-ctrl-n').value;
+                    const distribution = document.getElementById('stat-distribution').value;
+
+                    if (!design) {
+                        alert('請填寫研究設計');
+                        return '';
+                    }
+
+                    return `請為以下準實驗研究選擇適當的統計分析方法：
+
+【研究設計】
+${design}
+
+【變項資訊】
+- 自變項：${iv || '[請填寫自變項]'}
+- 依變項：${dv || '[請填寫依變項]'}
+- 共變項：${covariate || '[請填寫共變項]'}
+
+【樣本特性】
+- 實驗組：${expN || '[請填寫樣本數]'}
+- 控制組：${ctrlN || '[請填寫樣本數]'}
+- 資料分布：${distribution || '[請填寫資料分布]'}
+
+請協助完成統計分析規劃：
+
+1. **建議主要統計方法**
+   [例如：共變數分析 ANCOVA（以前測為共變項）]
+   - 說明選擇理由
+   - 說明相較於其他方法（如獨立樣本 t 檢定、重複量數 ANOVA）的優勢
+
+2. **前提假設檢驗**
+   列出需要檢驗的假設及檢驗方法：
+   - [ ] 依變項常態性（Shapiro-Wilk test）
+   - [ ] 變異數同質性（Levene's test）
+   - [ ] 共變項與依變項線性關係（散佈圖、相關係數）
+   - [ ] 迴歸斜率同質性（交互作用項檢驗）
+   - [ ] 共變項組間平衡（獨立樣本 t 檢定）
+
+3. **主要分析步驟**
+   Step 1：[例如：檢驗前提假設]
+   Step 2：[例如：執行 ANCOVA，檢驗組別主要效果]
+   Step 3：[例如：計算調整後平均數]
+   Step 4：[例如：計算效果量 partial η²]
+
+4. **效果量計算**
+   [例如：partial η²（部分 eta 平方）用於 ANCOVA，Cohen's d 用於組間差異]
+
+5. **APA 格式結果報表範例**
+   提供一個假設性的統計結果描述範例（APA 第七版格式）
+
+請提供：
+1. 統計分析決策樹或流程圖
+2. 完整分析步驟說明
+3. Python/R 分析腳本架構（主要步驟，不需完整代碼）
+4. APA 格式統計表格範本`;
+                }
+            },
+            {
+                name: 'IRB 倫理審查文件準備',
+                generate: () => {
+                    const title = document.getElementById('irb-title').value;
+                    const pi = document.getElementById('irb-pi').value;
+                    const participants = document.getElementById('irb-participants').value;
+                    const site = document.getElementById('irb-site').value;
+                    const duration = document.getElementById('irb-duration').value;
+                    const procedure = document.getElementById('irb-procedure').value;
+
+                    if (!title) {
+                        alert('請填寫研究題目');
+                        return '';
+                    }
+
+                    return `請協助準備人體研究倫理委員會（IRB）申請文件：
+
+【研究基本資訊】
+- 研究題目：${title}
+- 主持人：${pi || '[請填寫主持人資訊]'}
+- 研究對象：${participants || '[請填寫研究對象]'}
+- 研究場域：${site || '[請填寫研究場域]'}
+- 研究期程：${duration || '[請填寫研究期程]'}
+
+【研究程序摘要】
+${procedure || '[請填寫研究程序摘要]'}
+
+請協助準備以下文件：
+
+1. **研究計畫摘要**（500 字以內）
+   - 研究背景與目的
+   - 研究方法與設計
+   - 預期貢獻與重要性
+
+2. **受試者風險評估**
+   - 生理風險評估：[例如：無生理風險]
+   - 心理風險評估：[例如：測驗可能造成輕微焦慮]
+   - 社會風險評估：[例如：無社會風險]
+   - 風險最小化策略
+   - 風險效益分析（預期效益是否大於風險）
+
+3. **家長知情同意書**（適合家長閱讀的語言）
+   包含以下要素：
+   - 研究目的說明（淺白語言）
+   - 研究程序說明（您的孩子將會參與...）
+   - 時間承諾（共需多少時間）
+   - 風險與利益說明
+   - 保密性說明（如何保護孩子隱私）
+   - 自願參與原則（可隨時退出，不影響權益）
+   - 研究團隊聯絡資訊
+   - 簽名欄（家長簽名、日期）
+
+4. **學生知情同意書**（適合國小五年級學生理解的語言）
+   - 使用兒童友善語言（您好，我們想邀請你參加...）
+   - 簡化說明（我們會玩一些學習遊戲...）
+   - 強調自願性（你可以隨時說不想參加）
+   - 簡化簽名欄（學生簽名或打勾、日期）
+
+5. **資料保密計畫**
+   - 資料去識別化方式（使用編號代替姓名）
+   - 資料儲存方式（加密電腦、上鎖櫃子）
+   - 資料保存期限（研究結束後保存 3 年）
+   - 資料使用範圍（僅供研究使用，不做其他用途）
+   - 資料銷毀程序
+
+請生成：
+1. 完整的 IRB 申請文件草稿（5 個部分）
+2. 知情同意書格式範本（Word 格式描述）
+3. 常見 IRB 審查意見與回應建議`;
+                }
+            }
+        ];
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+
+            // 更新卡片樣式
+            document.querySelectorAll('.template-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            // 更新表單顯示
+            document.querySelectorAll('.form-section').forEach((form, i) => {
+                form.classList.toggle('active', i === index);
+            });
+
+            // 隱藏輸出區域
+            document.getElementById('output').classList.remove('visible');
+        }
+
+        function generatePrompt() {
+            const prompt = templates[currentTemplate].generate();
+
+            if (!prompt) return;
+
+            document.getElementById('promptOutput').textContent = prompt;
+            document.getElementById('output').classList.add('visible');
+
+            // 滾動到輸出區域
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptOutput').textContent;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 已複製！';
+                btn.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('複製失敗，請手動複製');
+            });
+        }
+    </script>
+</body>
+</html>

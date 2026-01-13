@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實證研究自動化 - Claude Educational AI Skills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .tool-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tool-desc {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .template-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .template-card.active {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .template-card h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .template-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .output-section.visible {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        .output-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .ai-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-links a {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .ai-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8em;
+            }
+
+            .template-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回工具箱</a>
+
+        <div class="tool-header">
+            <span class="tool-icon">📊</span>
+            <h1>實證研究自動化</h1>
+            <p class="tool-desc">運用 AI 自動化實證研究的完整工作流程，從資料收集、程式碼轉換、統計分析到論文撰寫</p>
+        </div>
+
+        <div class="template-cards">
+            <div class="template-card active" onclick="selectTemplate(0)">
+                <h3>📊 Stata 代碼轉換</h3>
+                <p>將舊版 Stata 統計代碼轉換為現代 Python/R 程式碼</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(1)">
+                <h3>🌐 資料自動爬取</h3>
+                <p>設計網路資料爬取腳本，自動收集研究資料</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(2)">
+                <h3>📈 統計分析視覺化</h3>
+                <p>執行統計分析並生成符合 APA 格式的圖表</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(3)">
+                <h3>📚 文獻回顧自動化</h3>
+                <p>系統化搜尋、萃取、組織文獻並生成回顧章節</p>
+            </div>
+        </div>
+
+        <!-- 模板 0: Stata 代碼轉換 -->
+        <div id="form-0" class="form-section active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📊 Stata 代碼轉換為 Python</h2>
+
+            <div class="form-group">
+                <label for="stata-code">Stata 原始代碼 *</label>
+                <textarea id="stata-code" rows="8" placeholder="貼上完整的 Stata .do 檔案內容"></textarea>
+                <small>請貼上您的 Stata 分析代碼</small>
+            </div>
+
+            <div class="form-group">
+                <label for="dataset-name">資料集名稱與格式</label>
+                <input type="text" id="dataset-name" placeholder="例如：survey_data.dta">
+            </div>
+
+            <div class="form-group">
+                <label for="sample-size">樣本數</label>
+                <input type="text" id="sample-size" placeholder="例如：500 筆">
+            </div>
+
+            <div class="form-group">
+                <label for="variables">主要變項</label>
+                <textarea id="variables" rows="3" placeholder="例如：學習成就（dep_var）、教學方法（indep_var）、前測成績（control_var）"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="analysis-type">分析類型</label>
+                <input type="text" id="analysis-type" placeholder="例如：共變數分析 ANCOVA">
+            </div>
+        </div>
+
+        <!-- 模板 1: 資料爬取 -->
+        <div id="form-1" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🌐 研究資料自動爬取</h2>
+
+            <div class="form-group">
+                <label for="research-topic">研究主題 *</label>
+                <input type="text" id="research-topic" placeholder="例如：台灣縣市教育資源分配與學生學習成效關聯研究">
+            </div>
+
+            <div class="form-group">
+                <label for="data-sources">目標資料來源</label>
+                <textarea id="data-sources" rows="3" placeholder="例如：教育部統計處、各縣市政府教育局公開資料、國中教育會考成績統計"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="data-fields">所需資料欄位</label>
+                <textarea id="data-fields" rows="3" placeholder="例如：縣市名稱、年度、教育經費、師生比、平均會考成績、學校數量"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="time-range">時間範圍</label>
+                <input type="text" id="time-range" placeholder="例如：2015-2024 年">
+            </div>
+
+            <div class="form-group">
+                <label for="geo-range">地理範圍</label>
+                <input type="text" id="geo-range" placeholder="例如：全台灣 22 個縣市">
+            </div>
+
+            <div class="form-group">
+                <label for="edu-stage">教育階段</label>
+                <input type="text" id="edu-stage" placeholder="例如：國中教育階段">
+            </div>
+        </div>
+
+        <!-- 模板 2: 統計分析 -->
+        <div id="form-2" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📈 統計分析與視覺化</h2>
+
+            <div class="form-group">
+                <label for="research-design">研究設計 *</label>
+                <input type="text" id="research-design" placeholder="例如：非等組前後測設計（實驗組 vs 控制組）">
+            </div>
+
+            <div class="form-group">
+                <label for="independent-var">自變項（獨立變項）</label>
+                <input type="text" id="independent-var" placeholder="例如：教學方法（遊戲化 vs 傳統）">
+            </div>
+
+            <div class="form-group">
+                <label for="dependent-vars">依變項（結果變項）</label>
+                <textarea id="dependent-vars" rows="2" placeholder="例如：學習成就後測、學習動機、批判思考"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="covariates">共變項（控制變項）</label>
+                <textarea id="covariates" rows="2" placeholder="例如：學習成就前測、性別、年齡"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exp-sample">實驗組樣本數</label>
+                <input type="text" id="exp-sample" placeholder="例如：30 人">
+            </div>
+
+            <div class="form-group">
+                <label for="ctrl-sample">控制組樣本數</label>
+                <input type="text" id="ctrl-sample" placeholder="例如：28 人">
+            </div>
+
+            <div class="form-group">
+                <label for="measurement-time">測量時間點</label>
+                <input type="text" id="measurement-time" placeholder="例如：前測、立即後測、延宕後測（3 週後）">
+            </div>
+        </div>
+
+        <!-- 模板 3: 文獻回顧 -->
+        <div id="form-3" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📚 文獻回顧自動化</h2>
+
+            <div class="form-group">
+                <label for="lit-topic">研究主題 *</label>
+                <input type="text" id="lit-topic" placeholder="例如：遊戲化學習對國小學生數學學習成效與學習動機的影響">
+            </div>
+
+            <div class="form-group">
+                <label for="keywords-zh">中文關鍵詞</label>
+                <input type="text" id="keywords-zh" placeholder="例如：遊戲化、數學學習、學習成效、學習動機、國小">
+            </div>
+
+            <div class="form-group">
+                <label for="keywords-en">英文關鍵詞</label>
+                <input type="text" id="keywords-en" placeholder="例如：gamification, mathematics education, learning achievement, motivation, elementary school">
+            </div>
+
+            <div class="form-group">
+                <label for="boolean-search">布林搜尋字串</label>
+                <input type="text" id="boolean-search" placeholder="例如：(gamification OR game-based learning) AND (mathematics OR math) AND (elementary OR primary)">
+            </div>
+
+            <div class="form-group">
+                <label for="time-period">時間範圍</label>
+                <input type="text" id="time-period" placeholder="例如：2015-2024 年">
+            </div>
+
+            <div class="form-group">
+                <label for="lit-types">文獻類型</label>
+                <input type="text" id="lit-types" placeholder="例如：期刊論文、學位論文、研討會論文">
+            </div>
+
+            <div class="form-group">
+                <label for="databases">資料庫</label>
+                <input type="text" id="databases" placeholder="例如：Google Scholar, ERIC, 台灣期刊論文索引系統、華藝線上圖書館">
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">⚡ 生成提示詞</button>
+
+        <div id="output" class="output-section">
+            <div class="output-content" id="promptOutput"></div>
+            <button class="copy-btn" onclick="copyPrompt()">📋 複製到剪貼板</button>
+            <div class="ai-links">
+                <a href="https://claude.ai" target="_blank">🤖 使用 Claude</a>
+                <a href="https://chat.openai.com" target="_blank">💬 使用 ChatGPT</a>
+                <a href="https://gemini.google.com" target="_blank">✨ 使用 Gemini</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 0;
+
+        const templates = [
+            {
+                name: 'Stata 代碼轉換為 Python',
+                generate: () => {
+                    const stataCode = document.getElementById('stata-code').value;
+                    const datasetName = document.getElementById('dataset-name').value;
+                    const sampleSize = document.getElementById('sample-size').value;
+                    const variables = document.getElementById('variables').value;
+                    const analysisType = document.getElementById('analysis-type').value;
+
+                    if (!stataCode) {
+                        alert('請填寫 Stata 原始代碼');
+                        return '';
+                    }
+
+                    return `請協助將以下 Stata 統計分析代碼轉換為 Python（使用 pandas 與 statsmodels）：
+
+【Stata 原始代碼】
+${stataCode}
+
+【資料描述】
+- 資料集：${datasetName || '[請填寫資料檔名]'}
+- 樣本數：${sampleSize || '[請填寫樣本數]'}
+- 主要變項：${variables || '[請填寫主要變項]'}
+- 分析類型：${analysisType || '[請填寫分析類型]'}
+
+【轉換要求】
+1. 完整保留原始分析邏輯與統計方法
+2. 使用現代 Python 最佳實踐（pandas, statsmodels, matplotlib）
+3. 加入詳細的中文註解說明每個步驟
+4. 確保統計結果與 Stata 輸出一致
+5. 生成 requirements.txt 套件清單
+
+請提供：
+1. 完整的 Python 分析腳本（含註解）
+2. 套件需求清單（requirements.txt）
+3. 執行說明（README.md 格式）
+4. 預期輸出範例說明`;
+                }
+            },
+            {
+                name: '研究資料自動爬取',
+                generate: () => {
+                    const topic = document.getElementById('research-topic').value;
+                    const sources = document.getElementById('data-sources').value;
+                    const fields = document.getElementById('data-fields').value;
+                    const timeRange = document.getElementById('time-range').value;
+                    const geoRange = document.getElementById('geo-range').value;
+                    const eduStage = document.getElementById('edu-stage').value;
+
+                    if (!topic) {
+                        alert('請填寫研究主題');
+                        return '';
+                    }
+
+                    return `請為以下研究主題設計網路資料爬取腳本：
+
+【研究主題】
+${topic}
+
+【目標資料來源】
+${sources || '[請填寫資料來源]'}
+
+【所需資料欄位】
+${fields || '[請填寫所需欄位]'}
+
+【資料範圍】
+- 時間範圍：${timeRange || '[請填寫時間範圍]'}
+- 地理範圍：${geoRange || '[請填寫地理範圍]'}
+- 教育階段：${eduStage || '[請填寫教育階段]'}
+
+【技術要求】
+1. 使用 Python（requests, BeautifulSoup 或 Selenium）
+2. 遵守網站 robots.txt 與爬取禮儀
+3. 實作錯誤處理與重試機制
+4. 輸出為結構化資料（CSV 格式）
+
+請提供：
+1. 爬蟲程式碼（含完整註解）
+2. 資料欄位說明文件
+3. 執行範例與預期輸出格式
+4. 常見錯誤排解建議`;
+                }
+            },
+            {
+                name: '統計分析與視覺化',
+                generate: () => {
+                    const design = document.getElementById('research-design').value;
+                    const independentVar = document.getElementById('independent-var').value;
+                    const dependentVars = document.getElementById('dependent-vars').value;
+                    const covariates = document.getElementById('covariates').value;
+                    const expSample = document.getElementById('exp-sample').value;
+                    const ctrlSample = document.getElementById('ctrl-sample').value;
+                    const measurementTime = document.getElementById('measurement-time').value;
+
+                    if (!design) {
+                        alert('請填寫研究設計');
+                        return '';
+                    }
+
+                    return `請為以下準實驗研究設計統計分析流程：
+
+【研究設計】
+${design}
+
+【變項資訊】
+- 自變項（獨立變項）：${independentVar || '[請填寫自變項]'}
+- 依變項（結果變項）：${dependentVars || '[請填寫依變項]'}
+- 共變項（控制變項）：${covariates || '[請填寫共變項]'}
+
+【樣本資訊】
+- 實驗組樣本數：${expSample || '[請填寫樣本數]'}
+- 控制組樣本數：${ctrlSample || '[請填寫樣本數]'}
+- 測量時間點：${measurementTime || '[請填寫測量時間點]'}
+
+【分析需求】
+請選擇適當的統計方法並執行以下分析：
+
+1. **描述性統計**
+   - 各組在前測、後測的平均數、標準差
+   - 檢查資料分布（直方圖、Q-Q 圖）
+
+2. **推論統計**
+   - 選擇適當統計方法（建議 ANCOVA，以前測為共變項）
+   - 檢驗統計假設（常態性、變異數同質性、迴歸斜率同質性）
+   - 計算效果量（partial η² 或 Cohen's d）
+
+3. **視覺化圖表**
+   - 組別比較長條圖（含誤差線）
+   - 前後測變化折線圖
+   - 符合 APA 第七版格式
+
+請提供：
+1. Python 或 R 完整分析腳本
+2. APA 格式統計表格（可直接放入論文）
+3. 高解析度圖表檔案（PNG 或 PDF）
+4. 統計結果文字描述（適合論文結果章節）`;
+                }
+            },
+            {
+                name: '文獻回顧自動化',
+                generate: () => {
+                    const topic = document.getElementById('lit-topic').value;
+                    const keywordsZh = document.getElementById('keywords-zh').value;
+                    const keywordsEn = document.getElementById('keywords-en').value;
+                    const booleanSearch = document.getElementById('boolean-search').value;
+                    const timePeriod = document.getElementById('time-period').value;
+                    const litTypes = document.getElementById('lit-types').value;
+                    const databases = document.getElementById('databases').value;
+
+                    if (!topic) {
+                        alert('請填寫研究主題');
+                        return '';
+                    }
+
+                    return `請協助進行以下主題的系統化文獻回顧：
+
+【研究主題】
+${topic}
+
+【搜尋關鍵詞】
+- 中文關鍵詞：${keywordsZh || '[請填寫中文關鍵詞]'}
+- 英文關鍵詞：${keywordsEn || '[請填寫英文關鍵詞]'}
+- 布林搜尋字串：${booleanSearch || '[請填寫布林搜尋字串]'}
+
+【搜尋範圍】
+- 時間範圍：${timePeriod || '[請填寫時間範圍]'}
+- 文獻類型：${litTypes || '[請填寫文獻類型]'}
+- 資料庫：${databases || '[請填寫資料庫]'}
+
+【文獻回顧焦點】
+- ☐ 理論基礎（遊戲化理論、動機理論）
+- ☐ 研究方法（準實驗設計、量表工具）
+- ☐ 研究發現（成效、適用情境、限制）
+- ☐ 研究缺口識別
+
+請執行以下任務：
+
+1. **搜尋策略規劃**
+   - 建立布林搜尋字串
+   - 設定納入/排除條件
+   - 建議搜尋策略
+
+2. **文獻萃取與組織**
+   - 萃取每篇文獻的：研究目的、設計、樣本、主要發現、限制
+   - 建立文獻矩陣表格（Excel 格式）
+   - 依主題分類文獻（理論、方法、發現）
+
+3. **撰寫文獻回顧**
+   - 主題式組織（非逐篇摘要）
+   - 批判性分析與綜合討論
+   - 識別研究缺口與趨勢
+   - 導出本研究的重要性
+
+請提供：
+1. 搜尋策略文件（布林字串與納入排除條件）
+2. 文獻矩陣表格（Excel/CSV，包含所有萃取資訊）
+3. 文獻回顧章節草稿（2000-3000 字）
+4. 參考文獻清單（APA 第七版格式）`;
+                }
+            }
+        ];
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+
+            // 更新卡片樣式
+            document.querySelectorAll('.template-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            // 更新表單顯示
+            document.querySelectorAll('.form-section').forEach((form, i) => {
+                form.classList.toggle('active', i === index);
+            });
+
+            // 隱藏輸出區域
+            document.getElementById('output').classList.remove('visible');
+        }
+
+        function generatePrompt() {
+            const prompt = templates[currentTemplate].generate();
+
+            if (!prompt) return;
+
+            document.getElementById('promptOutput').textContent = prompt;
+            document.getElementById('output').classList.add('visible');
+
+            // 滾動到輸出區域
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptOutput').textContent;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 已複製！';
+                btn.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('複製失敗，請手動複製');
+            });
+        }
+    </script>
+</body>
+</html>

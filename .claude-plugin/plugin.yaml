@@ -1,9 +1,9 @@
 name: claude-educational-ai-skills
-version: 1.0.0
+version: 2.0.0
 description: |
-  數位學習與教育科技 AI 技能集
+  數位學習與教育科技 AI 技能集（20 個專業技能）
   專為教育研究者、教師、數位學習平台開發者設計
-  涵蓋 AI 教育、差異化教學、偏鄉教育、學習分析等領域
+  涵蓋實證研究、SEL、遊戲化、同儕互評、偏鄉教育等領域
 
 author: 曾慶良 (Ching-Liang Tseng)
 repository: https://github.com/your-username/claude-educational-ai-skills
@@ -30,6 +30,14 @@ keywords:
   - Educational Technology
   - ICT融入教學
   - 數學教育
+  - 實證研究
+  - 準實驗設計
+  - SEL
+  - 社會情緒學習
+  - 遊戲化學習
+  - 同儕互評
+  - CASEL
+  - 研究方法
 
 supported_models:
   - claude-3

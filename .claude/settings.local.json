@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:chatgpt3a01.github.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:vibe-coding-gem.netlify.app)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nRefactor: 重構為工具箱模式，新增 13 個獨立生成器頁面\n\n- 首頁改為工具箱總覽，新增身份選擇（教師/研究者/開發者）\n- 工具卡片採用雙入口設計（開啟生成器 + 技能文件）\n- 新增 tools/ 資料夾，包含 13 個獨立工具頁面\n- 每個工具頁面含範本選擇、動態表單、一鍵複製功能\n- 視覺升級：毛玻璃效果、漸層配色、序號標示\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git commit:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(grep:*)",
+      "Bash(git pull:*)",
+      "Bash(ls:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)"
+    ]
+  }
+}

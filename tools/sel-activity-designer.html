@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEL 教學活動設計 - Claude Educational AI Skills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .tool-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tool-desc {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .template-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .template-card.active {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .template-card h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .template-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-group label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .output-section.visible {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        .output-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .ai-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-links a {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .ai-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8em;
+            }
+
+            .template-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回工具箱</a>
+
+        <div class="tool-header">
+            <span class="tool-icon">😊</span>
+            <h1>SEL 教學活動設計</h1>
+            <p class="tool-desc">基於 CASEL 架構設計社會情緒學習活動，培養學生自我覺察、情緒管理與人際技巧</p>
+        </div>
+
+        <div class="template-cards">
+            <div class="template-card active" onclick="selectTemplate(0)">
+                <h3>😊 學科融入 SEL</h3>
+                <p>將社會情緒學習自然融入學科教學中</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(1)">
+                <h3>🌡️ 情緒調節工具包</h3>
+                <p>設計實用的情緒調節策略工具包</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(2)">
+                <h3>💬 Talk Moves 對話</h3>
+                <p>培養學生傾聽與有效溝通能力</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(3)">
+                <h3>🎯 SMART 目標設定</h3>
+                <p>協助學生設定明確可達成的學習目標</p>
+            </div>
+        </div>
+
+        <!-- 模板 0: 學科融入 SEL -->
+        <div id="form-0" class="form-section active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">😊 學科融入 SEL 活動設計</h2>
+
+            <div class="form-group">
+                <label for="subject">學科領域 *</label>
+                <input type="text" id="subject" placeholder="例如：國小五年級數學">
+            </div>
+
+            <div class="form-group">
+                <label for="unit-topic">單元主題</label>
+                <input type="text" id="unit-topic" placeholder="例如：分數的加減運算">
+            </div>
+
+            <div class="form-group">
+                <label for="class-duration">節數時間</label>
+                <input type="text" id="class-duration" placeholder="例如：1 節課 40 分鐘">
+            </div>
+
+            <div class="form-group">
+                <label for="student-background">學生背景</label>
+                <textarea id="student-background" rows="2" placeholder="例如：30 人，學習動機中等，部分學生對數學有焦慮"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="sel-focus">SEL 能力焦點</label>
+                <input type="text" id="sel-focus" placeholder="例如：自我管理（降低數學焦慮）+ 人際技巧（小組合作解題）">
+                <small>請選擇 1-2 個 CASEL 核心能力作為主要焦點</small>
+            </div>
+
+            <div class="form-group">
+                <label for="subject-goal">學科學習目標</label>
+                <textarea id="subject-goal" rows="2" placeholder="例如：學生能正確計算異分母分數加法，正確率達 80%"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="sel-goal">SEL 學習目標</label>
+                <textarea id="sel-goal" rows="3" placeholder="例如：學生能辨識數學焦慮情緒並使用深呼吸策略調節；學生能在小組討論中有效表達想法"></textarea>
+            </div>
+        </div>
+
+        <!-- 模板 1: 情緒調節工具包 -->
+        <div id="form-1" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🌡️ 情緒調節策略工具包</h2>
+
+            <div class="form-group">
+                <label for="target-grade">目標年級 *</label>
+                <input type="text" id="target-grade" placeholder="例如：國小中年級">
+            </div>
+
+            <div class="form-group">
+                <label for="strategy-count">策略數量</label>
+                <select id="strategy-count">
+                    <option value="3">3 個策略</option>
+                    <option value="4">4 個策略</option>
+                    <option value="5" selected>5 個策略</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="situation">適用情境</label>
+                <textarea id="situation" rows="3" placeholder="例如：課堂學習中、考試前、與同學衝突時"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>策略類型（請勾選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="preventive" checked> 預防性策略（事前準備）</label>
+                    <label><input type="checkbox" id="immediate" checked> 當下調節策略（情緒發生時）</label>
+                    <label><input type="checkbox" id="reflective" checked> 事後反思策略（事件後）</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模板 2: Talk Moves 對話 -->
+        <div id="form-2" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">💬 Talk Moves 對話促進活動</h2>
+
+            <div class="form-group">
+                <label for="discussion-subject">學科 *</label>
+                <input type="text" id="discussion-subject" placeholder="例如：社會科">
+            </div>
+
+            <div class="form-group">
+                <label for="discussion-topic">討論主題</label>
+                <input type="text" id="discussion-topic" placeholder="例如：環境保護的重要性">
+            </div>
+
+            <div class="form-group">
+                <label for="discussion-grade">年級</label>
+                <input type="text" id="discussion-grade" placeholder="例如：國小六年級">
+            </div>
+
+            <div class="form-group">
+                <label for="discussion-time">討論時間</label>
+                <input type="text" id="discussion-time" placeholder="例如：20 分鐘討論時間">
+            </div>
+
+            <div class="form-group">
+                <label>Talk Moves 策略（預設已選擇所有策略）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="revoicing" checked> 重述 (Revoicing)：「你的意思是...對嗎？」</label>
+                    <label><input type="checkbox" id="pressing" checked> 追問 (Pressing)：「可以說更多嗎？為什麼你這樣想？」</label>
+                    <label><input type="checkbox" id="adding-on" checked> 連結 (Adding On)：「誰可以補充 OOO 的想法？」</label>
+                    <label><input type="checkbox" id="clarifying" checked> 澄清 (Clarifying)：「可以用自己的話再說一次嗎？」</label>
+                    <label><input type="checkbox" id="evidence" checked> 要求證據 (Using Evidence)：「你的證據是什麼？」</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模板 3: SMART 目標設定 -->
+        <div id="form-3" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🎯 SMART 目標設定工作坊</h2>
+
+            <div class="form-group">
+                <label for="workshop-situation">適用情境 *</label>
+                <input type="text" id="workshop-situation" placeholder="例如：學期初、專案開始前、期中檢討">
+            </div>
+
+            <div class="form-group">
+                <label for="workshop-target">目標對象</label>
+                <input type="text" id="workshop-target" placeholder="例如：國中七年級">
+            </div>
+
+            <div class="form-group">
+                <label for="workshop-duration">活動時長</label>
+                <input type="text" id="workshop-duration" placeholder="例如：45 分鐘">
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">⚡ 生成提示詞</button>
+
+        <div id="output" class="output-section">
+            <div class="output-content" id="promptOutput"></div>
+            <button class="copy-btn" onclick="copyPrompt()">📋 複製到剪貼板</button>
+            <div class="ai-links">
+                <a href="https://claude.ai" target="_blank">🤖 使用 Claude</a>
+                <a href="https://chat.openai.com" target="_blank">💬 使用 ChatGPT</a>
+                <a href="https://gemini.google.com" target="_blank">✨ 使用 Gemini</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 0;
+
+        const templates = [
+            {
+                name: '學科融入 SEL 活動設計',
+                generate: () => {
+                    const subject = document.getElementById('subject').value;
+                    const unit = document.getElementById('unit-topic').value;
+                    const duration = document.getElementById('class-duration').value;
+                    const background = document.getElementById('student-background').value;
+                    const selFocus = document.getElementById('sel-focus').value;
+                    const subjectGoal = document.getElementById('subject-goal').value;
+                    const selGoal = document.getElementById('sel-goal').value;
+
+                    if (!subject) {
+                        alert('請填寫學科領域');
+                        return '';
+                    }
+
+                    return `請設計將 SEL 自然融入以下學科教學的活動：
+
+【課程資訊】
+- 學科領域：${subject}
+- 單元主題：${unit || '[請填寫單元主題]'}
+- 節數時間：${duration || '[請填寫節數時間]'}
+- 學生背景：${background || '[請填寫學生背景]'}
+
+【SEL 能力焦點】
+請選擇 1-2 個 CASEL 核心能力作為主要焦點：
+${selFocus || '[請填寫 SEL 能力焦點，例如：自我管理 + 人際技巧]'}
+
+【學科學習目標】
+${subjectGoal || '[請填寫學科學習目標]'}
+
+【SEL 學習目標】
+${selGoal || '[請填寫 SEL 學習目標]'}
+
+請設計完整活動，包含：
+
+1. **活動流程**（分階段，含時間分配）
+   - 引起動機（5 分鐘）
+   - 發展活動（25 分鐘）
+   - 綜合活動（10 分鐘）
+
+2. **SEL 策略融入點**
+   具體說明在哪些環節融入哪些 SEL 策略：
+   - 情緒檢視時機（如：課堂開始、解題遇困難時）
+   - 調節策略教學（如：深呼吸、正向自我對話）
+   - 社交技巧引導（如：鼓勵性回饋、輪流發言）
+
+3. **教師引導語範例**
+   提供至少 3 段教師可直接使用的引導語：
+   - 情緒覺察引導：「現在請大家看看自己的情緒溫度計，當你看到這個分數題目時，你的情緒是...」
+   - 調節策略引導：「如果感到緊張，讓我們一起做三次深呼吸...」
+   - 正向結語引導：「今天你在小組中做了什麼幫助別人的事？」
+
+4. **學生活動單**（簡要描述或提供範本）
+
+5. **差異化策略**
+   - 針對高焦慮學生的支持
+   - 針對社交困難學生的鷹架
+
+請提供完整活動設計，可直接應用於課堂。`;
+                }
+            },
+            {
+                name: '情緒調節策略工具包',
+                generate: () => {
+                    const grade = document.getElementById('target-grade').value;
+                    const count = document.getElementById('strategy-count').value;
+                    const situation = document.getElementById('situation').value;
+
+                    const preventive = document.getElementById('preventive').checked;
+                    const immediate = document.getElementById('immediate').checked;
+                    const reflective = document.getElementById('reflective').checked;
+
+                    if (!grade) {
+                        alert('請填寫目標年級');
+                        return '';
+                    }
+
+                    let strategyTypes = [];
+                    if (preventive) strategyTypes.push('預防性策略（事前準備）');
+                    if (immediate) strategyTypes.push('當下調節策略（情緒發生時）');
+                    if (reflective) strategyTypes.push('事後反思策略（事件後）');
+
+                    return `請為 ${grade} 設計一套實用的情緒調節策略工具包：
+
+【設計需求】
+- 策略數量：${count} 個具體策略
+- 適用情境：${situation || '[請填寫適用情境]'}
+- 實施難度：簡單易學，學生可自主使用
+
+【策略類型】
+請涵蓋以下類型，每類提供 1-2 個策略：
+
+${strategyTypes.map((type, i) => `${i + 1}. **${type}**`).join('\n')}
+
+針對每個策略，請提供：
+
+- **策略名稱**：易記的名字
+- **步驟說明**：3-5 個具體步驟（學生可理解的語言）
+- **引導語範例**：教師如何教導此策略
+- **練習活動**：學生如何練習此策略
+- **視覺提示卡設計**：描述可張貼在教室的提示卡內容（文字 + 圖示建議）
+
+**範例格式：**
+
+**策略 1：「54321 平靜法」**（當下調節策略）
+- 步驟：
+  1. 找到 5 個你看到的東西
+  2. 找到 4 個你聽到的聲音
+  3. 找到 3 個你能碰觸的東西
+  4. 找到 2 個你聞到的氣味
+  5. 找到 1 個你喜歡自己的地方
+- 引導語：「當你感到很緊張時，讓我們一起用 54321 平靜法...」
+- 練習活動：課堂中模擬緊張情境，全班練習此策略
+- 視覺卡：[簡筆畫圖示：眼睛看、耳朵聽、手觸摸、鼻子聞、心形（喜歡自己）]
+
+請提供：
+1. ${count} 個具體策略（含完整資訊）
+2. 教師實施手冊（如何教導、常見問題）
+3. 學生策略卡設計（可印製發給學生）`;
+                }
+            },
+            {
+                name: 'Talk Moves 對話促進活動',
+                generate: () => {
+                    const subject = document.getElementById('discussion-subject').value;
+                    const topic = document.getElementById('discussion-topic').value;
+                    const grade = document.getElementById('discussion-grade').value;
+                    const time = document.getElementById('discussion-time').value;
+
+                    if (!subject) {
+                        alert('請填寫學科');
+                        return '';
+                    }
+
+                    const selectedMoves = [];
+                    if (document.getElementById('revoicing').checked) selectedMoves.push('1. **重述 (Revoicing)**：「你的意思是...對嗎？」');
+                    if (document.getElementById('pressing').checked) selectedMoves.push('2. **追問 (Pressing)**：「可以說更多嗎？為什麼你這樣想？」');
+                    if (document.getElementById('adding-on').checked) selectedMoves.push('3. **連結 (Adding On)**：「誰可以補充 OOO 的想法？」');
+                    if (document.getElementById('clarifying').checked) selectedMoves.push('4. **澄清 (Clarifying)**：「可以用自己的話再說一次嗎？」');
+                    if (document.getElementById('evidence').checked) selectedMoves.push('5. **要求證據 (Using Evidence)**：「你的證據是什麼？哪裡看到的？」');
+
+                    return `設計基於 Talk Moves 的課堂討論活動，培養學生的傾聽與溝通能力：
+
+【討論主題】
+- 學科：${subject}
+- 主題：${topic || '[請填寫討論主題]'}
+- 年級：${grade || '[請填寫年級]'}
+- 時間：${time || '[請填寫討論時間]'}
+
+【Talk Moves 策略應用】
+請在活動設計中融入以下策略：
+
+${selectedMoves.join('\n')}
+
+請設計：
+
+1. **討論前準備**
+   - 暖身活動（建立安全討論氛圍）
+   - Talk Moves 快速複習（視覺海報）
+
+2. **討論流程設計**
+   - 開場提問（開放式問題）
+   - 小組討論（4-5 人，10 分鐘）
+   - 全班分享（10 分鐘）
+
+3. **教師提問腳本**
+   提供至少 5 個教師提問範例，標示使用哪種 Talk Move：
+   - 「小明剛才提到環境保護很重要，小華，你可以用自己的話說說小明的想法嗎？」[澄清]
+   - 「小美，你為什麼認為減少塑膠袋很重要？可以多說一點嗎？」[追問]
+   - （依此類推...）
+
+4. **學生對話框架**（sentence starters）
+   提供學生可使用的句型卡：
+   - 「我同意 ___ 的想法，因為...」
+   - 「我想補充 ___ 說的...」
+   - 「我的證據是...」
+   - 「我有不同的看法，我認為...」
+
+5. **觀察評量指標**
+   教師如何觀察學生的對話品質：
+   - [ ] 學生能主動發言
+   - [ ] 學生回應時有連結他人想法
+   - [ ] 學生能提供證據支持論點
+   - [ ] 學生能尊重不同意見
+
+請提供完整的 Talk Moves 討論活動設計。`;
+                }
+            },
+            {
+                name: 'SMART 目標設定工作坊',
+                generate: () => {
+                    const situation = document.getElementById('workshop-situation').value;
+                    const target = document.getElementById('workshop-target').value;
+                    const duration = document.getElementById('workshop-duration').value;
+
+                    if (!situation) {
+                        alert('請填寫適用情境');
+                        return '';
+                    }
+
+                    return `設計協助學生設定學習目標的工作坊活動：
+
+【工作坊資訊】
+- 適用情境：${situation}
+- 目標對象：${target || '[請填寫目標對象]'}
+- 活動時長：${duration || '[請填寫活動時長]'}
+
+【SMART 目標框架】
+- **S**pecific（具體的）：目標明確，非模糊籠統
+- **M**easurable（可測量的）：可量化，知道何時達成
+- **A**chievable（可達成的）：具挑戰但不過度困難
+- **R**elevant（相關的）：與個人學習需求相關
+- **T**ime-bound（有期限的）：設定明確達成時間
+
+請設計工作坊活動，包含：
+
+1. **SMART 概念教學**（10 分鐘）
+   - 講解 SMART 五要素
+   - 提供好目標 vs 不好目標對比範例
+     - 不好的目標：「我要更努力」（太模糊）
+     - 好的目標：「我要在這學期內，每週完成 5 次數學練習題，期末考數學成績進步 10 分」（符合 SMART）
+
+2. **目標設定引導單**
+   設計學生填寫的工作單，包含以下提問：
+   - 你想改善什麼學習領域？（學科、技能、態度）
+   - 具體來說，你想達成什麼？（Specific）
+   - 你如何知道自己達成了？用什麼測量？（Measurable）
+   - 這個目標對你來說是可達成的嗎？需要什麼資源？（Achievable）
+   - 為什麼這個目標對你重要？（Relevant）
+   - 你要在什麼時候達成？（Time-bound）
+
+3. **自我監控工具**
+   - 每週檢核表（我本週做了什麼朝目標前進？）
+   - 進度視覺化（如：進度條、階梯圖）
+   - 反思問題（遇到什麼困難？如何克服？）
+
+4. **慶祝與調整機制**
+   - 達成目標的慶祝方式
+   - 未達成時如何調整目標（不責備，而是學習）
+
+5. **後續追蹤計畫**
+   教師如何定期與學生檢視目標進度（每週？每兩週？）
+
+請提供完整的 SMART 目標設定工作坊設計。`;
+                }
+            }
+        ];
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+
+            // 更新卡片樣式
+            document.querySelectorAll('.template-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            // 更新表單顯示
+            document.querySelectorAll('.form-section').forEach((form, i) => {
+                form.classList.toggle('active', i === index);
+            });
+
+            // 隱藏輸出區域
+            document.getElementById('output').classList.remove('visible');
+        }
+
+        function generatePrompt() {
+            const prompt = templates[currentTemplate].generate();
+
+            if (!prompt) return;
+
+            document.getElementById('promptOutput').textContent = prompt;
+            document.getElementById('output').classList.add('visible');
+
+            // 滾動到輸出區域
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptOutput').textContent;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 已複製！';
+                btn.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('複製失敗，請手動複製');
+            });
+        }
+    </script>
+</body>
+</html>

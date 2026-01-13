@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遊戲化學習設計 - Claude Educational AI Skills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .tool-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tool-desc {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .template-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .template-card.active {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .template-card h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .template-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-group label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .output-section.visible {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        .output-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .ai-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-links a {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .ai-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8em;
+            }
+
+            .template-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回工具箱</a>
+
+        <div class="tool-header">
+            <span class="tool-icon">🎮</span>
+            <h1>遊戲化學習設計</h1>
+            <p class="tool-desc">運用積分、徽章、排行榜等遊戲化機制，提升學生學習動機與參與度</p>
+        </div>
+
+        <div class="template-cards">
+            <div class="template-card active" onclick="selectTemplate(0)">
+                <h3>🎮 完整遊戲化體驗</h3>
+                <p>設計包含敘事、積分、徽章的完整遊戲化學習活動</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(1)">
+                <h3>🏆 概念圖互評遊戲化</h3>
+                <p>為概念圖建構與同儕互評加入遊戲化元素</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(2)">
+                <h3>📱 線上平台遊戲化</h3>
+                <p>為數位學習平台設計積分、徽章與排行榜系統</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(3)">
+                <h3>📊 遊戲化成效評估</h3>
+                <p>設計評估遊戲化學習成效的方法</p>
+            </div>
+        </div>
+
+        <!-- 模板 0: 完整遊戲化體驗 -->
+        <div id="form-0" class="form-section active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🎮 完整遊戲化學習體驗設計</h2>
+
+            <div class="form-group">
+                <label for="subject-theme">學科主題 *</label>
+                <input type="text" id="subject-theme" placeholder="例如：國小五年級自然科「能源與環境」單元">
+            </div>
+
+            <div class="form-group">
+                <label for="learning-goal">學習目標</label>
+                <textarea id="learning-goal" rows="2" placeholder="例如：了解再生能源種類、比較優缺點、提出永續能源方案"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="learning-hours">學習時數</label>
+                <input type="text" id="learning-hours" placeholder="例如：4 週，每週 3 節課，共 12 節課">
+            </div>
+
+            <div class="form-group">
+                <label for="student-info">學生背景</label>
+                <textarea id="student-info" rows="2" placeholder="例如：30 人，學習動機中等，對科學主題興趣不高"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="teaching-env">教學環境</label>
+                <input type="text" id="teaching-env" placeholder="例如：一般教室，有電腦教室可使用，資源中等">
+            </div>
+
+            <div class="form-group">
+                <label>遊戲化目標（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="goal1" checked> 主動探索與提問</label>
+                    <label><input type="checkbox" id="goal2" checked> 持續練習與精熟</label>
+                    <label><input type="checkbox" id="goal3" checked> 同儕互助與協作</label>
+                    <label><input type="checkbox" id="goal4"> 深度思考與反思</label>
+                    <label><input type="checkbox" id="goal5"> 作品品質提升</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- 模板 1: 概念圖互評遊戲化 -->
+        <div id="form-1" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🏆 概念圖互評遊戲化設計</h2>
+
+            <div class="form-group">
+                <label for="concept-topic">概念圖主題 *</label>
+                <input type="text" id="concept-topic" placeholder="例如：科學探究「植物生長因素」">
+            </div>
+
+            <div class="form-group">
+                <label for="participants">參與人數</label>
+                <input type="text" id="participants" placeholder="例如：28 人">
+            </div>
+
+            <div class="form-group">
+                <label for="activity-duration">活動時程</label>
+                <input type="text" id="activity-duration" placeholder="例如：2 週，包含建構、互評、修改">
+            </div>
+
+            <div class="form-group">
+                <label for="peer-method">互評方式</label>
+                <input type="text" id="peer-method" placeholder="例如：每人評 3 份作品，採雙盲評量">
+            </div>
+        </div>
+
+        <!-- 模板 2: 線上平台遊戲化 -->
+        <div id="form-2" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📱 線上學習平台遊戲化功能設計</h2>
+
+            <div class="form-group">
+                <label for="platform-type">平台類型 *</label>
+                <input type="text" id="platform-type" placeholder="例如：國小數學練習平台">
+            </div>
+
+            <div class="form-group">
+                <label for="platform-features">主要功能</label>
+                <textarea id="platform-features" rows="2" placeholder="例如：題目練習、教學影片、討論區"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="target-users">目標用戶</label>
+                <input type="text" id="target-users" placeholder="例如：國小 3-6 年級學生">
+            </div>
+
+            <div class="form-group">
+                <label for="tech-constraints">技術限制</label>
+                <input type="text" id="tech-constraints" placeholder="例如：網頁平台，需支援手機與平板">
+            </div>
+        </div>
+
+        <!-- 模板 3: 遊戲化成效評估 -->
+        <div id="form-3" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📊 遊戲化成效評估設計</h2>
+
+            <div class="form-group">
+                <label>評估目標（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="eval1" checked> 學習成效（是否真正學會）</label>
+                    <label><input type="checkbox" id="eval2" checked> 學習動機（是否提升內在動機）</label>
+                    <label><input type="checkbox" id="eval3" checked> 參與度（是否更投入）</label>
+                    <label><input type="checkbox" id="eval4" checked> 公平性（是否所有學生受益）</label>
+                </div>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">⚡ 生成提示詞</button>
+
+        <div id="output" class="output-section">
+            <div class="output-content" id="promptOutput"></div>
+            <button class="copy-btn" onclick="copyPrompt()">📋 複製到剪貼板</button>
+            <div class="ai-links">
+                <a href="https://claude.ai" target="_blank">🤖 使用 Claude</a>
+                <a href="https://chat.openai.com" target="_blank">💬 使用 ChatGPT</a>
+                <a href="https://gemini.google.com" target="_blank">✨ 使用 Gemini</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 0;
+
+        const templates = [
+            {
+                name: '完整遊戲化學習體驗設計',
+                generate: () => {
+                    const theme = document.getElementById('subject-theme').value;
+                    const goal = document.getElementById('learning-goal').value;
+                    const hours = document.getElementById('learning-hours').value;
+                    const studentInfo = document.getElementById('student-info').value;
+                    const env = document.getElementById('teaching-env').value;
+
+                    if (!theme) {
+                        alert('請填寫學科主題');
+                        return '';
+                    }
+
+                    const goals = [];
+                    if (document.getElementById('goal1').checked) goals.push('- [X] 主動探索與提問');
+                    if (document.getElementById('goal2').checked) goals.push('- [X] 持續練習與精熟');
+                    if (document.getElementById('goal3').checked) goals.push('- [X] 同儕互助與協作');
+                    if (document.getElementById('goal4').checked) goals.push('- [X] 深度思考與反思');
+                    if (document.getElementById('goal5').checked) goals.push('- [X] 作品品質提升');
+
+                    return `請為以下學習活動設計完整的遊戲化機制：
+
+【課程資訊】
+- 學科主題：${theme}
+- 學習目標：${goal || '[請填寫學習目標]'}
+- 學習時數：${hours || '[請填寫學習時數]'}
+- 學生背景：${studentInfo || '[請填寫學生背景]'}
+- 教學環境：${env || '[請填寫教學環境]'}
+
+【遊戲化目標】
+選擇要提升的學習行為（可多選）：
+${goals.join('\n') || '- [ ] 請勾選遊戲化目標'}
+
+請設計遊戲化學習體驗，包含：
+
+1. **學習敘事框架**
+   - 背景故事：[例如：「能源偵探學院」，學生是見習偵探，任務是調查並解決未來能源危機]
+   - 學生角色：[例如：能源偵探，依專精領域分為太陽能探員、風能探員等]
+   - 最終目標：[例如：設計一座永續能源城市，通過學院認證]
+
+2. **積分系統設計**
+
+   積分來源：
+   - 探索活動（參與課堂探索、提出問題）：+10 分/次
+   - 概念圖建構（完成個人概念圖）：+20 分
+   - 同儕互評（提供有品質的回饋）：+15 分/則
+   - 小組合作（有效協作）：+25 分/組
+   - 成就測驗（通過單元測驗）：+50 分
+   - 品質加乘：優秀作品額外 +10 分
+
+   積分用途：
+   - 累積積分解鎖進階任務
+   - 兌換「能源道具卡」（提示卡、合作卡）
+   - 升級偵探等級
+
+3. **徽章系統設計**
+
+   設計 5-8 個徽章，每個包含：
+   - 徽章名稱：[例如：「太陽能專家」]
+   - 獲得條件：[例如：完成太陽能探索任務並通過測驗]
+   - 徽章視覺設計描述：[例如：金色太陽圖案，周圍有光芒]
+   - 稀有度：★☆☆☆☆（常見）到 ★★★★★（稀有）
+
+   徽章類型：
+   - 進度徽章（完成里程碑）
+   - 技能徽章（精熟特定能力）
+   - 合作徽章（團隊貢獻）
+   - 挑戰徽章（完成高難度任務）
+
+4. **排行榜設計**
+
+   排行榜類型：
+   - 個人總積分排行（前 10 名）
+   - 小組協作排行（以小組為單位）
+   - 本週進步排行（鼓勵成長）
+   - 互助之星排行（幫助他人次數）
+
+   隱私與倫理：
+   - 僅顯示前段排名（避免後段學生受挫）
+   - 強調多元排行（非只有一種成功方式）
+   - 可選擇隱藏自己的排名
+
+5. **任務與關卡設計**
+
+   主線任務（必須完成）：
+   - 任務 1：能源初探（探索不同能源類型）
+   - 任務 2：優缺點分析（建構比較概念圖）
+   - 任務 3：未來方案（設計永續能源方案）
+   - 最終任務：能源城市設計（整合所學）
+
+   支線任務（選擇性挑戰）：
+   - 深入研究特定能源（額外積分）
+   - 訪談家長能源使用習慣
+   - 製作能源宣傳海報
+
+6. **進度視覺化**
+   設計學習地圖或進度條，讓學生看見自己的位置與成長
+
+請提供：
+1. 完整遊戲化機制設計文件
+2. 學生手冊（規則說明、任務清單）
+3. 教師實施指引（課堂操作流程）
+4. 簡易積分記錄表格（Excel 或紙本）`;
+                }
+            },
+            {
+                name: '概念圖互評遊戲化設計',
+                generate: () => {
+                    const topic = document.getElementById('concept-topic').value;
+                    const participants = document.getElementById('participants').value;
+                    const duration = document.getElementById('activity-duration').value;
+                    const method = document.getElementById('peer-method').value;
+
+                    if (!topic) {
+                        alert('請填寫概念圖主題');
+                        return '';
+                    }
+
+                    return `請為概念圖建構與同儕互評活動設計遊戲化機制：
+
+【活動資訊】
+- 概念圖主題：${topic}
+- 參與人數：${participants || '[請填寫參與人數]'}
+- 活動時程：${duration || '[請填寫活動時程]'}
+- 互評方式：${method || '[請填寫互評方式]'}
+
+【遊戲化設計需求】
+
+1. **建構階段遊戲化**
+
+   任務分級：
+   - 青銅任務：建立基本概念圖（5 個概念節點，4 個連結）+10 分
+   - 白銀任務：建立中等概念圖（10 個概念，層級結構）+20 分
+   - 黃金任務：建立複雜概念圖（15+ 概念，交叉連結）+35 分
+
+   即時回饋：
+   - 完成度進度條（已建立 X/15 個概念）
+   - 品質提示（「太棒了！你加入了交叉連結！+5 分」）
+
+2. **互評階段遊戲化**
+
+   評論員等級：
+   - 見習評論員（完成 3 份評量）→ 青銅評論員（5 份）→ 白銀評論員（10 份，品質優良）
+
+   評論品質積分：
+   - 基本評論（有評分，簡單回饋）：+10 分
+   - 優質評論（具體、建設性、連結標準）：+20 分
+   - 卓越評論（深入分析、提供範例）：+30 分
+
+   評論品質檢核：
+   - 字數達標（至少 50 字）
+   - 具體指出位置（「在第二層的...」）
+   - 提供改進建議
+   - 語氣鼓勵與尊重
+
+3. **回饋被採納獎勵**
+   - 你的評論被作者標記為「最有幫助」：+15 分
+   - 作者根據你的建議修改：+10 分
+   - 獲得「最佳評論員」徽章（本週最多有用回饋）
+
+4. **修改階段遊戲化**
+   - 根據回饋修改作品：+10 分
+   - 品質顯著提升（教師評比）：+20 分
+   - 反思日誌（寫下學到什麼）：+10 分
+
+5. **團隊協作獎勵**
+   - 小組內互助討論（觀察到）：小組 +25 分
+   - 小組平均分數達標：解鎖小組徽章
+
+【倫理平衡設計】
+
+- 如何避免只為積分而評？
+- 如何支持低成就學生？
+- 如何防止惡意評分？
+
+請提供：
+1. 完整遊戲化概念圖互評機制
+2. 積分計算說明與範例
+3. 徽章設計列表（含視覺描述）
+4. 學生使用規則與範例`;
+                }
+            },
+            {
+                name: '線上學習平台遊戲化功能設計',
+                generate: () => {
+                    const platformType = document.getElementById('platform-type').value;
+                    const features = document.getElementById('platform-features').value;
+                    const users = document.getElementById('target-users').value;
+                    const constraints = document.getElementById('tech-constraints').value;
+
+                    if (!platformType) {
+                        alert('請填寫平台類型');
+                        return '';
+                    }
+
+                    return `請為以下線上學習平台設計遊戲化功能規格：
+
+【平台資訊】
+- 平台類型：${platformType}
+- 主要功能：${features || '[請填寫主要功能]'}
+- 目標用戶：${users || '[請填寫目標用戶]'}
+- 技術限制：${constraints || '[請填寫技術限制]'}
+
+請設計以下功能模組：
+
+1. **積分與等級系統**
+
+   積分獲取：
+   - 完成每日練習：+20 分
+   - 答對題目：+5 分/題
+   - 連續答對（streak）：額外 +10 分
+   - 觀看教學影片：+10 分
+   - 參與討論區：+15 分/則有意義回應
+
+   等級系統：
+   - 等級 1（數學新手）：0-100 分
+   - 等級 2（數學學徒）：101-300 分
+   - ...（設計 10 個等級）
+   - 等級 10（數學大師）：2000+ 分
+
+   每升級獎勵：
+   - 解鎖新頭像或稱號
+   - 獲得虛擬獎勵（如「智慧星星」）
+
+2. **徽章成就系統**
+
+   設計 15-20 個徽章，包含：
+   - 進度徽章：「第一題」「完成 10 題」「完成 100 題」
+   - 精熟徽章：「分數達人」（分數單元全對）「幾何專家」
+   - 毅力徽章：「連續 7 天練習」「連續 30 天練習」
+   - 協助徽章：「樂於助人」（回答他人問題 10 次）
+   - 挑戰徽章：「挑戰題克服者」（完成高難度題目）
+
+   徽章展示：
+   - 個人徽章牆
+   - 社群動態分享（「小明獲得了『連續 30 天練習』徽章！」）
+
+3. **排行榜設計**
+
+   排行榜類型：
+   - 本週積分排行（重置制，給所有人機會）
+   - 月度進步排行（進步幅度，非絕對分數）
+   - 好友排行（只與好友比較）
+   - 班級排行（班級內競爭）
+
+   隱私設定：
+   - 允許學生選擇是否顯示在排行榜
+   - 僅顯示暱稱，不顯示真實姓名
+
+4. **每日任務與挑戰**
+
+   每日任務（每天重置）：
+   - 完成 10 題練習
+   - 觀看 1 部教學影片
+   - 幫助 1 位同學
+
+   每週挑戰：
+   - 特定主題挑戰（「本週挑戰：征服小數點！」）
+   - 限時挑戰（30 分鐘內完成 20 題）
+
+   完成獎勵：
+   - 每日任務全完成：+50 bonus 分
+   - 每週挑戰完成：特殊徽章 + 100 分
+
+5. **社交與協作功能**
+
+   - 組隊學習：邀請朋友組隊，共同完成團隊任務
+   - 好友系統：加好友、贈送鼓勵貼紙
+   - 學習動態：分享學習成就（「我今天完成了 30 題！」）
+
+請提供：
+1. 功能規格文件（含使用者介面描述）
+2. 資料庫欄位設計（積分、徽章、等級）
+3. 遊戲化規則手冊（給學生的說明）
+4. 防弊機制（避免刷分、作弊）`;
+                }
+            },
+            {
+                name: '遊戲化成效評估設計',
+                generate: () => {
+                    const evalGoals = [];
+                    if (document.getElementById('eval1').checked) evalGoals.push('- 學習成效（是否真正學會）');
+                    if (document.getElementById('eval2').checked) evalGoals.push('- 學習動機（是否提升內在動機）');
+                    if (document.getElementById('eval3').checked) evalGoals.push('- 參與度（是否更投入）');
+                    if (document.getElementById('eval4').checked) evalGoals.push('- 公平性（是否所有學生受益）');
+
+                    return `設計評估遊戲化學習成效的方法：
+
+【評估目標】
+${evalGoals.join('\n') || '- [請勾選評估目標]'}
+
+【評估資料來源】
+
+1. **量化資料**
+   - 學習成就測驗（前測 vs 後測）
+   - 學習動機量表（ARCS 動機量表）
+   - 參與行為記錄（登入次數、完成任務數、互動次數）
+   - 積分與徽章資料分析（分布、相關性）
+
+2. **質性資料**
+   - 學生訪談（喜歡什麼？不喜歡什麼？）
+   - 教師觀察日誌（課堂氛圍變化）
+   - 學生反思日誌（學習歷程反思）
+   - 家長回饋（是否觀察到學習習慣改變）
+
+3. **比較分析**
+   - 遊戲化班級 vs 傳統班級（準實驗設計）
+   - 不同遊戲化機制效果比較（積分 vs 徽章 vs 敘事）
+   - 高/中/低成就學生受益程度
+
+【評估指標設計】
+
+請為每個評估目標設計 2-3 個具體指標：
+
+**學習成效指標：**
+- 後測成績進步幅度（與前測比較）
+- 知識保留率（延宕後測）
+- 高階思考能力表現（批判思考、問題解決）
+
+**學習動機指標：**
+- 動機量表分數變化
+- 自主學習行為增加（課外自主練習時間）
+- 學習態度改變（從被動到主動）
+
+**參與度指標：**
+- 出席率、作業完成率
+- 課堂發言次數、提問次數
+- 線上平台活躍度（若有）
+
+**公平性指標：**
+- 不同能力學生的進步幅度
+- 排行榜多樣性（非總是同一群人）
+- 弱勢學生受益情況
+
+請提供：
+1. 完整評估計畫（評估時間點、工具、流程）
+2. 評估工具（問卷、訪談大綱、觀察表）
+3. 資料分析方法建議
+4. 評估報告範本`;
+                }
+            }
+        ];
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+
+            // 更新卡片樣式
+            document.querySelectorAll('.template-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            // 更新表單顯示
+            document.querySelectorAll('.form-section').forEach((form, i) => {
+                form.classList.toggle('active', i === index);
+            });
+
+            // 隱藏輸出區域
+            document.getElementById('output').classList.remove('visible');
+        }
+
+        function generatePrompt() {
+            const prompt = templates[currentTemplate].generate();
+
+            if (!prompt) return;
+
+            document.getElementById('promptOutput').textContent = prompt;
+            document.getElementById('output').classList.add('visible');
+
+            // 滾動到輸出區域
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptOutput').textContent;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 已複製！';
+                btn.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('複製失敗，請手動複製');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同儕互評機制設計 - Claude Educational AI Skills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', '微軟正黑體', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .tool-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .tool-icon {
+            font-size: 60px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .tool-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tool-desc {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .template-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .template-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .template-card.active {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .template-card h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .template-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checkbox-group label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .output-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .output-section.visible {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        .output-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .copy-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .ai-links {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .ai-links a {
+            padding: 10px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .ai-links a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .tool-header h1 {
+                font-size: 1.8em;
+            }
+
+            .template-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← 返回工具箱</a>
+
+        <div class="tool-header">
+            <span class="tool-icon">📋</span>
+            <h1>同儕互評機制設計</h1>
+            <p class="tool-desc">設計有效的同儕評量與回饋機制，培養學生批判思考與建設性回饋能力</p>
+        </div>
+
+        <div class="template-cards">
+            <div class="template-card active" onclick="selectTemplate(0)">
+                <h3>📋 Rubric 評分規準</h3>
+                <p>設計詳細的評分規準（Rubric）與標竿範例</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(1)">
+                <h3>🎓 評量者訓練</h3>
+                <p>訓練學生成為有效評量者的工作坊</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(2)">
+                <h3>🔄 互評流程管理</h3>
+                <p>設計完整的同儕互評實施流程與管理機制</p>
+            </div>
+            <div class="template-card" onclick="selectTemplate(3)">
+                <h3>⚖️ 互評倫理設計</h3>
+                <p>設計同儕互評的倫理規範與爭議處理機制</p>
+            </div>
+        </div>
+
+        <!-- 模板 0: Rubric 設計 -->
+        <div id="form-0" class="form-section active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📋 Rubric 評分規準設計</h2>
+
+            <div class="form-group">
+                <label for="work-type">作品類型 *</label>
+                <input type="text" id="work-type" placeholder="例如：國小五年級自然科「能源議題」概念圖">
+            </div>
+
+            <div class="form-group">
+                <label for="learning-goals">學習目標</label>
+                <textarea id="learning-goals" rows="4" placeholder="例如：&#10;1. 正確識別至少 5 種能源類型&#10;2. 建立能源之間的階層關係&#10;3. 標示能源優缺點與環境影響&#10;4. 提出創新的交叉連結"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>評量目的（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="summative" checked> 總結性評量（影響成績）</label>
+                    <label><input type="checkbox" id="formative" checked> 形成性評量（提供回饋）</label>
+                    <label><input type="checkbox" id="self-assess"> 自我評量（反思學習）</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>評量者（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="peer" checked> 同儕互評</label>
+                    <label><input type="checkbox" id="teacher" checked> 教師評分</label>
+                    <label><input type="checkbox" id="self"> 自我評量</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dimensions">評量向度數量</label>
+                <select id="dimensions">
+                    <option value="4">4 個向度</option>
+                    <option value="5" selected>5 個向度</option>
+                    <option value="6">6 個向度</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="levels">等級量表</label>
+                <select id="levels">
+                    <option value="3">3 等級（超越/符合/接近標準）</option>
+                    <option value="4" selected>4 等級（優秀/良好/尚可/待改進）</option>
+                    <option value="5">5 等級（卓越/優秀/良好/尚可/待改進）</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 模板 1: 評量者訓練 -->
+        <div id="form-1" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🎓 評量者訓練活動設計</h2>
+
+            <div class="form-group">
+                <label for="training-goals">訓練目標 *</label>
+                <textarea id="training-goals" rows="3" placeholder="學生能夠：&#10;1. 理解並正確應用評分規準&#10;2. 撰寫具體、建設性、有幫助的回饋&#10;3. 保持公平客觀的評量態度"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="learners">目標學習者</label>
+                <input type="text" id="learners" placeholder="例如：國中八年級，30 人，即將進行作文互評">
+            </div>
+
+            <div class="form-group">
+                <label for="training-time">訓練時間</label>
+                <input type="text" id="training-time" placeholder="例如：1 節課 45 分鐘">
+            </div>
+        </div>
+
+        <!-- 模板 2: 互評流程 -->
+        <div id="form-2" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔄 同儕互評流程管理</h2>
+
+            <div class="form-group">
+                <label for="course-subject">科目 *</label>
+                <input type="text" id="course-subject" placeholder="例如：國文科">
+            </div>
+
+            <div class="form-group">
+                <label for="assignment-type">作業類型</label>
+                <input type="text" id="assignment-type" placeholder="例如：議論文寫作（800 字）">
+            </div>
+
+            <div class="form-group">
+                <label for="class-size">班級人數</label>
+                <input type="text" id="class-size" placeholder="例如：32 人">
+            </div>
+
+            <div class="form-group">
+                <label for="peer-duration">互評時程</label>
+                <input type="text" id="peer-duration" placeholder="例如：2 週（提交→互評→修改）">
+            </div>
+
+            <div class="form-group">
+                <label for="anonymous">匿名評量</label>
+                <select id="anonymous">
+                    <option value="yes" selected>是</option>
+                    <option value="no">否</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="reviewers-per-work">每件作品評量者數</label>
+                <input type="text" id="reviewers-per-work" placeholder="例如：3 人">
+            </div>
+
+            <div class="form-group">
+                <label for="works-per-reviewer">每人評量件數</label>
+                <input type="text" id="works-per-reviewer" placeholder="例如：3 件">
+            </div>
+
+            <div class="form-group">
+                <label for="grading-weight">成績佔比</label>
+                <input type="text" id="grading-weight" placeholder="例如：作品 70%（同儕 40% + 教師 30%），評量品質 30%">
+            </div>
+        </div>
+
+        <!-- 模板 3: 互評倫理 -->
+        <div id="form-3" class="form-section">
+            <h2 style="color: #667eea; margin-bottom: 20px;">⚖️ 互評倫理與公平性設計</h2>
+
+            <div class="form-group">
+                <label>倫理關注點（可多選）</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="privacy" checked> 隱私保密（學生作品是否公開？）</label>
+                    <label><input type="checkbox" id="fairness" checked> 評分公平（避免友誼/敵意偏誤）</label>
+                    <label><input type="checkbox" id="safety" checked> 心理安全（學生能否承受批評？）</label>
+                    <label><input type="checkbox" id="integrity" checked> 學術誠信（避免串通作弊）</label>
+                </div>
+            </div>
+        </div>
+
+        <button class="generate-btn" onclick="generatePrompt()">⚡ 生成提示詞</button>
+
+        <div id="output" class="output-section">
+            <div class="output-content" id="promptOutput"></div>
+            <button class="copy-btn" onclick="copyPrompt()">📋 複製到剪貼板</button>
+            <div class="ai-links">
+                <a href="https://claude.ai" target="_blank">🤖 使用 Claude</a>
+                <a href="https://chat.openai.com" target="_blank">💬 使用 ChatGPT</a>
+                <a href="https://gemini.google.com" target="_blank">✨ 使用 Gemini</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTemplate = 0;
+
+        const templates = [
+            {
+                name: 'Rubric 評分規準設計',
+                generate: () => {
+                    const workType = document.getElementById('work-type').value;
+                    const goals = document.getElementById('learning-goals').value;
+                    const dimensions = document.getElementById('dimensions').value;
+                    const levels = document.getElementById('levels').value;
+
+                    if (!workType) {
+                        alert('請填寫作品類型');
+                        return '';
+                    }
+
+                    const purposes = [];
+                    if (document.getElementById('summative').checked) purposes.push('- [X] 總結性評量（影響成績）');
+                    if (document.getElementById('formative').checked) purposes.push('- [X] 形成性評量（提供回饋）');
+                    if (document.getElementById('self-assess').checked) purposes.push('- [X] 自我評量（反思學習）');
+
+                    const evaluators = [];
+                    if (document.getElementById('peer').checked) evaluators.push('- [X] 同儕互評');
+                    if (document.getElementById('teacher').checked) evaluators.push('- [X] 教師評分');
+                    if (document.getElementById('self').checked) evaluators.push('- [X] 自我評量');
+
+                    let levelDesc = '';
+                    if (levels === '3') levelDesc = '3 等級（超越/符合/接近標準）';
+                    else if (levels === '4') levelDesc = '4 等級（優秀/良好/尚可/待改進）';
+                    else levelDesc = '5 等級（卓越/優秀/良好/尚可/待改進）';
+
+                    return `請為以下學習作品設計詳細的評分規準（Rubric）：
+
+【作品類型】
+${workType}
+
+【學習目標】
+${goals || '[請填寫學習目標]'}
+
+【評量目的】
+${purposes.join('\n') || '- [ ] 請勾選評量目的'}
+
+【評量者】
+${evaluators.join('\n') || '- [ ] 請勾選評量者'}
+
+請設計 Rubric，包含：
+
+1. **評量向度設定**（${dimensions} 個向度）
+
+   請識別關鍵評量向度，例如：
+   - 向度 1：概念完整性（是否涵蓋關鍵概念）
+   - 向度 2：階層結構（上位-下位概念組織）
+   - 向度 3：連結正確性（關係標示適當）
+   - 向度 4：交叉連結（創造性整合）
+   - 向度 5：視覺呈現（清晰易讀）
+
+2. **等級量表設計**
+
+   選擇適當等級數：
+   - [${levels === '3' ? 'X' : ' '}] 3 等級（超越/符合/接近標準）
+   - [${levels === '4' ? 'X' : ' '}] 4 等級（優秀/良好/尚可/待改進）
+   - [${levels === '5' ? 'X' : ' '}] 5 等級（卓越/優秀/良好/尚可/待改進）
+
+3. **詳細 Rubric 內容**
+
+   請為每個向度提供 ${levels} 個等級的描述：
+
+   **向度 1：概念完整性**（權重 30%）
+
+   | 等級 | 分數 | 描述（可觀察、可測量） |
+   |------|------|----------------------|
+   | 優秀 | 4 | 包含 8 個以上關鍵概念，涵蓋所有能源類型（太陽能、風能、水力、化石燃料等），並加入環境影響概念 |
+   | 良好 | 3 | 包含 5-7 個關鍵概念，涵蓋多數能源類型，概念正確 |
+   | 尚可 | 2 | 包含 3-4 個概念，部分能源類型遺漏，或有少數概念錯誤 |
+   | 待改進 | 1 | 包含少於 3 個概念，或概念錯誤較多 |
+
+   （為每個向度提供完整表格）
+
+4. **學生友善版 Rubric**
+
+   將專業用語轉換為學生易懂的語言：
+   - 「階層結構」→「你的概念圖有沒有分類？大概念包含小概念？」
+   - 「交叉連結」→「你有沒有找到不同分類之間的關係？」
+
+5. **標竿範例說明**
+
+   為每個等級提供作品範例或描述：
+   - 優秀範例：「看看這個概念圖，它有...」
+   - 良好範例：「這個概念圖做得不錯，如果能...會更好」
+
+請提供：
+1. 完整 Rubric 表格（含所有向度與等級）
+2. 學生友善版 Rubric
+3. 標竿範例說明（或範例作品描述）
+4. 教師使用指引（如何使用此 Rubric 評分）`;
+                }
+            },
+            {
+                name: '評量者訓練活動設計',
+                generate: () => {
+                    const goals = document.getElementById('training-goals').value;
+                    const learners = document.getElementById('learners').value;
+                    const time = document.getElementById('training-time').value;
+
+                    if (!goals) {
+                        alert('請填寫訓練目標');
+                        return '';
+                    }
+
+                    return `設計訓練學生成為有效評量者的工作坊：
+
+【訓練目標】
+${goals}
+
+【目標學習者】
+${learners || '[請填寫目標學習者]'}
+
+【訓練時間】
+${time || '[請填寫訓練時間]'}
+
+請設計訓練活動，包含：
+
+1. **活動 1：回饋品質辨識**（15 分鐘）
+
+   教師提供：
+   - 1 件範例作品（如：一篇作文段落）
+   - 5-6 則不同品質的回饋範例
+
+   回饋範例類型：
+   - **優秀回饋**：「第二段的比喻很生動（『時間像流水』），但第三段的論點可以加入具體例子支持，例如...」
+   - **模糊回饋**：「寫得很好」「需要改進」（無具體指引）
+   - **過於批評**：「這段寫得很差，完全看不懂」（負面語氣）
+   - **過於寬鬆**：「全部都很棒！沒問題！」（無實質建議）
+
+   學生任務：
+   1. 閱讀所有回饋
+   2. 小組討論：哪些回饋最有幫助？為什麼？
+   3. 歸納「高品質回饋」的特徵
+
+   教師總結：提出「高品質回饋檢核清單」
+   - [ ] 具體指出位置（「在第二段...」）
+   - [ ] 說明優點或問題
+   - [ ] 連結評分規準
+   - [ ] 提供改進建議
+   - [ ] 語氣鼓勵與尊重
+
+2. **活動 2：Rubric 應用練習**（15 分鐘）
+
+   教師提供：
+   - 2-3 件不同品質的範例作品
+   - 評分規準 (Rubric)
+
+   學生任務：
+   1. 個人評分：使用 Rubric 為範例作品評分
+   2. 小組討論：比較評分結果，討論差異
+   3. 口徑校正：全班討論，教師說明標準答案與理由
+
+   口徑校正重點：
+   - 「優秀」與「良好」的界線在哪？
+   - 如何判斷「概念完整性」？
+   - 常見評分錯誤有哪些？
+
+3. **活動 3：回饋寫作練習**（15 分鐘）
+
+   提供回饋框架（TAG 法或肯定-建議-鼓勵法）：
+
+   **TAG 回饋模板**：
+   【T - Tell 我喜歡的部分】
+   你的作品中，我覺得 ___ 很棒，因為 ___
+
+   【A - Ask 我的疑問】
+   我想問：___？ 或者我好奇 ___？
+
+   【G - Give 我的建議】
+   如果能 ___，你的作品會更好，例如 ___
+
+   學生任務：
+   1. 選擇一件範例作品
+   2. 使用 TAG 模板撰寫回饋
+   3. 兩人配對互相檢視回饋品質
+   4. 全班分享優秀回饋範例
+
+4. **總結與承諾**（5 分鐘）
+
+   - 回顧高品質回饋的要素
+   - 學生簽署「評量者承諾書」：
+     - 我承諾公平評量
+     - 我承諾給予建設性回饋
+     - 我承諾尊重他人作品
+
+請提供：
+1. 完整訓練活動教案（含時間分配）
+2. 回饋範例集（好與不好的對比）
+3. 學生活動單（含 TAG 回饋模板）
+4. 評量者承諾書範本`;
+                }
+            },
+            {
+                name: '同儕互評流程管理',
+                generate: () => {
+                    const subject = document.getElementById('course-subject').value;
+                    const assignmentType = document.getElementById('assignment-type').value;
+                    const classSize = document.getElementById('class-size').value;
+                    const duration = document.getElementById('peer-duration').value;
+                    const anonymous = document.getElementById('anonymous').value;
+                    const reviewersPerWork = document.getElementById('reviewers-per-work').value;
+                    const worksPerReviewer = document.getElementById('works-per-reviewer').value;
+                    const gradingWeight = document.getElementById('grading-weight').value;
+
+                    if (!subject) {
+                        alert('請填寫科目');
+                        return '';
+                    }
+
+                    return `設計完整的同儕互評實施流程與管理機制：
+
+【課程資訊】
+- 科目：${subject}
+- 作業類型：${assignmentType || '[請填寫作業類型]'}
+- 班級人數：${classSize || '[請填寫班級人數]'}
+- 互評時程：${duration || '[請填寫互評時程]'}
+
+【互評設定】
+- 匿名評量：[${anonymous === 'yes' ? 'X' : ' '}] 是  [${anonymous === 'no' ? 'X' : ' '}] 否
+- 每件作品評量者數：${reviewersPerWork || '[請填寫評量者數]'}
+- 每人評量件數：${worksPerReviewer || '[請填寫評量件數]'}
+- 成績佔比：${gradingWeight || '[請填寫成績佔比]'}
+
+請設計互評流程，包含：
+
+1. **階段 1：作品提交**（第 1-3 天）
+
+   提交規範：
+   - 格式：Word 檔案，12pt 新細明體，行距 1.5 倍
+   - 檔名：學號_姓名_議論文.docx
+   - 截止時間：第 3 天晚上 11:59
+   - 提交平台：[例如：Google Classroom / 學校學習平台 / 紙本]
+
+   去識別化處理（若匿名）：
+   - 教師移除檔案中的姓名資訊
+   - 重新編號：A01, A02, A03... （使用代碼）
+
+2. **階段 2：評量者分配**（第 4 天）
+
+   分配策略：
+   - [X] 隨機分配（避免朋友互評偏誤）
+   - [ ] 能力分層（高/中/低能力互評）
+   - [ ] 互惠評量（A 評 B，B 評 A）
+
+   分配結果通知：
+   - 每位學生收到 3 件作品代碼（如：A05, A12, A23）
+   - 下載作品檔案或領取紙本
+   - 收到評分規準與回饋模板
+
+3. **階段 3：執行互評**（第 5-10 天）
+
+   評量任務：
+   - 使用 Rubric 為每個向度評分
+   - 撰寫文字回饋（每件作品至少 100 字）
+   - 提供具體改進建議
+
+   教師監控：
+   - 每天檢視提交進度
+   - 抽檢評量品質（10-20% 作品）
+   - 發現問題及時介入（如：敷衍評分、不當回饋）
+
+   學生支援：
+   - 設立答疑時段
+   - 線上討論區（釐清評分標準）
+
+4. **階段 4：回饋彙整與閱讀**（第 11-12 天）
+
+   教師處理：
+   - 彙整每件作品的 3 份評量
+   - 計算平均分數
+   - 標記極端評分（與平均差距過大）
+   - 進行教師複核（抽檢或全數）
+
+   學生收到：
+   - 自己作品的 3 份同儕回饋
+   - 平均分數與各向度得分
+   - 教師補充意見（若有）
+
+   反思任務：
+   - 閱讀所有回饋
+   - 填寫反思單：「哪些回饋最有幫助？為什麼？」
+   - 規劃修改方向
+
+5. **階段 5：修改與再提交**（第 13-14 天）
+
+   修改任務：
+   - 根據回饋修改作品
+   - 撰寫「修改說明」（我根據回饋做了哪些修改？）
+   - 提交最終版本
+
+   成績計算：
+   - 初稿成績（同儕評分平均）× 40%
+   - 最終版成績（教師評分）× 30%
+   - 評量品質成績 × 20%
+   - 反思與修改 × 10%
+   = 總成績
+
+6. **品質保證機制**
+
+   評量品質檢核：
+   - 評分過於寬鬆或嚴格（與平均差距 > 1 分）→ 教師面談
+   - 文字回饋過短（< 50 字）→ 提醒補充
+   - 不當回饋內容（攻擊性、離題）→ 移除並重新分配
+   - 優質回饋（被作者評為最有幫助）→ 加分獎勵
+
+   學生申訴機制：
+   - 認為評分不公→ 提出申訴→ 教師複核→ 調整分數
+   - 收到不當回饋→ 通報教師→ 移除回饋→ 教師介入處理
+
+請提供：
+1. 完整流程時程表（甘特圖或時間軸）
+2. 教師檢核清單（每階段要做什麼）
+3. 學生任務清單（每階段繳交什麼）
+4. 評分計算 Excel 範本`;
+                }
+            },
+            {
+                name: '互評倫理與公平性設計',
+                generate: () => {
+                    const concerns = [];
+                    if (document.getElementById('privacy').checked) concerns.push('- 隱私保密（學生作品是否公開？）');
+                    if (document.getElementById('fairness').checked) concerns.push('- 評分公平（避免友誼/敵意偏誤）');
+                    if (document.getElementById('safety').checked) concerns.push('- 心理安全（學生能否承受批評？）');
+                    if (document.getElementById('integrity').checked) concerns.push('- 學術誠信（避免串通作弊）');
+
+                    return `設計同儕互評的倫理規範與爭議處理機制：
+
+【倫理關注點】
+${concerns.join('\n') || '- [請勾選倫理關注點]'}
+
+請設計倫理規範與處理機制：
+
+1. **隱私保密規範**
+
+   規則設計：
+   - 互評作品僅評量者與教師可見（不公開全班）
+   - 匿名評量優先（雙盲：作者與評量者均匿名）
+   - 禁止截圖或分享他人作品
+   - 違反規定的處理方式
+
+2. **公平性保證策略**
+
+   潛在偏誤與對策：
+
+   | 偏誤類型 | 現象 | 對策 |
+   |---------|------|------|
+   | 友誼偏誤 | 給朋友高分 | 匿名評量、多評量者平均 |
+   | 敵意偏誤 | 故意給低分 | 教師監控、極端值處理 |
+   | 寬嚴偏誤 | 整體過鬆或過嚴 | 標準化訓練、口徑校正 |
+   | 光環效應 | 所有向度給相同分數 | 提醒分向度獨立評分 |
+   | 能力差異 | 低成就學生評量品質較低 | 加強訓練、教師複核 |
+
+3. **心理安全支持**
+
+   建立支持性文化：
+   - 強調「回饋是幫助而非批評」
+   - 教師示範接受回饋的態度
+   - 使用「肯定-建議-鼓勵」結構
+   - 提供情緒支持管道（輔導老師）
+
+   弱勢學生保護：
+   - 特殊需求學生的調整（如：可選擇退出排行榜）
+   - 低成就學生的鼓勵（強調進步而非絕對分數）
+   - 避免公開完整排名（只表揚前段，不揭露後段）
+
+4. **學術誠信規範**
+
+   禁止行為：
+   - 串通作弊（互給高分）
+   - 敷衍評量（隨意給分、複製貼上回饋）
+   - 惡意評量（故意給低分、人身攻擊）
+
+   偵測機制：
+   - 統計分析：偵測異常互評模式（總是互相給高分）
+   - 教師抽檢：檢視回饋品質
+   - 同儕檢舉：提供匿名通報管道
+
+   處理方式：
+   - 初犯：警告、重新評量
+   - 再犯：該次評量成績不計分
+   - 嚴重違規：依校規處理
+
+5. **爭議處理流程**
+
+   **情境 1：學生認為評分不公**
+   - Step 1：學生提出申訴（3 天內，需說明理由）
+   - Step 2：教師檢視作品與回饋
+   - Step 3：對照 Rubric 判斷
+   - Step 4：決定維持或調整分數
+   - Step 5：向學生說明理由
+
+   **情境 2：收到不當回饋**
+   - Step 1：學生通報教師
+   - Step 2：教師審查回饋內容
+   - Step 3：移除不當回饋
+   - Step 4：與評量者面談教育
+   - Step 5：重新分配評量者（若需要）
+
+6. **學生須知文件**
+
+   設計「同儕互評學生手冊」，包含：
+   - 互評的目的與價值（為什麼要做互評？）
+   - 評量流程說明（時程表）
+   - 權利與責任（我可以做什麼？不可以做什麼？）
+   - 倫理規範（隱私、公平、尊重）
+   - 申訴管道（遇到問題找誰？）
+   - FAQ 常見問題
+
+請提供：
+1. 倫理規範文件（可張貼在教室或平台）
+2. 爭議處理流程圖
+3. 學生互評須知手冊（Word 文件格式）
+4. 家長說明信（若學生為國小/國中）`;
+                }
+            }
+        ];
+
+        function selectTemplate(index) {
+            currentTemplate = index;
+
+            // 更新卡片樣式
+            document.querySelectorAll('.template-card').forEach((card, i) => {
+                card.classList.toggle('active', i === index);
+            });
+
+            // 更新表單顯示
+            document.querySelectorAll('.form-section').forEach((form, i) => {
+                form.classList.toggle('active', i === index);
+            });
+
+            // 隱藏輸出區域
+            document.getElementById('output').classList.remove('visible');
+        }
+
+        function generatePrompt() {
+            const prompt = templates[currentTemplate].generate();
+
+            if (!prompt) return;
+
+            document.getElementById('promptOutput').textContent = prompt;
+            document.getElementById('output').classList.add('visible');
+
+            // 滾動到輸出區域
+            document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyPrompt() {
+            const promptText = document.getElementById('promptOutput').textContent;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ 已複製！';
+                btn.style.background = '#4CAF50';
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                alert('複製失敗，請手動複製');
+            });
+        }
+    </script>
+</body>
+</html>

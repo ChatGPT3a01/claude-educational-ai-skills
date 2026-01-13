@@ -13,7 +13,7 @@
 > 數位學習與教育科技 AI 技能集
 > 專為教育研究者、教師、數位學習平台開發者設計
 
-![Skills](https://img.shields.io/badge/Skills-14-blue)
+![Skills](https://img.shields.io/badge/Skills-20-blue)
 ![Categories](https://img.shields.io/badge/Categories-7-green)
 ![Claude](https://img.shields.io/badge/Claude-Opus%204.5%20%7C%20Sonnet%204-blueviolet)
 ![GPT](https://img.shields.io/badge/GPT-5.1%20%7C%205.2-74aa9c)
@@ -30,7 +30,7 @@
 
 ## 功能特色
 
-- **14 個專業技能** - 涵蓋教學設計、學習分析、偏鄉教育等 7 大領域
+- **20 個專業技能** - 涵蓋教學設計、學習分析、偏鄉教育、研究方法等 7 大領域
 - **完整提示詞範本** - 每個技能都附有可直接使用的提示詞模板
 - **多 AI 模型支援** - 相容 Claude、GPT、Gemini 等主流 AI
 - **偏鄉友善設計** - 特別考量資源受限環境的應用場景
@@ -46,12 +46,17 @@
 | 自適應學習設計 | 建構依據學生表現動態調整的學習系統 | [adaptive-learning-design.md](skills/教學設計/adaptive-learning-design.md) |
 | 差異化教學策略 | 設計多層次教學內容與評量 | [differentiated-instruction.md](skills/教學設計/differentiated-instruction.md) |
 | AI 教案產生器 | 運用 AI 快速生成教案 | [lesson-plan-generator.md](skills/教學設計/lesson-plan-generator.md) |
+| SEL 教學活動設計 | 基於 CASEL 架構設計社會情緒學習活動 | [sel-activity-designer.md](skills/教學設計/sel-activity-designer.md) |
+| 遊戲化學習設計 | 運用積分、徽章、排行榜提升學習動機 | [gamified-learning.md](skills/教學設計/gamified-learning.md) |
+| 專題導向學習 (PBL) | 設計跨領域專題式學習活動 | [project-based-learning.md](skills/教學設計/project-based-learning.md) |
 
 ### 📊 學習分析 (Learning Analytics)
 | 技能 | 說明 | 檔案 |
 |------|------|------|
 | 學習分析技術 | 收集、分析學習歷程數據 | [learning-analytics.md](skills/學習分析/learning-analytics.md) |
 | 學生學習輪廓分析 | 建立全面的學生學習畫像 | [student-profiling.md](skills/學習分析/student-profiling.md) |
+| 同儕互評機制設計 | 設計有效的同儕評量與回饋機制 | [peer-assessment.md](skills/學習分析/peer-assessment.md) |
+| 素養導向評量 | 設計符合 108 課綱的素養導向評量 | [competency-based-assessment.md](skills/學習分析/competency-based-assessment.md) |
 
 ### 🏔️ 偏鄉教育 (Rural Education)
 | 技能 | 說明 | 檔案 |
@@ -80,6 +85,8 @@
 |------|------|------|
 | 教育研究設計 | 研究問題、方法、設計規劃 | [education-research-design.md](skills/研究方法/education-research-design.md) |
 | 混合研究方法 | 整合量化與質性研究 | [mixed-methods.md](skills/研究方法/mixed-methods.md) |
+| 實證研究自動化 | 從資料收集到論文撰寫的完整工作流 | [empirical-research-automation.md](skills/研究方法/empirical-research-automation.md) |
+| 準實驗研究設計助手 | 設計嚴謹的準實驗研究與統計分析 | [quasi-experimental-design.md](skills/研究方法/quasi-experimental-design.md) |
 
 ---
 
