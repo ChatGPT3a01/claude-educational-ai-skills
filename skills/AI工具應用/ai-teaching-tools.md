@@ -10,7 +10,6 @@
 #### 通用型對話 AI
 | 工具 | 開發商 | 教學應用優勢 | 限制 |
 |------|--------|-------------|------|
-| **Claude** | Anthropic | 長文本處理、邏輯推理強、安全性高 | 無即時搜尋 |
 | **ChatGPT** | OpenAI | 生態系完整、外掛多元 | 需訂閱進階功能 |
 | **Gemini** | Google | 即時搜尋、多模態、免費版功能佳 | 中文生成品質待加強 |
 | **Copilot** | Microsoft | Office 整合、教育版授權 | 依賴 Microsoft 生態 |
@@ -29,7 +28,7 @@
 #### 文本生成
 | 工具 | 應用 | 教學用途 |
 |------|------|---------|
-| **Claude/GPT/Gemini** | 通用文本 | 教案、學習單、講義 |
+| **GPT/Gemini** | 通用文本 | 教案、學習單、講義 |
 | **Notion AI** | 筆記整理 | 課程大綱、會議紀錄 |
 | **Jasper** | 行銷文案 | 課程宣傳、公告撰寫 |
 
@@ -124,7 +123,7 @@
 - 教學影片腳本
 
 【可用工具】
-- 文本 AI：Claude / GPT / Gemini
+- 文本 AI：GPT / Gemini
 - 簡報 AI：Gamma / Canva
 - 圖像 AI：DALL-E / Canva
 - 其他：[列出可用工具]
@@ -166,13 +165,13 @@
 
 | 教學場景 | 推薦 AI 工具 | 應用方式 |
 |---------|-------------|---------|
-| 教案設計 | Claude, GPT | 對話生成教案框架 |
-| 差異化教材 | Claude, GPT | 生成不同難度版本 |
+| 教案設計 | GPT | 對話生成教案框架 |
+| 差異化教材 | GPT | 生成不同難度版本 |
 | 課程簡報 | Gamma, Canva AI | 快速生成簡報 |
 | 教材插圖 | DALL-E, Canva AI | 生成情境圖片 |
-| 評量命題 | Claude, GPT | 生成題目與解析 |
+| 評量命題 | GPT | 生成題目與解析 |
 | 作業批改 | Gradescope, GPT | 輔助批改與回饋 |
-| 學習輔導 | Khanmigo, Claude | AI 家教對話 |
+| 學習輔導 | Khanmigo | AI 家教對話 |
 | 語言學習 | Duolingo Max, GPT | 對話練習 |
 | 課堂錄影字幕 | Whisper, Otter | 自動生成字幕 |
 | 教材配音 | ElevenLabs | 生成旁白 |

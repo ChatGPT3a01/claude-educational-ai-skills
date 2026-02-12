@@ -45,7 +45,7 @@
         .output-content { color: #e0e0e0; font-family: monospace; font-size: 0.9em; white-space: pre-wrap; line-height: 1.7; max-height: 500px; overflow-y: auto; }
         .ai-links { display: flex; gap: 12px; margin-top: 20px; justify-content: center; flex-wrap: wrap; }
         .ai-link { padding: 12px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; }
-        .ai-link.claude { background: #7c3aed; color: white; }
+
         .ai-link.gpt { background: #10a37f; color: white; }
         .ai-link.gemini { background: #4285f4; color: white; }
     </style>
@@ -105,7 +105,7 @@
                         <div class="form-field"><label>年級</label><input type="text" id="f1-grade" placeholder="例：國小五年級"></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-field"><label>文本 AI</label><input type="text" id="f1-text" placeholder="例：Claude、GPT"></div>
+                        <div class="form-field"><label>文本 AI</label><input type="text" id="f1-text" placeholder="例：GPT、Gemini"></div>
                         <div class="form-field"><label>簡報 AI</label><input type="text" id="f1-slides" placeholder="例：Gamma、Canva"></div>
                     </div>
                     <div class="form-row">
@@ -129,7 +129,7 @@
                     <div class="output-content" id="output-content"></div>
                 </div>
                 <div class="ai-links">
-                    <a href="https://claude.ai" target="_blank" class="ai-link claude">前往 Claude</a>
+
                     <a href="https://chat.openai.com" target="_blank" class="ai-link gpt">前往 ChatGPT</a>
                     <a href="https://gemini.google.com" target="_blank" class="ai-link gemini">前往 Gemini</a>
                 </div>

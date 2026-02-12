@@ -89,7 +89,7 @@ skills/
 
 #### 5. 更新 plugin.yaml（如需要）
 
-如果新增了新的分類，請同步更新 `.claude-plugin/plugin.yaml`。
+如果新增了新的分類，請同步更新 `plugin.yaml`。
 
 #### 6. 提交變更
 
