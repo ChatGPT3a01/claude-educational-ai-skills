@@ -1,4 +1,4 @@
-# Claude Educational AI Skills
+# Educational AI Skills
 
 <p align="center">
   <a href="https://chatgpt3a01.github.io/claude-educational-ai-skills/">
@@ -24,7 +24,7 @@
 
 ## 簡介
 
-這是一個專為**數位學習與教育研究**領域打造的 Claude Skills 集合，涵蓋 AI 教育、差異化教學、偏鄉教育、學習分析、ICT 融入教學、數學科技教育等主題，專注於教育科技領域的研究與實務應用。
+這是一個專為**數位學習與教育研究**領域打造的 AI Skills 集合，涵蓋 AI 教育、差異化教學、偏鄉教育、學習分析、ICT 融入教學、數學科技教育等主題，專注於教育科技領域的研究與實務應用。
 
 ---
 
@@ -262,9 +262,9 @@ git submodule add https://github.com/ChatGPT3a01/claude-educational-ai-skills.gi
 ## 專案結構
 
 ```
-claude-educational-ai-skills/
+educational-ai-skills/
 ├── .claude-plugin/
-│   └── plugin.yaml          # Claude 插件設定檔
+│   └── plugin.yaml          # 插件設定檔
 ├── skills/
 │   ├── 教學設計/
 │   │   ├── adaptive-learning-design.md
@@ -406,5 +406,5 @@ copies or substantial portions of the Software.
 ---
 
 <p align="center">
-  <sub>Built with Claude Code | 讓 AI 教育不再只屬於資源豐富的都會學校，而是能在偏鄉生根發芽</sub>
+  <sub>讓 AI 教育不再只屬於資源豐富的都會學校，而是能在偏鄉生根發芽</sub>
 </p>

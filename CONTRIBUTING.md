@@ -1,6 +1,6 @@
 # 貢獻指南
 
-感謝您對 Claude Educational AI Skills 專案的興趣！我們歡迎各種形式的貢獻。
+感謝您對 Educational AI Skills 專案的興趣！我們歡迎各種形式的貢獻。
 
 ---
 
